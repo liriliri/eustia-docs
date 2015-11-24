@@ -2,12 +2,24 @@
     "title": "Eustia",
     "nav": [
         {
-            "text": "FEATURES",
-            "url": "features"
+            "text": "GUIDE",
+            "url": "guide"
         },
         {
-            "text": "DOCS",
-            "url": "docs"
+            "text": "API",
+            "url": "api"
+        },
+        {
+            "text": "FUNCTION",
+            "url": "function"
+        },
+        {
+            "text": "MODULE",
+            "url": "module"
+        },
+        {
+            "text": "CLASS",
+            "url": "class"
         }
     ]
 }
