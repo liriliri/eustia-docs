@@ -1,0 +1,13 @@
+{
+    "title": "Eustia",
+    "nav": [
+        {
+            "text": "FEATURES",
+            "url": "features"
+        },
+        {
+            "text": "DOCS",
+            "url": "docs"
+        }
+    ]
+}

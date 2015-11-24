@@ -1,7 +1,8 @@
 var path   = require('path'),
     fs     = require('fs'),
     ncp    = require('ncp'),
-    marked = require('marked');
+    marked = require('marked'),
+    autoprefixer = require('autoprefixer-stylus');
 
 var dirname = __dirname;
 
@@ -42,9 +43,9 @@ function build()
     console.time('[metalsmith] build/site finished');
 
     metalsmith.metadata({
-        site: require(dirPath('data/site.json'))
+        site: require(dirPath('src/site.json'))
     }).source(
-        dirPath('data')
+        dirPath('src')
     ).use(collections({
         guides: {
             pattern: 'docs/guides/!(index).md'
@@ -53,7 +54,8 @@ function build()
         renderer: new marked.Renderer()
     })).use(stylus({
         compress: true,
-        paths   : [dirPath('layout/css')]
+        paths   : [dirPath('layout/css')],
+        use     : [autoprefixer()]
     })).use(layouts({
         engine   : 'jade',
         directory: 'layout',
@@ -104,11 +106,11 @@ function server()
     };
 
     var layout  = chokidar.watch(dirPath('layout'), options),
-        data    = chokidar.watch(dirPath('data'), options),
+        src     = chokidar.watch(dirPath('src'), options),
         staticFiles = chokidar.watch(dirPath('static'), options);
 
     layout.on('change', build);
-    data.on('change', build);
+    src.on('change', build);
     staticFiles.on('change', build);
 }
 

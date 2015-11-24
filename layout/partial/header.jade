@@ -1,0 +1,9 @@
+.header
+    nav
+        h1
+            a(href="#") Eustia
+        ul
+            each val in site.nav
+                li
+                    a(href='#{val.url}')= val.text
+
