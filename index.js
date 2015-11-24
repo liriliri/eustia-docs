@@ -1,10 +1,14 @@
 var path   = require('path'),
+    fs     = require('fs'),
+    ncp    = require('ncp'),
     marked = require('marked');
+
+var dirname = __dirname;
 
 function dirPath()
 {
     var args = [].slice.call(arguments);
-    args.unshift(__dirname);
+    args.unshift(dirname);
     return path.join.apply(null, args);
 }
 
@@ -13,27 +17,101 @@ var layouts     = require('metalsmith-layouts'),
     markdown    = require('metalsmith-markdown'),
     collections = require('metalsmith-collections');
 
-const metalsmith = require('metalsmith')(__dirname);
-
-metalsmith.metadata({
-    site: require(dirPath('data/site.json'))
-}).source(
-    dirPath('data')
-).use(collections({
-
-})).use(markdown({
-    renderer: new marked.Renderer()
-})).use(stylus({
-    compress: true,
-    paths: [dirPath('layout/css')]
-})).use(layouts({
-    engine   : 'jade',
-    directory: 'layout',
-    pattern  : '**/*.html',
-    partials : 'layout/partial'
-})).destination(
-    dirPath('build')
-).build(function (err)
+function copyStatic()
 {
-    if (err) throw err;
-});
+    console.time('[metalsmith] build/static finished');
+
+    fs.mkdir(dirPath('build'), function ()
+    {
+       fs.mkdir(dirPath('build/static'), function ()
+       {
+           ncp(dirPath('static'), dirPath('build/static'), function (err)
+           {
+               if (err) return console.error(err);
+
+               console.timeEnd('[metalsmith] build/static finished');
+           });
+       });
+    });
+}
+
+function build()
+{
+    const metalsmith = require('metalsmith')(dirname);
+
+    console.time('[metalsmith] build/site finished');
+
+    metalsmith.metadata({
+        site: require(dirPath('data/site.json'))
+    }).source(
+        dirPath('data')
+    ).use(collections({
+        guides: {
+            pattern: 'docs/guides/!(index).md'
+        }
+    })).use(markdown({
+        renderer: new marked.Renderer()
+    })).use(stylus({
+        compress: true,
+        paths   : [dirPath('layout/css')]
+    })).use(layouts({
+        engine   : 'jade',
+        directory: 'layout',
+        pattern  : '**/*.html'
+    })).destination(
+        dirPath('build')
+    ).build(function (err)
+    {
+        if (err) throw err;
+
+        console.timeEnd('[metalsmith] build/site finished');
+
+        copyStatic();
+    });
+}
+
+function server()
+{
+    var st   = require('st'),
+        http = require('http');
+
+    const mount = st({
+        path : dirPath('build'),
+        cache: false,
+        index: 'index.html'
+    });
+
+    http.createServer(function (req, res)
+    {
+        mount(req, res);
+    }).listen(8080, function ()
+    {
+        console.log('http://localhost:8080/');
+    });
+
+    const chokidar = require('chokidar');
+
+    var options = {
+        persistent    : true,
+        ignoreInitial : true,
+        followSymlinks: true,
+        usePolling    : true,
+        alwaysStat    : false,
+        depth         : undefined,
+        interval      : 100,
+        atomic        : true,
+        ignorePermissionErrors: false
+    };
+
+    var layout  = chokidar.watch(dirPath('layout'), options),
+        data    = chokidar.watch(dirPath('data'), options),
+        staticFiles = chokidar.watch(dirPath('static'), options);
+
+    layout.on('change', build);
+    data.on('change', build);
+    staticFiles.on('change', build);
+}
+
+build();
+
+if (process.argv[2] === 'serve') server();
