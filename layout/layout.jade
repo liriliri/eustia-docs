@@ -2,6 +2,7 @@ doctype html
 html
     include ./partial/head
     body
-        include ./partial/header
-        block content
+        .content-wrapper
+            include ./partial/header
+            block content
         include ./partial/footer

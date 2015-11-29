@@ -2,15 +2,27 @@
     box-sizing border-box
 
 html, body
-    margin 0
+    height 100%
+
+html, body, header, footer, ul
     padding 0
+    margin 0
 
 body
     font-family 'Source Sans Pro', '微软雅黑', sans-serif
 
 ul
-    padding-left 0
     list-style none
 
 a
     text-decoration none
+
+// Needed to implement sticky footer.
+.content-wrapper
+    min-height 100%
+    overflow auto
+
+.container
+    width: 1024px
+    padding 0
+    margin 0 auto
