@@ -16,6 +16,7 @@ function dirPath()
 var layouts     = require('metalsmith-layouts'),
     stylus      = require('metalsmith-stylus'),
     markdown    = require('metalsmith-markdown'),
+    prism       = require('metalsmith-prism'),
     collections = require('metalsmith-collections');
 
 function copyStatic()
@@ -51,8 +52,11 @@ function build()
             pattern: 'docs/guides/!(index).md'
         }
     })).use(markdown({
-        renderer: new marked.Renderer()
-    })).use(stylus({
+        renderer: new marked.Renderer(),
+        langPrefix: 'language-'
+    })).use(
+        prism()
+    ).use(stylus({
         compress: true,
         paths   : [dirPath('layout/css')],
         use     : [autoprefixer()]

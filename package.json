@@ -27,6 +27,7 @@
     "metalsmith-collections": "^0.7.0",
     "metalsmith-layouts": "^1.4.2",
     "metalsmith-markdown": "^0.2.1",
+    "metalsmith-prism": "^2.1.1",
     "metalsmith-stylus": "^1.0.0",
     "ncp": "^2.0.0",
     "st": "^1.0.0"
