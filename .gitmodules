@@ -1,0 +1,3 @@
+[submodule "eustia"]
+	path = eustia
+	url = git@github.com:liriliri/eustia.git
