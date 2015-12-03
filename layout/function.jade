@@ -1,0 +1,23 @@
+extends ./layout
+
+block content
+
+    .container
+        each func in data
+            .function
+                h2= func.name
+                .detail
+                    p= func.desc
+                    p= func.return.name
+                    table.table
+                        thead
+                            tr
+                                th Name
+                                th Type
+                                th Desc
+                        tbody
+                            each param in func.params
+                                tr
+                                    td= param.name
+                                    td= param.type
+                                    td= param.desc

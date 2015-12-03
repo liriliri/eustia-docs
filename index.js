@@ -17,6 +17,8 @@ var layouts     = require('metalsmith-layouts'),
     stylus      = require('metalsmith-stylus'),
     markdown    = require('metalsmith-markdown'),
     prism       = require('metalsmith-prism'),
+    ignore      = require('metalsmith-ignore'),
+    jsonToHtml  = require('./lib/metalsmith-json-to-html'),
     collections = require('metalsmith-collections');
 
 function copyStatic()
@@ -48,8 +50,8 @@ function build()
     }).source(
         dirPath('src')
     ).use(collections({
-        guides: {
-            pattern: 'docs/guides/!(index).md'
+        guide: {
+            pattern: 'guide/!(index).md'
         }
     })).use(markdown({
         renderer: new marked.Renderer(),
@@ -60,10 +62,18 @@ function build()
         compress: true,
         paths   : [dirPath('layout/css')],
         use     : [autoprefixer()]
-    })).use(layouts({
+    })).use(ignore([
+        'site.json'
+    ])).use(
+        jsonToHtml()
+    ).use(layouts({
         engine   : 'jade',
         directory: 'layout',
         pattern  : '**/*.html'
+    })).use(layouts({
+        engine   : 'jade',
+        directory: 'layout',
+        pattern  : '**/*.json'
     })).destination(
         dirPath('build')
     ).build(function (err)

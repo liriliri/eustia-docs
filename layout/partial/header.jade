@@ -1,8 +1,8 @@
 header
     nav.container
-        a.site-logo(href="#") Eustia
+        a.site-logo(href="#{site.baseUrl}") Eustia
         ul
             each val in site.nav
                 li
-                    a(href='#{val.url}')= val.text
+                    a(href='#{site.baseUrl + val.url}')= val.text
 

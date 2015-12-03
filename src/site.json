@@ -1,25 +1,26 @@
 {
     "title": "Eustia",
+    "baseUrl": "http://liriliri.github.io/eustia/",
     "nav": [
         {
             "text": "GUIDE",
-            "url": "guide"
+            "url": "guide.html"
         },
         {
             "text": "API",
-            "url": "api"
+            "url": "api.html"
         },
         {
             "text": "FUNCTION",
-            "url": "function"
+            "url": "function.html"
         },
         {
             "text": "MODULE",
-            "url": "module"
+            "url": "module.html"
         },
         {
             "text": "CLASS",
-            "url": "class"
+            "url": "class.html"
         }
     ]
 }

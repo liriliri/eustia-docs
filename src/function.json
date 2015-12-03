@@ -1,0 +1,20 @@
+{
+    "layout": "function.jade",
+    "data": [
+        {
+            "name": "isArr",
+            "desc": "Check if value is classified as an Array Object.",
+            "params": [
+                {
+                    "name": "value",
+                    "type": "*",
+                    "desc": "The value to check."
+                }
+            ],
+            "return": {
+                "type": "boolean",
+                "desc": "Returns true if value is correctly classified, else false."
+            }
+        }
+    ]
+}
