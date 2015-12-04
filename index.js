@@ -18,7 +18,7 @@ var layouts     = require('metalsmith-layouts'),
     markdown    = require('metalsmith-markdown'),
     prism       = require('metalsmith-prism'),
     ignore      = require('metalsmith-ignore'),
-    jsonToHtml  = require('./lib/metalsmith-json-to-html'),
+    jsonToHtml  = require('./lib/jsonToHtml'),
     collections = require('metalsmith-collections');
 
 function copyStatic()
@@ -41,14 +41,16 @@ function copyStatic()
 
 function build()
 {
-    const metalsmith = require('metalsmith')(dirname);
+    var metalsmith = require('metalsmith')(dirname);
 
     console.time('[metalsmith] build/site finished');
 
     metalsmith.metadata({
         site: require(dirPath('src/site.json'))
     }).source(
-        dirPath('src')
+        'src'
+    ).clean(
+        false
     ).use(collections({
         guide: {
             pattern: 'guide/!(index).md'
@@ -75,15 +77,19 @@ function build()
         directory: 'layout',
         pattern  : '**/*.json'
     })).destination(
-        dirPath('build')
+        'build'
     ).build(function (err)
     {
         if (err) throw err;
 
         console.timeEnd('[metalsmith] build/site finished');
-
-        copyStatic();
     });
+}
+
+function fullBuild()
+{
+    copyStatic();
+    build();
 }
 
 function server()
@@ -91,7 +97,7 @@ function server()
     var st   = require('st'),
         http = require('http');
 
-    const mount = st({
+    var mount = st({
         path : dirPath('build'),
         cache: false,
         index: 'index.html'
@@ -105,7 +111,7 @@ function server()
         console.log('http://localhost:8080/');
     });
 
-    const chokidar = require('chokidar');
+    var chokidar = require('chokidar');
 
     var options = {
         persistent    : true,
@@ -125,9 +131,9 @@ function server()
 
     layout.on('change', build);
     src.on('change', build);
-    staticFiles.on('change', build);
+    staticFiles.on('change', copyStatic);
 }
 
-build();
+fullBuild();
 
 if (process.argv[2] === 'serve') server();

@@ -6,8 +6,9 @@
   "scripts": {
     "build": "node .",
     "serve": "node . serve",
-    "genPageUtil": "eustia build layout/*.jade -o static/js/eustia.js",
-    "genNodeUtil": "eustia build lib/*.js -o lib/util.js"
+    "genApiData": "node tool/genApiData/index",
+    "genPageUtil": "eustia build layout/*.jade -o static/js/eustia.js --external D:/Project/LiriLiri/caim/util/",
+    "genNodeUtil": "eustia build lib/*.js tool/**/*.js -o lib/util.js --external D:/Project/LiriLiri/caim/util"
   },
   "repository": {
     "type": "git",
