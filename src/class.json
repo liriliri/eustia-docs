@@ -1,3 +1,6 @@
 {
-    "layout": "class.jade"
+    "layout": "class.jade",
+    "data": [
+        "Emitter: Event emitter."
+    ]
 }

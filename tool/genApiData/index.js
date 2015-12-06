@@ -4,12 +4,13 @@ var ignore      = require('metalsmith-ignore'),
     extractCmt  = require('./extractCmt'),
     fnParser    = require('./fnParser'),
     classParser = require('./classParser'),
-    modParser   = require('./modParser');
+    modParser   = require('./modParser'),
+    format      = require('./format');
 
 var metalsmith = require('metalsmith')(path.join(__dirname, '../../'));
 
 metalsmith.source(
-    'eustia/src'
+    'project/src'
 ).clean(
     false
 ).use(
@@ -20,8 +21,10 @@ metalsmith.source(
     classParser()
 ).use(
     modParser()
+).use(
+    format()
 ).use(ignore([
     '*.js'
 ])).destination(
-    'build'
+    'src'
 ).build(function (err) { if (err) throw err });

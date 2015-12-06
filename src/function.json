@@ -2,8 +2,111 @@
     "layout": "function.jade",
     "data": [
         {
-            "name": "isArr",
-            "desc": "Check if value is classified as an Array Object.",
+            "name": "allKeys",
+            "desc": "Retrieve all the names of object's own and inherited properties.",
+            "params": [
+                {
+                    "name": "object",
+                    "type": "object",
+                    "desc": "The object to query."
+                }
+            ],
+            "return": {
+                "type": "array",
+                "desc": "Returns the array of all property names."
+            },
+            "detail": "<pre><code class=\"language-javascript\">var obj = Object.create({ a: 0 });\nobj.b = 1;\nconsole.log(_.allKeys(obj)); // [&#39;a&#39;, &#39;b&#39;]\n</code></pre>\n"
+        },
+        {
+            "name": "endWith",
+            "desc": "Checks if string ends with the given target string.",
+            "params": [
+                {
+                    "name": "string",
+                    "type": "string",
+                    "desc": "The string to search."
+                },
+                {
+                    "name": "suffix",
+                    "type": "string",
+                    "desc": "String suffix."
+                }
+            ],
+            "return": {
+                "type": "boolean",
+                "desc": "Returns true if string ends with target, else false"
+            }
+        },
+        {
+            "name": "has",
+            "desc": "Checks if key is a direct property.",
+            "params": [
+                {
+                    "name": "object",
+                    "type": "object",
+                    "desc": "The object to query."
+                },
+                {
+                    "name": "key",
+                    "type": "string",
+                    "desc": "The path to check."
+                }
+            ],
+            "return": {
+                "type": "boolean",
+                "desc": "Returns true if key is a direct property, else false"
+            }
+        },
+        {
+            "name": "identity",
+            "desc": "This method returns the first argument provided to it.",
+            "params": [
+                {
+                    "name": "value",
+                    "type": "*",
+                    "desc": "Any value."
+                }
+            ],
+            "return": {
+                "type": "*",
+                "desc": "Returns value"
+            }
+        },
+        {
+            "name": "inherits",
+            "desc": "Inherit the prototype methods from one constructor into another.",
+            "params": [
+                {
+                    "name": "Class",
+                    "type": "function",
+                    "desc": "Child Class."
+                },
+                {
+                    "name": "SuperClass",
+                    "type": "function",
+                    "desc": "Super Class"
+                }
+            ]
+        },
+        {
+            "name": "invert",
+            "desc": "Creates an object composed of the inverted keys and values of object.",
+            "params": [
+                {
+                    "name": "object",
+                    "type": "object",
+                    "desc": "The object to invert."
+                }
+            ],
+            "return": {
+                "type": "object",
+                "desc": "Returns the new inverted object."
+            },
+            "detail": "<p>If object contains duplicate values, subsequent values overwrite property\nassignments of previous values unless multiValue is true.</p>\n"
+        },
+        {
+            "name": "isArgs",
+            "desc": "Checks if value is classified as an arguments object.",
             "params": [
                 {
                     "name": "value",
@@ -13,7 +116,318 @@
             ],
             "return": {
                 "type": "boolean",
-                "desc": "Returns true if value is correctly classified, else false."
+                "desc": "Returns true if value is correctly classified, else false"
+            }
+        },
+        {
+            "name": "isArr",
+            "desc": "Check if value is classified as an Array Object",
+            "params": [
+                {
+                    "name": "value",
+                    "type": "*",
+                    "desc": "The value to check."
+                }
+            ],
+            "return": {
+                "type": "boolean",
+                "desc": "Returns true if value is correctly classified, else false"
+            }
+        },
+        {
+            "name": "isBool",
+            "desc": "Checks if value is classified as a boolean primitive or object.",
+            "params": [
+                {
+                    "name": "val",
+                    "type": "*",
+                    "desc": "The value to check."
+                }
+            ],
+            "return": {
+                "type": "boolean",
+                "desc": "Returns true if value is correctly classified, else false"
+            }
+        },
+        {
+            "name": "isDate",
+            "desc": "Checks if value is classified as a Date object.",
+            "params": [
+                {
+                    "name": "val",
+                    "type": "*",
+                    "desc": "The value to check."
+                }
+            ],
+            "return": {
+                "type": "boolean",
+                "desc": "Returns true if value is correctly classified, else false"
+            }
+        },
+        {
+            "name": "isErr",
+            "desc": "Checks if value is an Error.",
+            "params": [
+                {
+                    "name": "value",
+                    "type": "*",
+                    "desc": "The value to check."
+                }
+            ],
+            "return": {
+                "type": "boolean",
+                "desc": "Returns true if value is an error object, else false"
+            }
+        },
+        {
+            "name": "isFn",
+            "desc": "Checks if value is classified as a Function object.",
+            "params": [
+                {
+                    "name": "value",
+                    "type": "*",
+                    "desc": "The value to check."
+                }
+            ],
+            "return": {
+                "type": "boolean",
+                "desc": "Returns true if value is correctly classified, else false"
+            }
+        },
+        {
+            "name": "isInt",
+            "desc": "Checks if value is classified as a Integer.",
+            "params": [
+                {
+                    "name": "value",
+                    "type": "*",
+                    "desc": "The value to check."
+                }
+            ],
+            "return": {
+                "type": "boolean",
+                "desc": "Returns true if value is correctly classified, else false"
+            }
+        },
+        {
+            "name": "isNum",
+            "desc": "Checks if value is classified as a Number primitive or object.",
+            "params": [
+                {
+                    "name": "value",
+                    "type": "*",
+                    "desc": "The value to check."
+                }
+            ],
+            "return": {
+                "type": "boolean",
+                "desc": "Returns true if value is correctly classified, else false"
+            }
+        },
+        {
+            "name": "isObj",
+            "desc": "Checks if value is the language type of Object.",
+            "params": [
+                {
+                    "name": "value",
+                    "type": "*",
+                    "desc": "The value to check."
+                }
+            ],
+            "return": {
+                "type": "boolean",
+                "desc": "Returns true if value is an object, else false"
+            }
+        },
+        {
+            "name": "isStr",
+            "desc": "Checks if value is classified as a String primitive or object.",
+            "params": [
+                {
+                    "name": "value",
+                    "type": "*",
+                    "desc": "The value to check."
+                }
+            ],
+            "return": {
+                "type": "boolean",
+                "desc": "Returns true if value is correctly classified, else false"
+            }
+        },
+        {
+            "name": "isUndef",
+            "desc": "Checks if value is undefined.",
+            "params": [
+                {
+                    "name": "value",
+                    "type": "*",
+                    "desc": "The value to check."
+                }
+            ],
+            "return": {
+                "type": "boolean",
+                "desc": "Returns true if value is undefined, else false"
+            }
+        },
+        {
+            "name": "keys",
+            "desc": "Creates an array of the own enumerable property names of object.",
+            "params": [
+                {
+                    "name": "object",
+                    "type": "object",
+                    "desc": "The object to query."
+                }
+            ],
+            "return": {
+                "type": "array",
+                "desc": "Returns the array of property names"
+            }
+        },
+        {
+            "name": "last",
+            "desc": "Gets the last element of array.",
+            "params": [
+                {
+                    "name": "array",
+                    "type": "array",
+                    "desc": "The array to query."
+                }
+            ],
+            "return": {
+                "type": "*",
+                "desc": "Returns the last element of array"
+            }
+        },
+        {
+            "name": "lpad",
+            "desc": "Pads string on the left side if it's shorter than length.",
+            "params": [
+                {
+                    "name": "string",
+                    "type": "string",
+                    "desc": "The string to pad."
+                },
+                {
+                    "name": "length",
+                    "type": "number",
+                    "desc": "The padding length."
+                },
+                {
+                    "name": "chars",
+                    "type": "string",
+                    "desc": "The string used as padding"
+                }
+            ]
+        },
+        {
+            "name": "noop",
+            "desc": "A no-operation function that returns undefined regardless of the arguments it receives."
+        },
+        {
+            "name": "now",
+            "desc": "Gets the number of milliseconds that have elapsed since the Unix epoch."
+        },
+        {
+            "name": "pad",
+            "desc": "Pads string on the left and right sides if it's shorter than length.",
+            "params": [
+                {
+                    "name": "string",
+                    "type": "string",
+                    "desc": "The string to pad."
+                },
+                {
+                    "name": "length",
+                    "type": "number",
+                    "desc": "The padding length."
+                },
+                {
+                    "name": "chars",
+                    "type": "string",
+                    "desc": "The string used as padding"
+                }
+            ]
+        },
+        {
+            "name": "random",
+            "desc": "Produces a random number between min and max (inclusive).",
+            "params": [
+                {
+                    "name": "min",
+                    "type": "number",
+                    "desc": "The minimum possible value."
+                },
+                {
+                    "name": "max",
+                    "type": "number",
+                    "desc": "The maximum possible value."
+                }
+            ],
+            "return": {
+                "type": "number",
+                "desc": "Returns the random number"
+            }
+        },
+        {
+            "name": "repeat",
+            "desc": "Repeat string n-times.",
+            "params": [
+                {
+                    "name": "string",
+                    "type": "string",
+                    "desc": "The string to repeat."
+                },
+                {
+                    "name": "n",
+                    "type": "number",
+                    "desc": "Repeat times."
+                }
+            ],
+            "return": {
+                "type": "string",
+                "desc": "Repeated string"
+            }
+        },
+        {
+            "name": "rpad",
+            "desc": "Pads string on the right side if it's shorter than length.",
+            "params": [
+                {
+                    "name": "string",
+                    "type": "string",
+                    "desc": "The string to pad."
+                },
+                {
+                    "name": "length",
+                    "type": "number",
+                    "desc": "The padding length."
+                },
+                {
+                    "name": "chars",
+                    "type": "string",
+                    "desc": "The string used as padding"
+                }
+            ]
+        },
+        {
+            "name": "startWith",
+            "desc": "Checks if string starts with the given target string.",
+            "params": [
+                {
+                    "name": "string",
+                    "type": "string",
+                    "desc": "The string to search."
+                },
+                {
+                    "name": "prefix",
+                    "type": "string",
+                    "desc": "String prefix."
+                }
+            ],
+            "return": {
+                "type": "boolean",
+                "desc": "Returns true if string starts with prefix, else false"
             }
         }
     ]

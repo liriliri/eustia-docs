@@ -1,10 +1,9 @@
 {
     "title": "Eustia",
-    "baseUrl": "http://liriliri.github.io/eustia/",
     "nav": [
         {
             "text": "GUIDE",
-            "url": "guide.html"
+            "url": "guide/index.html"
         },
         {
             "text": "API",

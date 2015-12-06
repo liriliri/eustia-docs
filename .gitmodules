@@ -1,3 +1,3 @@
-[submodule "eustia"]
-	path = eustia
+[submodule "project"]
+	path = project
 	url = git@github.com:liriliri/eustia.git

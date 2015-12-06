@@ -4,7 +4,8 @@ var path   = require('path'),
     marked = require('marked'),
     autoprefixer = require('autoprefixer-stylus');
 
-var dirname = __dirname;
+var dirname = __dirname,
+    env     = 'release';
 
 function dirPath()
 {
@@ -39,14 +40,19 @@ function copyStatic()
     });
 }
 
+var site = require('./src/site.json');
+
 function build()
 {
+    site.baseUrl = (env === 'development') ? "http://localhost:8080/"
+                                           : "http://liriliri.github.io/eustia/";
+
     var metalsmith = require('metalsmith')(dirname);
 
     console.time('[metalsmith] build/site finished');
 
     metalsmith.metadata({
-        site: require(dirPath('src/site.json'))
+        site: site
     }).source(
         'src'
     ).clean(
@@ -58,9 +64,7 @@ function build()
     })).use(markdown({
         renderer: new marked.Renderer(),
         langPrefix: 'language-'
-    })).use(
-        prism()
-    ).use(stylus({
+    })).use(stylus({
         compress: true,
         paths   : [dirPath('layout/css')],
         use     : [autoprefixer()]
@@ -72,11 +76,9 @@ function build()
         engine   : 'jade',
         directory: 'layout',
         pattern  : '**/*.html'
-    })).use(layouts({
-        engine   : 'jade',
-        directory: 'layout',
-        pattern  : '**/*.json'
-    })).destination(
+    })).use(
+        prism()
+    ).destination(
         'build'
     ).build(function (err)
     {
@@ -134,6 +136,10 @@ function server()
     staticFiles.on('change', copyStatic);
 }
 
-fullBuild();
+if (process.argv[2] === 'serve')
+{
+    env = 'development';
+    server();
+}
 
-if (process.argv[2] === 'serve') server();
+fullBuild();

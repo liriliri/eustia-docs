@@ -14,7 +14,7 @@ module.exports = _.Class({
     },
     eof: function ()
     {
-        return this.c === EOF;
+        return this.c == EOF;
     },
     parse: function ()
     {
@@ -22,9 +22,13 @@ module.exports = _.Class({
     },
     whiteSpace: function ()
     {
+        while (this.isEmpty()) this.forward();
+    },
+    isEmpty: function ()
+    {
         var c = this.c;
 
-        while (c === '' || c === '\t' || c === '\r' || c === '\n') this.forward();
+        return c === ' ' || c === '\t' || c === '\r' || c === '\n';
     },
     consume: function (num)
     {
@@ -42,6 +46,8 @@ module.exports = _.Class({
     },
     forward: function (num)
     {
+        if (this.c == EOF) return;
+
         num = num || 1;
 
         while (num--)

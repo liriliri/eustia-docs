@@ -5,19 +5,24 @@ block content
     .container
         each func in data
             .function
-                h2= func.name
-                .detail
+                h2
+                    span.name= func.name
+                    if func.return
+                        span.return= '(' + func.return.type +'): ' + func.return.desc
+                .content
                     p= func.desc
-                    p= func.return.name
-                    table.table
-                        thead
-                            tr
-                                th Name
-                                th Type
-                                th Desc
-                        tbody
-                            each param in func.params
+                    if func.params
+                        table.table
+                            thead
                                 tr
-                                    td= param.name
-                                    td= param.type
-                                    td= param.desc
+                                    th.td-name Name
+                                    th.td-type Type
+                                    th Desc
+                            tbody
+                                each param in func.params
+                                    tr
+                                        td= param.name
+                                        td= param.type
+                                        td= param.desc
+                    if func.detail
+                        .md.detail!= func.detail
