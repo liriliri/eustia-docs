@@ -5,8 +5,46 @@ block content
     .banner
         h1 A tool for building JavaScript utility libraries:)
         a.btn.second(href='#{site.baseUrl}guide/index.html') GET STARTED
+        .glow
 
     .md.container.intro!= contents
 
     script.
-        _.use(function () { });
+        // Banner glow effect.
+        _.use(function ()
+        {
+            var $glow = new _.Select('.glow');
+
+            var imgWidth  = 1828,
+                imgHeight = 360,
+                imgRatio  = imgWidth / imgHeight;
+
+            var bannerWidth, bannerHeight = 360, bannerRatio;
+
+            function onResize()
+            {
+                var width, height;
+
+                bannerWidth  = window.innerWidth;
+                bannerRatio = bannerWidth / bannerHeight;
+
+                if (bannerRatio > imgRatio)
+                {
+                    width  = bannerWidth;
+                    height = width / imgRatio;
+                } else
+                {
+                    height = bannerHeight;
+                    width  = height * imgRatio;
+                }
+
+                var x = width * (297 / imgWidth) - 10,
+                    y = height * (272 / imgHeight) - 10;
+
+                $glow.css({ top : y, left: x });
+            }
+
+            onResize();
+
+            window.onresize = onResize;
+        });
