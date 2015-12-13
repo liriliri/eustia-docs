@@ -1,0 +1,31 @@
+.btn
+    color $gray
+    border 1px solid $gray
+    display inline-block
+    padding 1em 2em
+    overflow hidden
+    position relative
+    z-index 1
+    transition color 0.3s;
+    transition-timing-function cubic-bezier(0.2, 1, 0.3, 1);
+    &:hover
+        color #fff !important
+    &::before
+        z-index -1
+        content ''
+        position absolute
+        top 0
+        left 0
+        width 150%
+        height 100%
+        transform-origin: 0% 100%;
+        transition transform 0.3s, opacity 0.3s, background-color 0.3s;
+        background $gray
+        transform rotate3d(0, 0, 1, -45deg) translate3d(0, -3em, 0)
+    &:hover::before
+        transform rotate3d(0, 0, 1, 0deg);
+    &.second
+        color $sec-color
+        border-color $sec-color
+        &::before
+            background $sec-color

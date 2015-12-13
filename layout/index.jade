@@ -3,6 +3,10 @@ extends ./layout
 block content
 
     .banner
-        h1 Eustia is a tool for building your own JavaScript utility libraries.
+        h1 A tool for building JavaScript utility libraries:)
+        a.btn.second(href='#{site.baseUrl}guide/index.html') GET STARTED
 
     .md.container.intro!= contents
+
+    script.
+        _.use(function () { });
