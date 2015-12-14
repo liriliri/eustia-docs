@@ -25,7 +25,32 @@
         animation glow 3s linear infinite;
 
 .intro
-    padding 64px 0
+    padding 20px 0 64px
+
+.procedure
+    margin-top 50px
+    ul
+        margin-right -26px
+        &:after
+            content ''
+            display block
+            clear both
+    li
+        width 324px
+        margin-right 26px
+        height 150px
+        display block
+        border 1px solid $pri-color
+        border-bottom-width 3px
+        float left
+        h2
+            background  $pri-color
+            padding 10px 0;
+            text-align center
+            margin 0
+            color #fff
+        p
+            padding 15px 20px
 
 @keyframes glow
     50%
