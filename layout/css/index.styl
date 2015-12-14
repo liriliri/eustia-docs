@@ -7,7 +7,6 @@
     background-position top left
     text-align center
     position relative
-    overflow hidden
     h1
         width 560px
         margin 40px auto
@@ -28,7 +27,8 @@
     padding 20px 0 64px
 
 .procedure
-    margin-top 50px
+    background $gray
+    padding 40px 0
     ul
         margin-right -26px
         &:after
@@ -42,7 +42,12 @@
         display block
         border 1px solid $pri-color
         border-bottom-width 3px
+        background #fff
         float left
+        &:hover
+            border-color $sec-color
+            h2
+                background $sec-color
         h2
             background  $pri-color
             padding 10px 0;

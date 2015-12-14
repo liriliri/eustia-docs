@@ -1,8 +1,9 @@
 ---
 layout: guide.jade
+title: Get Started
 ---
 
-## Quick Example
+## Get Started
 
 You can install Eustia using Node Package Manager(**npm**).
 
@@ -30,7 +31,7 @@ Suppose you are doing a new project, and create a file name **index.html**. Then
 Inside the same folder, run command:
 
 ```bash
-eustia index.html -o util.js
+eustia build index.html -o util.js
 ```
 
 After that, just include the generated library in you html file. This is it, everything is just done, so simple!
