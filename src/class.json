@@ -1,6 +1,7 @@
 {
     "layout": "class.jade",
     "data": [
-        "Emitter: Event emitter."
+        "Emitter: Event emitter.",
+        "Select: jQuery like dom manipulator."
     ]
 }

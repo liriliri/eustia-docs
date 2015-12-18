@@ -10,7 +10,7 @@ var ignore      = require('metalsmith-ignore'),
 var metalsmith = require('metalsmith')(path.join(__dirname, '../../'));
 
 metalsmith.source(
-    'project/src'
+    '../eustia/src'
 ).clean(
     false
 ).use(

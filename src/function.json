@@ -2,6 +2,26 @@
     "layout": "function.jade",
     "data": [
         {
+            "name": "Class",
+            "desc": "Create JavaScript class.",
+            "params": [
+                {
+                    "name": "methods",
+                    "type": "object",
+                    "desc": "Public methods."
+                },
+                {
+                    "name": "statics",
+                    "type": "object",
+                    "desc": "Static methods."
+                }
+            ],
+            "return": {
+                "type": "function",
+                "desc": "Result function used to create instances"
+            }
+        },
+        {
             "name": "allKeys",
             "desc": "Retrieve all the names of object's own and inherited properties.",
             "params": [
@@ -15,7 +35,41 @@
                 "type": "array",
                 "desc": "Returns the array of all property names."
             },
-            "detail": "<pre><code class=\"language-javascript\">var obj = Object.create({ a: 0 });\nobj.b = 1;\nconsole.log(_.allKeys(obj)); // [&#39;a&#39;, &#39;b&#39;]\n</code></pre>\n"
+            "detail": "<pre><code class=\"language-javascript\">var obj = Object.create({ a: 0 });\nobj.b = 1;\n_.allKeys(obj) // -&gt; [&#39;a&#39;, &#39;b&#39;]\n</code></pre>\n<blockquote>\n<p>Members of Object&#39;s prototype won&#39;t be retrieved.</p>\n</blockquote>\n"
+        },
+        {
+            "name": "bind",
+            "desc": "Create a function bound to a given object.",
+            "params": [
+                {
+                    "name": "function",
+                    "type": "function",
+                    "desc": "The function to bind."
+                },
+                {
+                    "name": "context",
+                    "type": "*",
+                    "desc": "This binding of given function."
+                },
+                {
+                    "name": "[rest]",
+                    "type": "...*",
+                    "desc": "Optional arguments."
+                }
+            ],
+            "return": {
+                "type": "function",
+                "desc": "Returns the new bound function."
+            },
+            "detail": "<pre><code class=\"language-javascript\">var fn = _.bind(function (msg)\n{\n    console.log(this.name + &#39;:&#39; + msg);\n}, {name: &#39;eustia&#39;}, &#39;I am a utility library.&#39;);\nfn(); // -&gt; &#39;eustia: I am a utility library.&#39;\n</code></pre>\n"
+        },
+        {
+            "name": "camelCase",
+            "desc": "Convert string to \"camelCase\" text."
+        },
+        {
+            "name": "dasherize",
+            "desc": "Convert string to \"dashCase\"."
         },
         {
             "name": "endWith",
@@ -266,8 +320,9 @@
             ],
             "return": {
                 "type": "boolean",
-                "desc": "Returns true if value is undefined, else false"
-            }
+                "desc": "Returns true if value is undefined, else false."
+            },
+            "detail": "<pre><code class=\"language-javascript\">_.isUndef(void 0) // -&gt; true\n_.isUndef(null) // -&gt; false\n</code></pre>\n<p>Just a shortcut for <strong>x === undefined</strong>, doesn&#39;t matter that much whether you\nuse it or not.</p>\n"
         },
         {
             "name": "keys",
@@ -316,9 +371,10 @@
                 {
                     "name": "chars",
                     "type": "string",
-                    "desc": "The string used as padding"
+                    "desc": "The string used as padding."
                 }
-            ]
+            ],
+            "detail": "<p>&#39;repeat&#39;;\nlpad = function (str, len, chars)\n{\n    var strLen = str.length;\n    return strLen &lt; len ? repeat(chars, len - strLen) + str : str;</p>\n"
         },
         {
             "name": "noop",
@@ -345,9 +401,10 @@
                 {
                     "name": "chars",
                     "type": "string",
-                    "desc": "The string used as padding"
+                    "desc": "The string used as padding."
                 }
-            ]
+            ],
+            "detail": "<p>&#39;repeat&#39;;\npad = function (str, len, chars)\n{\n    var padLen = len - str.length;\n    return repeat(chars, Math.ceil(padLen / 2)) + str +\n           repeat(chars, Math.floor(padLen /2));</p>\n"
         },
         {
             "name": "random",
@@ -390,6 +447,27 @@
             }
         },
         {
+            "name": "restArgs",
+            "desc": "This accumulates the arguments passed into an array, after a given index.",
+            "params": [
+                {
+                    "name": "function",
+                    "type": "function",
+                    "desc": "Function that needs rest parameters."
+                },
+                {
+                    "name": "startIndex",
+                    "type": "number",
+                    "desc": "The start index to accumulates."
+                }
+            ],
+            "return": {
+                "type": "function",
+                "desc": "Generated function with rest parameters."
+            },
+            "detail": "<pre><code class=\"language-javascript\">var paramArr = _.restArs(function (rest) { return rest });\nparamArr(1, 2, 3, 4); // -&gt; [1, 2, 3, 4]\n</code></pre>\n"
+        },
+        {
             "name": "rpad",
             "desc": "Pads string on the right side if it's shorter than length.",
             "params": [
@@ -401,14 +479,19 @@
                 {
                     "name": "length",
                     "type": "number",
-                    "desc": "The padding length."
+                    "desc": "Padding length."
                 },
                 {
                     "name": "chars",
                     "type": "string",
-                    "desc": "The string used as padding"
+                    "desc": "String used as padding."
                 }
-            ]
+            ],
+            "return": {
+                "type": "string",
+                "desc": "Resulted string."
+            },
+            "detail": "<p>&#39;repeat&#39;;\nrpad = function (str, len, chars)\n{\n    var strLen = str.length;\n    return strLen &lt; len ? str + repeat(chars, len - strLen): str;</p>\n"
         },
         {
             "name": "startWith",

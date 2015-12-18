@@ -1,4 +1,4 @@
-'now';
+_('now');
 
 var interval = 1000 / 60;
 

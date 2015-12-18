@@ -11,8 +11,18 @@ module.exports = function ()
 
             var data = {};
             data.layout = val + '.jade';
-
             data.data = JSON.parse(file.contents.toString());
+
+            if (val === 'function')
+            {
+                data.data.sort(function (a, b)
+                {
+                    if (a.name < b.name) return -1;
+                    if (a.name > b.name) return 1;
+
+                    return 0;
+                });
+            }
 
             file.contents = new Buffer(JSON.stringify(data, null, 4));
         });

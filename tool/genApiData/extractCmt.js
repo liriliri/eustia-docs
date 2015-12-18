@@ -1,4 +1,5 @@
- var _ = require('../../lib/util');
+ var _ = require('../../lib/util'),
+     extractCmts = require('extract-comments');
 
 module.exports = function ()
 {
@@ -14,15 +15,13 @@ module.exports = function ()
         {
             if (!_.isJs(key)) return;
 
-            var comments = _.extractBlockCmt(data.contents.toString());
+            var comments = extractCmts(data.contents.toString());
 
-            if (!comments) return;
+            if (comments.length === 0) return;
 
             comments = _.map(comments, function (comment)
             {
-                comment = comment.replace(/^\/\*+|\*+\/$/mg, '')
-                                 .replace(/\n\s*\*+\s*/mg, '\n')
-                                 .replace(/\r/mg, '');
+                comment = comment.value;
 
                 return _.trim(comment);
             });

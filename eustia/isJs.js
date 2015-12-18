@@ -1,3 +1,3 @@
-'endWith';
+_('endWith');
 
 isJs = function(fileName) { return endWith(fileName, '.js') };
