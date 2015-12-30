@@ -1,11 +1,21 @@
 header
-    nav.container
+    nav.container.collapsed
         a.site-logo(href="#{site.baseUrl}")
             span.first-letter E
             span ustia
+        button.toggle-nav
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+        script.
+            _.$('.toggle-nav').on('click', function ()
+            {
+                _.$('nav').toggleClass('collapsed');
+            });
         ul
             each val in site.nav
                 li
                     a(href='#{site.baseUrl + val.url}')= val.text
             li
                 a(href='https://github.com/liriliri/eustia') GITHUB
+

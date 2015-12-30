@@ -11,6 +11,7 @@
     pre
         background #333
         padding 1em 1.5em
+        overflow-y auto
     blockquote
         border-left 4px solid $pri-color
         background #f5f6f7
@@ -24,3 +25,9 @@
     a
         color $pri-color
         text-decoration underline
+
+@media (max-width $container-width)
+    .md
+        padding 0 1.4em !important
+        p
+            font-size 14px

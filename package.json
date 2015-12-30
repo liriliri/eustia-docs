@@ -6,9 +6,7 @@
   "scripts": {
     "build": "node .",
     "serve": "node . serve",
-    "genApiData": "node scripts/genApiData/index",
-    "genPageUtil": "eustia build layout/*.jade -o static/js/eustia.js",
-    "genNodeUtil": "eustia build lib/*.js tool/**/*.js -o lib/util.js"
+    "genApiData": "node scripts/genApiData/index"
   },
   "repository": {
     "type": "git",

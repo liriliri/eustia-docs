@@ -1,7 +1,9 @@
 header
     border-bottom 1px solid $pri-color
     nav
-        height $header-height
+        &.collapsed
+            height $header-height
+        overflow hidden
         &:after
             clear both
             content ''
@@ -21,6 +23,22 @@ header
                 text-align center
                 color #fff
                 margin-right 5px
+        button
+            float right
+            margin-top 25px
+            padding 9px 10px
+            background $sec-color
+            border none
+            outline none
+            cursor pointer
+            display none
+            .icon-bar
+                width 22px
+                height 2px
+                background #fff
+                display block
+            .icon-bar + .icon-bar
+                margin-top: 4px;
         ul
             float right
             li
@@ -34,3 +52,18 @@ header
                     transition color 0.2s ease-in-out
                     &:hover
                         color $sec-color
+
+@media (max-width $container-width)
+    nav
+        padding 0 1.4em !important
+        button
+            display block !important
+        ul
+            float none !important
+            clear both
+            margin-top 80px
+            border-top 1px solid $pri-color
+            li
+                width 100%
+                a
+                    padding 0 !important

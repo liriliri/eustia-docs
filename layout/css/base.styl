@@ -24,7 +24,7 @@ a
     overflow auto
 
 .container
-    width: 1024px
+    width: $container-width
     padding 0
     margin 0 auto
 
@@ -41,4 +41,6 @@ a
 ::-webkit-scrollbar
     width 15px
 
-
+@media (max-width $container-width)
+    .container
+        width 100%
