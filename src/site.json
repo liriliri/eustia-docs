@@ -1,9 +1,9 @@
 {
-    "title": "Eustia",
+    "title": "Eustia: A Tool for Generating JavaScript Utility Libraries:)",
     "nav": [
         {
             "text": "GUIDE",
-            "url": "guide/index.html"
+            "url": "guide.html"
         },
         {
             "text": "API",

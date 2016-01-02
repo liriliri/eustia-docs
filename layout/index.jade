@@ -3,8 +3,8 @@ extends ./layout
 block content
 
     .banner
-        h1 A tool for building JavaScript utility libraries:)
-        a.btn.second(href='#{site.baseUrl}guide/index.html') GET STARTED
+        h1 A Tool for Generating JavaScript Utility Libraries:)
+        a.btn.second(href='#{site.baseUrl}guide.html') GET STARTED
         .glow.hidden
 
     .procedure
@@ -23,7 +23,7 @@ block content
                     p.
                         Use the generated library.
 
-    .md.container.intro!= contents
+    .md.container.mobile.intro!= contents
 
     script.
         // Banner glow effect.

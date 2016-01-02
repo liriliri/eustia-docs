@@ -2,7 +2,7 @@ extends ./layout
 
 block content
 
-    .container
+    .container.mobile
         each func in data
             .function
                 h2
@@ -12,7 +12,7 @@ block content
                 .content
                     p= func.desc
                     if func.params
-                        table.table
+                        table
                             thead
                                 tr
                                     th.td-name Name

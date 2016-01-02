@@ -39,8 +39,12 @@ a
     background-color $sec-color
 
 ::-webkit-scrollbar
-    width 15px
+    width 10px
+    height 10px
 
 @media (max-width $container-width)
     .container
         width 100%
+        &.mobile
+            padding 1em 1.4em !important
+
