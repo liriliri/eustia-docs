@@ -25,6 +25,7 @@ When used in command line, the rest arguments will be treated as files.
 |namespace|n|_|Namespace of generated library|
 |output|o|util.js|Output path|
 |pattern|p|umd|Module pattern, commonjs, umd or global|
+|watch|w|false|Watch files to regenerate automatically|
 
 ## Docs
 
@@ -33,7 +34,7 @@ Generate documentation.
 |name|shorthand|default|description|
 |----------------------------------|
 |encoding||utf-8|Input file encoding|
-|input||Generated eustia library|
+|input|||Generated eustia library|
 |output|o|docs.html|Output path|
 |raw|r|false|Output json|
 |title|t|Eustia Documentation|Documentation title|
