@@ -26,11 +26,11 @@ function copyStatic()
 {
     console.time('[metalsmith] build/static finished');
 
-    fs.mkdir(dirPath('build'), function ()
+    fs.mkdir(dirPath('dist'), function ()
     {
-       fs.mkdir(dirPath('build/static'), function ()
+       fs.mkdir(dirPath('dist/static'), function ()
        {
-           ncp(dirPath('static'), dirPath('build/static'), function (err)
+           ncp(dirPath('static'), dirPath('dist/static'), function (err)
            {
                if (err) return console.error(err);
 
@@ -79,7 +79,7 @@ function build()
     })).use(
         prism()
     ).destination(
-        'build'
+        'dist'
     ).build(function (err)
     {
         if (err) throw err;
@@ -100,7 +100,7 @@ function server()
         http = require('http');
 
     var mount = st({
-        path : dirPath('build'),
+        path : dirPath('dist'),
         cache: false,
         index: 'index.html'
     });

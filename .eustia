@@ -1,10 +1,10 @@
-{
-    "page": {
-        "files": "./layout/**/*.jade",
-        "output": "./static/js/eustia.js"
+module.exports = {
+    page: {
+        files: "./layout/**/*.jade",
+        output: "./static/js/eustia.js"
     },
-    "node": {
-        "files": ["./lib/*.js", "./tool/**/*.js"],
-        "output": "./lib/util.js"
+    node: {
+        files: ["./lib/*.js", "./tool/**/*.js"],
+        output: "./lib/util.js"
     }
-}
+};

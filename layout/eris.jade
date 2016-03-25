@@ -1,0 +1,9 @@
+extends ./layout
+
+block content
+
+    .container.mobile
+        each mod, name in data
+            .eris
+                .name= name
+                .desc= mod.desc

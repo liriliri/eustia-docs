@@ -2,6 +2,10 @@
     "title": "Eustia: A Tool for Generating JavaScript Utility Libraries:)",
     "nav": [
         {
+            "text": "STORE",
+            "url": "eris.html"
+        },
+        {
             "text": "GUIDE",
             "url": "guide.html"
         },
@@ -12,14 +16,6 @@
         {
             "text": "FUNCTION",
             "url": "function.html"
-        },
-        {
-            "text": "MODULE",
-            "url": "module.html"
-        },
-        {
-            "text": "CLASS",
-            "url": "class.html"
         }
     ]
 }
