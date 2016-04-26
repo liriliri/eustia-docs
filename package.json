@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "node .",
-    "serve": "node . serve",
-    "genApiData": "node scripts/genApiData/index"
+    "serve": "node . serve"
   },
   "repository": {
     "type": "git",
