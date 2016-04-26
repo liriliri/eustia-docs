@@ -2,20 +2,12 @@
     "title": "Eustia: A Tool for Generating JavaScript Utility Libraries:)",
     "nav": [
         {
+            "text": "DOCS",
+            "url": "docs.html"
+        },
+        {
             "text": "MODULE",
             "url": "eris.html"
-        },
-        {
-            "text": "GUIDE",
-            "url": "guide.html"
-        },
-        {
-            "text": "API",
-            "url": "api.html"
-        },
-        {
-            "text": "FUNCTION",
-            "url": "function.html"
         }
     ]
 }

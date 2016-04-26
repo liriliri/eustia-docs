@@ -1,11 +1,19 @@
-var path   = require('path'),
-    fs     = require('fs'),
-    ncp    = require('ncp'),
+var path = require('path'),
+    fs = require('fs'),
+    ncp = require('ncp'),
     marked = require('marked'),
     autoprefixer = require('autoprefixer-stylus');
 
+var layouts = require('metalsmith-layouts'),
+    stylus = require('metalsmith-stylus'),
+    markdown = require('metalsmith-markdown'),
+    prism = require('metalsmith-prism'),
+    ignore = require('metalsmith-ignore'),
+    jsonToHtml = require('./lib/jsonToHtml'),
+    collections = require('metalsmith-collections');
+
 var dirname = __dirname,
-    env     = 'release';
+    env = 'release';
 
 function dirPath()
 {
@@ -13,14 +21,6 @@ function dirPath()
     args.unshift(dirname);
     return path.join.apply(null, args);
 }
-
-var layouts     = require('metalsmith-layouts'),
-    stylus      = require('metalsmith-stylus'),
-    markdown    = require('metalsmith-markdown'),
-    prism       = require('metalsmith-prism'),
-    ignore      = require('metalsmith-ignore'),
-    jsonToHtml  = require('./lib/jsonToHtml'),
-    collections = require('metalsmith-collections');
 
 function copyStatic()
 {

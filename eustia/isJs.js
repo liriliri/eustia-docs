@@ -1,3 +1,6 @@
 _('endWith');
 
-isJs = function(fileName) { return endWith(fileName, '.js') };
+function exports(fileName)
+{
+    return endWith(fileName, '.js');
+}

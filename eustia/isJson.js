@@ -1,3 +1,6 @@
 _('endWith');
 
-isJson = function(fileName) { return endWith(fileName, '.json') };
+function exports(fileName)
+{
+    return endWith(fileName, '.json');
+}
