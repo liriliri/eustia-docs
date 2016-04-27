@@ -272,4 +272,4 @@ functions is available by using
 
 [eustia-json: Allow modules to be writen in json format.](https://github.com/liriliri/eustia-json)
 
-[eustia-lodash: Allow using lodash functions.](https://github.com/liriliri/eustia-lodash)x
+[eustia-lodash: Allow using lodash functions.](https://github.com/liriliri/eustia-lodash)
