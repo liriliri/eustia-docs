@@ -266,6 +266,8 @@ functions is available by using
 
 ## Relative Projects
 
+[eris: Eustia official modules(updated everyday)](https://github.com/liriliri/eris)
+
 [eustia-babel: Allow modules to be written in es6.](https://github.com/liriliri/eustia-babel)
 
 [eustia-component: Allow modules to be written in html-like style.](https://github.com/liriliri/eustia-component)
