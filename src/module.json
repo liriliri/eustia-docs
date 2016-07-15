@@ -1,6 +1,0 @@
-{
-    "layout": "module.jade",
-    "data": [
-        "Cookie: Simple api for handling browser cookies."
-    ]
-}

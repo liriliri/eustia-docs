@@ -6,7 +6,7 @@
   "scripts": {
     "build": "node .",
     "serve": "node . serve",
-    "updateEris": "node script/updateEris"
+    "updateMod": "node script/updateMod"
   },
   "repository": {
     "type": "git",

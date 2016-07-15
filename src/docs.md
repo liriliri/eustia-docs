@@ -21,10 +21,11 @@ title: Guide
     <li>
         <a href="#commands">2. Commands</a>
         <ul>
-            <li><a href="#build-command">2.1 Build command</a></li>
-            <li><a href="#search-command">2.2 Search command</a></li>
-            <li><a href="#install-command">2.3 Install command</a></li>
-            <li><a href="#docs-command">2.4 Docs command</a></li>
+            <li><a href="#build-command">2.1 Build Command</a></li>
+            <li><a href="#search-command">2.2 Search Command</a></li>
+            <li><a href="#install-command">2.3 Install Command</a></li>
+            <li><a href="#doc-command">2.4 Doc Command</a></li>
+            <li><a href="#cache-command">2.5 Cache Command</a></li>
         </ul>
     </li>
     <li>
@@ -166,7 +167,7 @@ eustia.build({
 
 ## Commands
 
-### Build command
+### Build Command
 
 Build JavaScript libraries by scanning files. When used in command line, the
 rest arguments will be treated as files.
@@ -196,7 +197,7 @@ eusita build index.html src/*.js -o lib.js
 > **Transpilers** and **extension** are not available via command line
 arguments, use them only in configurations.
 
-### Search command
+### Search Command
 
 Search for [modules](http://liriliri.github.io/eustia/eris.html) directly
 through command line.
@@ -209,7 +210,7 @@ eustia search <keyword>
 |------------------------------------------------------------|
 |update|u        |false  |Update module data before searching|
 
-### Install command
+### Install Command
 
 Install module in current project directory.
 
@@ -217,13 +218,13 @@ Install module in current project directory.
 eustia install [<modules>]
 ```
 
-### Docs command
+### Doc Command
 
 Generate documentation from generated utiltiy libraries.
 
 ```bash
-eustia docs [<options>]
-eustia docs util.js -o docs.html
+eustia doc [<options>]
+eustia doc util.js -o doc.html
 ```
 
 |name       |shorthand|default             |description                          |
@@ -232,6 +233,14 @@ eustia docs util.js -o docs.html
 |format     |f        |html                |Output format, html, json or markdown|
 |output     |o        |docs.html           |Output path                          |
 |title      |t        |Eustia Documentation|Documentation title                  |
+
+### Cache Command
+
+Clear module cache.
+
+```bash
+eustia cache clear
+```
 
 ## Create Module
 

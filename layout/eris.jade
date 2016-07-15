@@ -1,9 +1,0 @@
-extends ./layout
-
-block content
-
-    .container.mobile
-        each mod, name in data
-            a.eris(href="https://github.com/liriliri/eris/blob/master/#{name[0]}/#{name}.js" target="_blank")
-                .name= name
-                .desc= mod
