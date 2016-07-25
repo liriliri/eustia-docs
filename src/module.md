@@ -16,20 +16,92 @@ $btn.html('eustia');
 
 ## $attr 
 
-Attributes manipulation. TODO
+Element attribute manipulation.
+
+Get the value of an attribute for the first element in the set of matched elements.
+
+|Name   |Type                |Desc                            |
+|-------|--------------------|--------------------------------|
+|element|string array element|Elements to manipulate          |
+|name   |string              |Attribute name                  |
+|return |string              |Attribute value of first element|
+
+Set one or more attributes for the set of matched elements.
+
+|Name   |Type                |Desc                  |
+|-------|--------------------|----------------------|
+|element|string array element|Elements to manipulate|
+|name   |string              |Attribute name        |
+|value  |string              |Attribute value       |
+
+|Name      |Type                |Desc                                  |
+|----------|--------------------|--------------------------------------|
+|element   |string array element|Elements to manipulate                |
+|attributes|object              |Object of attribute-value pairs to set|
+
+### remove
+
+Remove an attribute from each element in the set of matched elements.
+
+|Name   |Type                |Desc                  |
+|-------|--------------------|----------------------|
+|element|string array element|Elements to manipulate|
+|name   |string              |Attribute name        |
 
 ```javascript
 $attr('#test', 'attr1', 'test');
 $attr('#test', 'attr1'); // -> test
 $attr.remove('#test', 'attr1');
+$attr('#test', {
+    'attr1': 'test',
+    'attr2': 'test'
+});
 ```
 
 ## $class 
 
-Class manipulation. TODO
+Element class manipulations.
+
+### add
+
+Add the specified class(es) to each element in the set of matched elements.
+
+|Name   |Type                |Desc                  |
+|-------|--------------------|----------------------|
+|element|string array element|Elements to manipulate|
+|names  |string array        |Classes to add        |
+
+### has
+
+Determine whether any of the matched elements are assigned the given class.
+
+|Name   |Type                |Desc                                 |
+|-------|--------------------|-------------------------------------|
+|element|string array element|Elements to manipulate               |
+|name   |string              |Class name                           |
+|return |boolean             |True if elements has given class name|
+
+### toggle
+
+Add or remove one or more classes from each element in the set of matched elements, depending on either the class's presence or the value of the state argument.
+
+|Name   |Type                |Desc                  |
+|-------|--------------------|----------------------|
+|element|string array element|Elements to manipulate|
+|name   |string              |Class name to toggle  |
+
+### remove
+
+Remove a single class, multiple classes, or all classes from each element in the set of matched elements.
+
+|Name   |Type                |Desc                  |
+|-------|--------------------|----------------------|
+|element|string array element|Elements to manipulate|
+|names  |string              |Class names to remove |
 
 ```javascript
 $class.add('#test', 'class1');
+$class.add('#test', ['class1', 'class2']);
 $class.has('#test', 'class1'); // -> true
 $class.remove('#test', 'class1');
 $class.has('#test', 'class1'); // -> false
@@ -39,13 +111,36 @@ $class.has('#test', 'class1'); // -> true
 
 ## $css 
 
-Css manipulation. TODO
+Element css manipulation.
+
+Get the computed style properties for the first element in the set of matched elements.
+
+|Name   |Type                |Desc                      |
+|-------|--------------------|--------------------------|
+|element|string array element|Elements to manipulate    |
+|name   |string              |Property name             |
+|return |string              |Css value of first element|
+
+Set one or more CSS properties for the set of matched elements.
+
+|Name   |Type                |Desc                  |
+|-------|--------------------|----------------------|
+|element|string array element|Elements to manipulate|
+|name   |string              |Property name         |
+|value  |string              |Css value             |
+
+|Name      |Type                |Desc                            |
+|----------|--------------------|--------------------------------|
+|element   |string array element|Elements to manipulate          |
+|properties|object              |Object of css-value pairs to set|
 
 ```javascript
 $css('#test', {
     'color': '#fff',
     'background': 'black'
 });
+$css('#test', 'display', 'block');
+$css('#test', 'color'); // -> #fff
 ```
 
 ## $data 
@@ -77,23 +172,73 @@ $insert.append('#test', '<div>test</div>');
 
 ## $offset 
 
-TODO
+Get the position of the element in document.
+
+|Name   |Type                |Desc                  |
+|-------|--------------------|----------------------|
+|element|string array element|Elements to get offset|
+
+```javascript
+$offset('#test'); // -> {left: 0, top: 0, width: 0, height: 0}
+```
 
 ## $property 
 
-TODO
+Element property html, text, val getter and setter.
+
+### html
+
+Get the HTML contents of the first element in the set of matched elements or
+set the HTML contents of every matched element.
+
+### text
+
+Get the combined text contents of each element in the set of matched
+elements, including their descendants, or set the text contents of the
+matched elements.
+
+### val
+
+Get the current value of the first element in the set of matched elements or
+set the value of every matched element.
+
+```javascript
+$property.html('#test', 'eris');
+$property.html('#test'); // -> eris
+```
 
 ## $remove 
 
-TODO
+Remove the set of matched elements from the DOM.
 
-## $safeNodes 
+|Name   |Type                |Desc              |
+|-------|--------------------|------------------|
+|element|string array element|Elements to delete|
 
-TODO
+```javascript
+$remove('#test');
+```
+
+## $safeEls 
+
+Convert value into an array, if it's a string, do querySelector.
+
+|Name  |Type                |Desc             |
+|------|--------------------|-----------------|
+|value |element array string|Value to convert |
+|return|array               |Array of elements|
+
+```
+$safeEls('.test'); // -> Array of elements with test class
+```
 
 ## $show 
 
-Show elements. TODO
+Show elements.
+
+|Name   |Type                |Desc            |
+|-------|--------------------|----------------|
+|element|string array element|Elements to show|
 
 ```javascript
 $show('#test');
@@ -151,7 +296,17 @@ TODO
 
 ## Select 
 
-jQuery like dom manipulator. TODO
+Simple wrapper of querySelectorAll to make dom selection easier.
+
+### Constructor
+
+|Name    |Type  |Desc               |
+|--------|------|-------------------|
+|selector|string|Dom selector string|
+
+```javascript
+var test = new Select('#test');
+```
 
 ## State 
 
@@ -262,7 +417,18 @@ capitalize('rED'); // -> Red
 
 ## clone 
 
-TODO
+Create a shallow-copied clone of the provided plain object.
+
+Any nested objects or arrays will be copied by reference, not duplicated.
+
+|Name  |Type|Desc          |
+|------|----|--------------|
+|value |*   |Value to clone|
+|return|*   |Cloned value  |
+
+```javascript
+clone({name: 'eustia'}); // -> {name: 'eustia'}
+```
 
 ## cloneDeep 
 
@@ -270,20 +436,34 @@ TODO
 
 ## contain 
 
-TODO
+Check if the value is present in the list.
+
+|Name  |Type   |Desc                                |
+|------|-------|------------------------------------|
+|array |array  |Target list                         |
+|value |*      |Value to check                      |
+|return|boolean|True if value is present in the list|
+
+```javascript
+contain([1, 2, 3], 1); // -> true
+```
 
 ## cookie 
 
 Simple api for handling browser cookies.
 
-### get: get cookie value.
+### get
+
+Get cookie value.
 
 |Name  |Type  |Desc                      |
 |------|------|--------------------------|
 |key   |string|Cookie key                |
 |return|string|Corresponding cookie value|
 
-### set: set cookie value.
+### set
+
+Set cookie value.
 
 |Name     |Type   |Desc          |
 |---------|-------|--------------|
@@ -292,7 +472,9 @@ Simple api for handling browser cookies.
 |[options]|object |Cookie options|
 |return   |exports|Module cookie |
 
-### remove: remove cookie value.
+### remove
+
+Remove cookie value.
 
 |Name     |Type   |Desc          |
 |---------|-------|--------------|
@@ -693,7 +875,18 @@ isArr({}); // -> false
 
 ## isArrLike 
 
-TODO
+Check if value is array-like.
+
+|Name  |Type   |Desc                       |
+|------|-------|---------------------------|
+|value |*      |Value to check             |
+|return|boolean|True if value is array like|
+
+```javascript
+isArrLike('test'); // -> true
+isArrLike(document.body.children); // -> true;
+isArrLike([1, 2, 3]); // -> true
+```
 
 ## isBool 
 
@@ -765,7 +958,17 @@ isEmpty({}); // -> true
 
 ## isEqual 
 
-TODO
+Performs an optimized deep comparison between the two objects, to determine if they should be considered equal.
+
+|Name  |Type   |Desc                         |
+|------|-------|-----------------------------|
+|value |*      |Value to compare             |
+|other |*      |Other value to compare       |
+|return|boolean|True if values are equivalent|
+
+```javascript
+isEqual([1, 2, 3], [1, 2, 3]); // -> true
+```
 
 ## isErr 
 
@@ -1302,7 +1505,17 @@ size([1, 2, 3]); // -> 3
 
 ## slice 
 
-TODO
+Create slice of source array or array-like object.
+
+|Name              |Type  |Desc                      |
+|------------------|------|--------------------------|
+|array             |array |Array to slice            |
+|[start=0]         |number|Start position            |
+|[end=array.length]|number|End position, not included|
+
+```javascript
+slice([1, 2, 3, 4], 1, 2); // -> [2]
+```
 
 ## snakeCase 
 
@@ -1500,7 +1713,16 @@ toStr([1, 2, 3]); // -> '1,2,3'
 
 ## topoSort 
 
-Topological sorting algorithm. TODO
+Topological sorting algorithm.
+
+|Name  |Type |Desc        |
+|------|-----|------------|
+|edges |array|Dependencies|
+|return|array|Sorted order|
+
+```javascript
+topoSort([[1, 2], [1, 3], [3, 2]]); // -> [1, 3, 2]
+```
 
 ## trim 
 

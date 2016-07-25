@@ -1,7 +1,7 @@
 var request = require('request'),
     fs = require('fs');
 
-var ERIS_URL = 'https://raw.githubusercontent.com/liriliri/eris/master/module.md';
+var ERIS_URL = 'https://raw.githubusercontent.com/liriliri/eris/master/doc.md';
 
 request(ERIS_URL, function (err, res, body)
 {
