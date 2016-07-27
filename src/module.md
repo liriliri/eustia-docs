@@ -228,7 +228,7 @@ Convert value into an array, if it's a string, do querySelector.
 |value |element array string|Value to convert |
 |return|array               |Array of elements|
 
-```
+```javascript
 $safeEls('.test'); // -> Array of elements with test class
 ```
 
@@ -292,7 +292,48 @@ Student.is(a); // -> true
 
 ## Emitter 
 
-TODO
+Event emitter class which provides observer pattern.
+
+### on
+
+Bind event.
+
+### off
+
+Unbind event.
+
+### once
+
+Bind event that trigger once.
+
+|Name    |Type    |Desc          |
+|--------|--------|--------------|
+|event   |string  |Event name    |
+|listener|function|Event listener|
+
+### emit
+
+Emit event.
+
+|Name   |Type  |Desc                        |
+|-------|------|----------------------------|
+|event  |string|Event name                  |
+|...args|*     |Arguments passed to listener|
+
+### mixin
+
+[static] Mixin object class methods.
+
+|Name|Type  |Desc           |
+|----|------|---------------|
+|obj |object|Object to mixin|
+
+```javascript
+var event = new Emitter();
+event.on('test', function () { console.log('test') });
+event.emit('test'); // Logs out 'test'.
+Emitter.mixin({});
+```
 
 ## Select 
 
@@ -514,7 +555,26 @@ defaults({name: 'RedHood'}, {name: 'Unknown', age: 24}); // -> {name: 'RedHood',
 
 ## define 
 
-TODO
+Define a module, should be used along with use.
+
+|Name      |Type    |Desc        |
+|----------|--------|------------|
+|name      |string  |Module name |
+|[requires]|array   |Dependencies|
+|method    |function|Module body |
+
+The module won't be executed until it's used by use function.
+
+```javascript
+define('A', function ()
+{
+    return 'A';
+});
+define('B', ['A'], function (A)
+{
+    return 'B' + A;
+});
+```
 
 ## delay 
 
@@ -1265,10 +1325,10 @@ TODO
 
 Get maximum value of given numbers.
 
-|Name  |Type     |Desc                |
-|------|---------|--------------------|
-|num   |...number|Numbers to calculate|
-|return|number   |Maximum value       |
+|Name  |Type  |Desc                |
+|------|------|--------------------|
+|...num|number|Numbers to calculate|
+|return|number|Maximum value       |
 
 ```javascript
 max(2.3, 1, 4.5, 2); // 4.5
@@ -1808,7 +1868,23 @@ upperFirst('red'); // -> RED
 
 ## use 
 
-TODO
+Use modules that is created by define.
+
+|Name      |Type    |Desc                |
+|----------|--------|--------------------|
+|[requires]|array   |Dependencies        |
+|method    |function|Codes to be executed|
+
+```javascript
+define('A', function ()
+{
+    return 'A';
+});
+use(['A'], function (A)
+{
+    console.log(A + 'B'); // -> 'AB'
+});
+```
 
 ## values 
 
