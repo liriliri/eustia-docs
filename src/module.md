@@ -145,7 +145,7 @@ $css('#test', 'color'); // -> #fff
 
 ## $data 
 
-Data manipulation TODO
+Wrapper of $attr, adds data- prefix to keys.
 
 ```javascript
 $data('#test', 'attr1', 'eustia');
@@ -164,10 +164,39 @@ event.on('#test', 'click', function ()
 
 ## $insert 
 
-Insert html on different position. TODO
+Insert html on different position.
+
+### before
+
+Insert content before elements.
+
+### after
+
+Insert content after elements.
+
+### prepend
+
+Insert content to the beginning of elements.
+
+### append
+
+Insert content to the end of elements.
+
+|Name   |Type                |Desc                  |
+|-------|--------------------|----------------------|
+|element|string array element|Elements to manipulate|
+|content|string              |Html strings          |
 
 ```javascript
-$insert.append('#test', '<div>test</div>');
+// <div id="test"><div class="mark"></div></div>
+$insert.before('#test', '<div>eris</div>');
+// -> <div>eris</div><div id="test"><div class="mark"></div></div>
+$insert.after('#test', '<div>eris</div>');
+// -> <div id="test"><div class="mark"></div></div><div>eris</div>
+$insert.prepend('#test', '<div>eris</div>');
+// -> <div id="test"><div>eris</div><div class="mark"></div></div>
+$insert.append('#test', '<div>eris</div>');
+// -> <div id="test"><div class="mark"></div><div>eris</div></div>
 ```
 
 ## $offset 
@@ -339,19 +368,79 @@ Emitter.mixin({});
 
 Simple wrapper of querySelectorAll to make dom selection easier.
 
-### Constructor
+### constructor
 
 |Name    |Type  |Desc               |
 |--------|------|-------------------|
 |selector|string|Dom selector string|
 
+### find
+
+Get desdendants of current matched elements.
+
+|Name    |Type  |Desc               |
+|--------|------|-------------------|
+|selector|string|Dom selector string|
+
+### each
+
+Iterate over matched elements.
+
+|Name|Type    |Desc                                |
+|----|--------|------------------------------------|
+|fn  |function|Function to execute for each element|
+
 ```javascript
-var test = new Select('#test');
+var $test = new Select('#test');
+$test.find('.test').each(function (idx, element)
+{
+    // Manipulate dom nodes
+});
 ```
 
 ## State 
 
-TODO
+Simple state machine.
+
+Extends from Emitter.
+
+### constructor
+
+|Name   |Type  |Desc                  |
+|-------|------|----------------------|
+|initial|string|Initial state         |
+|events |string|Events to change state|
+
+### is
+
+Check current state.
+
+|Name  |Type   |Desc                                    |
+|------|-------|----------------------------------------|
+|value |string |State to check                          |
+|return|boolean|True if current state equals given value|
+
+```javascript
+var state = new State('empty', {
+    load: {from: 'empty', to: 'pause'},
+    play: {from: 'pause', to: 'play'},
+    pause: {from: ['play', 'empty'], to: 'pause'},
+    unload: {from: ['play', 'pause'], to: 'empty'}
+});
+
+state.is('empty'); // -> true
+state.load();
+state.is('pause'); // -> true
+state.on('play', function (src)
+{
+    console.log(src); // -> 'eustia'
+});
+state.on('error', function (err, event)
+{
+    // Error handler
+});
+state.play('eustia');
+```
 
 ## Uri 
 
@@ -371,6 +460,58 @@ Create a function that invokes once it's called n or more times.
 var fn = after(5, function()
 {
     // -> Only invoke after fn is called 5 times.
+});
+```
+
+## ajax 
+
+Perform an asynchronous HTTP request.
+
+|Name   |Type  |Desc        |
+|-------|------|------------|
+|options|object|Ajax options|
+
+Available options:
+
+|Name         |Type         |Desc                  |
+|-------------|-------------|----------------------|
+|url          |string       |Request url           |
+|data         |string object|Request data          |
+|dataType=json|string       |Response type         |
+|success      |function     |Success callback      |
+|error        |function     |Error callback        |
+|complete     |function     |Callback after request|
+
+### get
+
+Shortcut for type = GET;
+
+### post
+
+Shortcut for type = POST;
+
+|Name    |Type         |Desc            |
+|--------|-------------|----------------|
+|url     |string       |Request url     |
+|data    |string object|Request data    |
+|success |function     |Success callback|
+|dataType|function     |Response type   |
+
+```javascript
+ajax({
+    url: 'http://example.com',
+    data: {test: 'true'},
+    error: function () {},
+    success: function (data)
+    {
+        // ...
+    },
+    dataType: 'json'
+});
+
+ajax.get('http://example.com', {}, function (data)
+{
+    // ...
 });
 ```
 
@@ -942,6 +1083,8 @@ Check if value is array-like.
 |value |*      |Value to check             |
 |return|boolean|True if value is array like|
 
+> Function returns false.
+
 ```javascript
 isArrLike('test'); // -> true
 isArrLike(document.body.children); // -> true;
@@ -1098,7 +1241,16 @@ isMatch({a: 1, b: 2}, {a: 1}); // -> true
 
 ## isMobile 
 
-Check whether client is using a mobile browser using ua. TODO
+Check whether client is using a mobile browser using ua.
+
+|Name  |Type   |Desc                                 |
+|------|-------|-------------------------------------|
+|ua    |string |User agent                           |
+|return|boolean|True if ua belongs to mobile browsers|
+
+```javascript
+isMobile(navigator.userAgent);
+```
 
 ## isNaN 
 
@@ -1114,6 +1266,19 @@ Undefined is not an NaN, different from global isNaN function.
 ```javascript
 isNaN(0); // -> false
 isNaN(NaN); // -> true
+```
+
+## isNull 
+
+Check if value is an Null.
+
+|Name  |Type   |Desc                   |
+|------|-------|-----------------------|
+|value |*      |Value to check         |
+|return|boolean|True if value is an Null|
+
+```javascript
+isNull(null); // -> true
 ```
 
 ## isNum 
@@ -1345,6 +1510,24 @@ Get minimum value of given numbers.
 
 ```javascript
 min(2.3, 1, 4.5, 2); // 1
+```
+
+## mkdir 
+
+Recursively create directories.
+
+|Name       |Type    |Desc               |
+|-----------|--------|-------------------|
+|dir        |string  |Directory to create|
+|[mode=0777]|number  |Directory mode     |
+|callback   |function|Callback           |
+
+```javascript
+mkdir('/tmp/foo/bar/baz', function (err)
+{
+    if (err) console.log(err);
+    else console.log('Done');
+});
 ```
 
 ## negate 
@@ -1836,7 +2019,7 @@ Generate a globally-unique id.
 |return|string|Globally-unique id|
 
 ```javascript
-uniqueId('eusita_'); // -> 'eustia_xxx'
+uniqId('eusita_'); // -> 'eustia_xxx'
 ```
 
 ## unique 
