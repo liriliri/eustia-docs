@@ -156,7 +156,7 @@ $data('#test', 'attr1', 'eustia');
 bind events to certain dom elements. TODO
 
 ```javascript
-event.on('#test', 'click', function ()
+$event.on('#test', 'click', function ()
 {
     // ...
 });
@@ -616,6 +616,21 @@ clone({name: 'eustia'}); // -> {name: 'eustia'}
 
 TODO
 
+## compact 
+
+Return a copy of the array with all falsy values removed.
+
+The values false, null, 0, "", undefined, and NaN are falsey.
+
+|Name  |Type |Desc                        |
+|------|-----|----------------------------|
+|arr   |array|Array to compact            |
+|return|array|New array of filtered values|
+
+```javascript
+compact([0, 1, false, 2, '', 3]); // -> [1, 2, 3]
+```
+
 ## contain 
 
 Check if the value is present in the list.
@@ -679,6 +694,20 @@ Used to create extend, extendOwn and defaults.
 |keysFn  |function|Function to get object keys   |
 |defaults|boolean |No override when set to true  |
 |return  |function|Result function, extend...    |
+
+## debounce 
+
+Return a new debounced version of the passed function.
+
+|Name  |Type    |Desc                           |
+|------|--------|-------------------------------|
+|fn    |function|Function to debounce           |
+|wait  |number  |Number of milliseconds to delay|
+|return|function|New debounced function         |
+
+```javascript
+$(window).resize(debounce(calLayout, 300));
+```
 
 ## defaults 
 
@@ -1029,6 +1058,19 @@ var s = new Student('RedHood');
 s.getName(); // -> 'RedHood'
 ```
 
+## intersect 
+
+Compute the list of values that are the intersection of all the arrays.
+
+|Name  |Type |Desc                          |
+|------|-----|------------------------------|
+|*arr  |array|Arrays to inspect             |
+|return|array|New array of inspecting values|
+
+```javascript
+intersection([1, 2, 3, 4], [2, 1, 10], [2, 1]); // -> [1, 2]
+```
+
 ## invert 
 
 Create an object composed of the inverted keys and values of object.
@@ -1143,6 +1185,19 @@ Check if value is a DOM element.
 
 ```javascript
 isEl(document.body); // -> true
+```
+
+## isEmail 
+
+Loosely validate an email address.
+
+|Name  |Type   |Desc                                 |
+|------|-------|-------------------------------------|
+|val   |*      |Value to check                       |
+|return|boolean|True if value is an email like string|
+
+```javascript
+isEmail('surunzi@foxmail.com'); // -> true
 ```
 
 ## isEmpty 
@@ -1351,6 +1406,14 @@ Check if path appears to be relative.
 isRelative('README.md'); // -> true
 ```
 
+## isRetina 
+
+Determine if running on a high DPR device or not.
+
+```javascript
+isRetina(); // -> true if high DPR
+```
+
 ## isStr 
 
 Check if value is a string primitive.
@@ -1499,6 +1562,23 @@ Get maximum value of given numbers.
 max(2.3, 1, 4.5, 2); // 4.5
 ```
 
+## memoize 
+
+Memoize a given function by caching the computed result.
+
+|Name    |Type    |Desc                                |
+|--------|--------|------------------------------------|
+|fn      |function|Function to have its output memoized|
+|[hashFn]|function|Function to create cache key        |
+|return  |function|New memoized function               |
+
+```javascript
+var fibonacci = memoize(function(n)
+{
+    return n < 2 ? n : fibonacci(n - 1) + fibonacci(n - 2);
+});
+```
+
 ## min 
 
 Get minimum value of given numbers.
@@ -1643,6 +1723,40 @@ pascalCase('foo_bar'); // -> FooBar
 pascalCase('foo.bar'); // -> FooBar
 ```
 
+## pluck 
+
+Extract a list of property values.
+
+|Name  |Type        |Desc                           |
+|------|------------|-------------------------------|
+|obj   |object array|Collection to iterate over     |
+|key   |string array|Property path                  |
+|return|array       |New array of specified property|
+
+```javascript
+var stooges = [
+    {name: 'moe', age: 40},
+    {name: 'larry', age: 50},
+    {name: 'curly', age: 60}
+];
+pluck(stooges, 'name'); // -> ['moe', 'larry', 'curly']
+```
+
+## property 
+
+Return a function that will itself return the key property of any passed-in object.
+
+|Name  |Type        |Desc                       |
+|------|------------|---------------------------|
+|path  |string array|Path of the property to get|
+|return|function    |New accessor function      |
+
+```javascript
+var obj = {a: {b: 1}};
+property('a')(obj); // -> {b: 1}
+property(['a', 'b'])(obj); // -> 1
+```
+
 ## random 
 
 Produces a random number between min and max(inclusive).
@@ -1657,6 +1771,36 @@ Produces a random number between min and max(inclusive).
 random(1, 5); // -> an integer between 0 and 5
 random(5); // -> an integer between 0 and 5
 random(1.2, 5.2, true); /// -> a floating-point number between 1.2 and 5.2
+```
+
+## range 
+
+Create flexibly-numbered lists of integers.
+
+|Name    |Type  |Desc                              |
+|--------|------|----------------------------------|
+|[start] |number|Start of the range                |
+|end     |number|End of the range                  |
+|[step=1]|number|Value to increment or decrement by|
+
+```javascript
+range(5); // -> [0, 1, 2, 3, 4]
+range(0, 5, 2) // -> [0, 2, 4]
+```
+
+## ready 
+
+Invoke callback when dom is ready, similar to jQuery ready.
+
+|Name|Type    |Desc             |
+|----|--------|-----------------|
+|fn  |function|Callback function|
+
+```javascript
+ready(function ()
+{
+    // It's safe to manipulate dom here.
+});
 ```
 
 ## repeat 
@@ -1896,6 +2040,20 @@ stripHtmlTag('<p>Hello</p>'); // -> 'Hello'
 
 TODO
 
+## throttle 
+
+Return a new throttled version of the passed function.
+
+|Name  |Type    |Desc                           |
+|------|--------|-------------------------------|
+|fn    |function|Function to throttle           |
+|wait  |number  |Number of milliseconds to delay|
+|return|function|New throttled function         |
+
+```javascript
+$(window).scroll(throttle(updatePos, 100));
+```
+
 ## toArr 
 
 Convert value to an array.
@@ -2036,6 +2194,19 @@ Create duplicate-free version of an array.
 unique([1, 2, 3, 1]); // -> [1, 2, 3]
 ```
 
+## unzip 
+
+Opposite of zip.
+
+|Name  |Type |Desc                                |
+|------|-----|------------------------------------|
+|arr   |array|Array of grouped elements to process|
+|return|array|New array of regrouped elements     |
+
+```javascript
+unzip([['a', 1, true], ['b', 2, false]]); // -> [['a', 'b'], [1, 2], [true, false]]
+```
+
 ## upperFirst 
 
 Convert the first character of string to upper case.
@@ -2098,4 +2269,17 @@ var p = wrap(escape, function(fn, text)
     return '<p>' + fn(text) + '</p>';
 });
 p('You & Me'); // -> '<p>You &amp; Me</p>'
+```
+
+## zip 
+
+Merge together the values of each of the arrays with the values at the corresponding position.
+
+|Name  |Type |Desc                         |
+|------|-----|-----------------------------|
+|*arr  |array|Arrays to process            |
+|return|array|New array of grouped elements|
+
+```javascript
+zip(['a', 'b'], [1, 2], [true, false]); // -> [['a', 1, true], ['b', 2, false]]
 ```
