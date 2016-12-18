@@ -165,13 +165,15 @@ $data('#test', 'attr1', 'eustia');
 
 ## $event 
 
-bind events to certain dom elements. TODO
+bind events to certain dom elements.
 
 ```javascript
-$event.on('#test', 'click', function ()
+function clickHandler()
 {
-    // ...
-});
+    // Do something...
+}
+$event.on('#test', 'click', clickHandler);
+$event.off('#test', 'click', clickHandler);
 ```
 
 ## $insert 
@@ -329,6 +331,44 @@ var Student = People.extend({
 var a = new Student('allen', 17, 'Hogwarts');
 a.introduce(); // -> 'I am allen, 17 years old. \n I study at Hogwarts.'
 Student.is(a); // -> true
+```
+
+## Color 
+
+Color converter.
+
+### constructor
+
+|Name |Type         |Desc            |
+|-----|-------------|----------------|
+|color|string object|Color to convert|
+
+### toRgb
+
+Get color rgb string format.
+
+### toHex
+
+Get color hex string format.
+
+### toHsl
+
+Get color hsl string format.
+
+### parse
+
+[static] Parse color string into object containing value and model.
+
+|Name  |Type  |Desc                             |
+|------|------|---------------------------------|
+|color |string|Color string                     |
+|return|object|Object containing value and model|
+
+```javascript
+Color.parse('rgb(170, 287, 204, 0.5)'); // -> {val: [170, 187, 204, 0.5], model: 'rgb'}
+var color = new Color('#abc');
+color.toRgb(); // -> 'rgb(170, 187, 204)'
+color.toHsl(); // -> 'hsl(210, 25%, 73%)'
 ```
 
 ## Emitter 
@@ -718,7 +758,7 @@ Any nested objects or arrays will be copied by reference, not duplicated.
 
 |Name  |Type|Desc          |
 |------|----|--------------|
-|value |*   |Value to clone|
+|val   |*   |Value to clone|
 |return|*   |Cloned value  |
 
 ```javascript
@@ -727,7 +767,18 @@ clone({name: 'eustia'}); // -> {name: 'eustia'}
 
 ## cloneDeep 
 
-TODO
+Recursively clone value.
+
+|Name  |Type|Desc             |
+|------|----|-----------------|
+|val   |*   |Value to clone   |
+|return|*   |Deep cloned Value|
+
+```javascript
+var obj = [{a: 1}, {a: 2}];
+var obj2 = cloneDeep(obj);
+console.log(obj[0] === obj2[1]); // -> false
+```
 
 ## cmpVersion 
 
@@ -774,6 +825,22 @@ Check if the value is present in the list.
 
 ```javascript
 contain([1, 2, 3], 1); // -> true
+```
+
+## convertBase 
+
+Convert base of a number.
+
+|Name  |Type         |Desc             |
+|------|-------------|-----------------|
+|num   |number string|Number to convert|
+|from  |number       |Base from        |
+|to    |number       |Base to          |
+|return|string       |Converted number |
+
+```javascript
+convertBase('10', 2, 10); // -> '2'
+convertBase('ff', 16, 2); // -> '11111111'
 ```
 
 ## cookie 
@@ -944,7 +1011,32 @@ delay(function (text)
 
 ## delegate 
 
-TODO
+Event delegation.
+
+### add
+
+Add event delegation.
+
+|Name    |Type    |Desc          |
+|--------|--------|--------------|
+|el      |element |Parent element|
+|type    |string  |Event type    |
+|selector|string  |Match selector|
+|cb      |function|Event callback|
+
+### remove
+
+Remove event delegation.
+
+```javascript
+var container = document.getElementById('container');
+function clickHandler()
+{
+    // Do something...
+}
+delegate.add(container, 'click', '.children', clickHandler);
+delegate.remove(container, 'click', '.children', clickHandler);
+```
 
 ## difference 
 
@@ -1074,7 +1166,28 @@ extend({name: 'RedHood'}, {age: 24}); // -> {name: 'RedHood', age: 24}
 
 ## extendDeep 
 
-No documentation.
+Recursive object extending.
+
+|Name  |Type  |Desc              |
+|------|------|------------------|
+|obj   |object|Destination object|
+|*src  |object|Sources objects   |
+|return|object|Destination object|
+
+```javascript
+extendDeep({
+    name: 'RedHood',
+    family: {
+        mother: 'Jane',
+        father: 'Jack'
+    }
+}, {
+    family: {
+        brother: 'Bruce'
+    }
+});
+// -> {name: 'RedHood', family: {mother: 'Jane', father: 'Jack', brother: 'Bruce'}}
+```
 
 ## extendOwn 
 
@@ -1165,6 +1278,19 @@ Checks if key is a direct property.
 has({one: 1}, 'one'); // -> true
 ```
 
+## hslToRgb 
+
+Convert hsl to rgb.
+
+|Name  |Type |Desc      |
+|------|-----|----------|
+|hsl   |array|Hsl values|
+|return|array|Rgb values|
+
+```javascript
+hslToRgb([165, 59, 50, 0.8]); // -> [52, 203, 165, 0.8]
+```
+
 ## identity 
 
 Return the first argument given.
@@ -1180,7 +1306,7 @@ identity('a'); // -> 'a'
 
 ## idxOf 
 
-Get the index at which the first occurrence of value. TODO
+Get the index at which the first occurrence of value.
 
 |Name       |Type  |Desc                |
 |-----------|------|--------------------|
@@ -1927,7 +2053,7 @@ initOnce(); // -> init is invoked once
 
 ## optimizeCb 
 
-TODO
+Used for function context binding.
 
 ## pad 
 
@@ -2070,6 +2196,21 @@ random(5); // -> an integer between 0 and 5
 random(1.2, 5.2, true); /// -> a floating-point number between 1.2 and 5.2
 ```
 
+## randomBytes 
+
+Random bytes generator.
+
+Use crypto module in node or crypto object in browser if possible.
+
+|Name  |Type  |Desc                        |
+|------|------|----------------------------|
+|size  |number|Number of bytes to generate |
+|return|object|Random bytes of given length|
+
+```javascript
+randomBytes(5); // -> [55, 49, 153, 30, 122]
+```
+
 ## range 
 
 Create flexibly-numbered lists of integers.
@@ -2098,6 +2239,26 @@ ready(function ()
 {
     // It's safe to manipulate dom here.
 });
+```
+
+## remove 
+
+Remove all elements from array that predicate returns truthy for and return an array of the removed elements.
+
+Unlike filter, this method mutates array.
+
+|Name     |Type    |Desc                                |
+|---------|--------|------------------------------------|
+|obj      |array   |Collection to iterate over          |
+|predicate|function|Function invoked per iteration      |
+|[ctx]    |*       |Predicate context                   |
+|return   |array   |Array of all values that are removed|
+
+```javascript
+var arr = [1, 2, 3, 4, 5];
+var evens = remove(arr, function (val) { return val % 2 === 0 });
+console.log(arr); // -> [1, 3, 5]
+console.log(evens); // -> [2, 4]
 ```
 
 ## repeat 
@@ -2129,6 +2290,19 @@ This accumulates the arguments passed into an array, after a given index.
 ```javascript
 var paramArr = _.restArgs(function (rest) { return rest });
 paramArr(1, 2, 3, 4); // -> [1, 2, 3, 4]
+```
+
+## rgbToHsl 
+
+Convert rgb to hsl.
+
+|Name  |Type |Desc      |
+|------|-----|----------|
+|rgb   |array|Rgb values|
+|return|array|Hsl values|
+
+```javascript
+rgbToHsl([52, 203, 165, 0.8]); // -> [165, 59, 50, 0.8]
 ```
 
 ## root 
@@ -2171,7 +2345,7 @@ rtrim('_abc_', ['c', '_']); // -> '_ab'
 
 ## safeCb 
 
-Create callback based on input value. TODO
+Create callback based on input value.
 
 ## safeGet 
 
@@ -2369,6 +2543,19 @@ Strip html tags from a string.
 stripHtmlTag('<p>Hello</p>'); // -> 'Hello'
 ```
 
+## sum 
+
+Compute sum of given numbers.
+
+|Name  |Type  |Desc                |
+|------|------|--------------------|
+|...num|number|Numbers to calculate|
+|return|number|Sum of numbers      |
+
+```javascript
+sum(1, 2, 5); // -> 8
+```
+
 ## template 
 
 Compile JavaScript template into function that can be evaluated for rendering.
@@ -2503,6 +2690,22 @@ trim('_abc_', '_'); // -> 'abc'
 trim('_abc_', ['a', 'c', '_']); // -> 'b'
 ```
 
+## type 
+
+Determine the internal JavaScript [[Class]] of an object.
+
+|Name  |Type  |Desc                      |
+|------|------|--------------------------|
+|val   |*     |Value to get type         |
+|return|string|Type of object, lowercased|
+
+```javascript
+type(5); // -> 'number'
+type({}); // -> 'object'
+type(function () {}); // -> 'function'
+type([]); // -> 'array'
+```
+
 ## unescape 
 
 Convert HTML entities back, the inverse of escape.
@@ -2579,7 +2782,7 @@ Convert the first character of string to upper case.
 |return|string|Converted string |
 
 ```javascript
-upperFirst('red'); // -> RED
+upperFirst('red'); // -> Red
 ```
 
 ## use 
@@ -2600,6 +2803,16 @@ use(['A'], function (A)
 {
     console.log(A + 'B'); // -> 'AB'
 });
+```
+
+## uuid 
+
+RFC4122 version 4 compliant uuid generator.
+
+Check [RFC4122 4.4](http://www.ietf.org/rfc/rfc4122.txt) for reference.
+
+```javascript
+uuid(); // -> '53ce0497-6554-49e9-8d79-347406d2a88b'
 ```
 
 ## values 
