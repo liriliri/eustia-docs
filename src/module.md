@@ -813,6 +813,19 @@ The values false, null, 0, "", undefined, and NaN are falsey.
 compact([0, 1, false, 2, '', 3]); // -> [1, 2, 3]
 ```
 
+## concat 
+
+Concat multiple arrays into a single array.
+
+|Name  |Type |Desc              |
+|------|-----|------------------|
+|...arr|array|Arrays to concat  |
+|return|array|Concatenated array|
+
+```javascript
+concat([1, 2], [3], [4, 5]); // -> [1, 2, 3, 4, 5]
+```
+
 ## contain 
 
 Check if the value is present in the list.
@@ -1157,7 +1170,7 @@ Copy all of the properties in the source objects over to the destination object.
 |Name  |Type  |Desc              |
 |------|------|------------------|
 |obj   |object|Destination object|
-|*src  |object|Sources objects   |
+|...src|object|Sources objects   |
 |return|object|Destination object|
 
 ```javascript
@@ -1171,7 +1184,7 @@ Recursive object extending.
 |Name  |Type  |Desc              |
 |------|------|------------------|
 |obj   |object|Destination object|
-|*src  |object|Sources objects   |
+|...src|object|Sources objects   |
 |return|object|Destination object|
 
 ```javascript
@@ -2381,6 +2394,34 @@ var obj = {};
 safeSet(obj, 'a.aa.aaa', 1); // obj = {a: {aa: {aaa: 1}}}
 safeSet(obj, ['a', 'aa'], 2); // obj = {a: {aa: 2}}
 safeSet(obj, 'a.b', 3); // obj = {a: {aa: 2, b: 3}}
+```
+
+## sample 
+
+Sample random values from a collection.
+
+|Name  |Type        |Desc                  |
+|------|------------|----------------------|
+|obj   |array object|Collection to sample  |
+|n     |number      |Number of values      |
+|return|array       |Array of sample values|
+
+```javascript
+sample([2, 3, 1], 2); // -> [2, 3]
+sample({a: 1, b: 2, c: 3}, 1); // -> [2]
+```
+
+## shuffle 
+
+Randomize the order of the elements in a given array.
+
+|Name  |Type |Desc              |
+|------|-----|------------------|
+|arr   |array|Array to randomize|
+|return|array|Randomized Array  |
+
+```javascript
+shuffle([1, 2, 3]); // -> [3, 1, 2]
 ```
 
 ## size 
