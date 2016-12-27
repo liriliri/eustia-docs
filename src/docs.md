@@ -1,9 +1,7 @@
 ---
 layout: docs.jade
 title: Guide
----
-
-# Table of Contents
+--- 
 
 <div class="toc" markdown="1">
 

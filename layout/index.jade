@@ -31,9 +31,9 @@ block content
         {
             var $glow = _.$('.glow');
 
-            var imgWidth  = 1828,
+            var imgWidth = 1828,
                 imgHeight = 360,
-                imgRatio  = imgWidth / imgHeight;
+                imgRatio = imgWidth / imgHeight;
 
             var bannerWidth, bannerHeight = 360, bannerRatio;
 
@@ -41,23 +41,23 @@ block content
             {
                 var width, height;
 
-                bannerWidth  = window.innerWidth;
+                bannerWidth = window.innerWidth;
                 bannerRatio = bannerWidth / bannerHeight;
 
                 if (bannerRatio > imgRatio)
                 {
-                    width  = bannerWidth;
+                    width = bannerWidth;
                     height = width / imgRatio;
                 } else
                 {
                     height = bannerHeight;
-                    width  = height * imgRatio;
+                    width = height * imgRatio;
                 }
 
                 var x = width * (297 / imgWidth) - 10,
                     y = height * (272 / imgHeight) - 10;
 
-                $glow.css({ top : y, left: x });
+                $glow.css({top : y, left: x});
             }
 
             onResize();

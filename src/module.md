@@ -325,7 +325,7 @@ var Student = People.extend({
     is: function (obj)
     {
         return obj instanceof Student;
-   }
+    }
 });
 
 var a = new Student('allen', 17, 'Hogwarts');
@@ -666,6 +666,36 @@ Get average value of given numbers.
 average(5, 3, 1); // -> 3
 ```
 
+## base64 
+
+Basic base64 encoding and decoding.
+
+### encode
+
+Turn a byte array into a base64 string.
+
+|Name  |Type  |Desc         |
+|------|------|-------------|
+|arr   |array |Byte array   |
+|return|string|Base64 string|
+
+```javascript
+base64.encode([168, 174, 155, 255]); // -> 'qK6b/w=='
+```
+
+### decode
+
+Turn a base64 string into a byte array.
+
+|Name  |Type  |Desc         |
+|------|------|-------------|
+|str   |string|Base64 string|
+|return|array |Byte array   |
+
+```javascript
+base64.decode('qK6b/w=='); // -> [168, 174, 155, 255]
+```
+
 ## before 
 
 Create a function that invokes less than n times.
@@ -727,7 +757,7 @@ Convert the first character to upper case and the remaining to lower case.
 |str   |string|String to capitalize|
 |return|string|Capitalized string  |
 
-```
+```javascript
 capitalize('rED'); // -> Red
 ```
 
@@ -1381,11 +1411,11 @@ Compute the list of values that are the intersection of all the arrays.
 
 |Name  |Type |Desc                          |
 |------|-----|------------------------------|
-|*arr  |array|Arrays to inspect             |
+|...arr|array|Arrays to inspect             |
 |return|array|New array of inspecting values|
 
 ```javascript
-intersection([1, 2, 3, 4], [2, 1, 10], [2, 1]); // -> [1, 2]
+intersect([1, 2, 3, 4], [2, 1, 10], [2, 1]); // -> [1, 2]
 ```
 
 ## invert 

@@ -1,10 +1,12 @@
 module.exports = {
     page: {
-        files: "./layout/**/*.jade",
-        output: "./static/js/eustia.js"
+        files: './layout/**/*.jade',
+        output: './static/js/eustia.js',
+        format: 'global'
     },
     node: {
-        files: ["./lib/*.js", "./tool/**/*.js"],
-        output: "./lib/util.js"
+        files: ['./lib/*.js', './tool/**/*.js'],
+        output: './lib/util.js',
+        format: 'commonjs'
     }
 };

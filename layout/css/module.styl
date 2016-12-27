@@ -1,0 +1,36 @@
+.module-container
+    padding-top 80px
+    width 100%
+    position absolute
+    top 0
+    left 0
+    height 100%
+    overflow hidden
+    background #fff
+
+    .toc-container
+        width 200px
+        height 100%
+        float left
+        padding 25px 0 30px 30px
+        overflow-y auto
+
+    .doc-container
+        margin-left 200px
+        padding 0 30px;
+        height 100%
+        overflow-y auto;
+
+@media (max-width $container-width)
+    .module-container
+        height auto
+        padding-top 0
+        position static
+
+        .toc-container
+            display none
+
+        .doc-container
+            margin-left 0
+            margin-right 0
+            padding 1em 1.4em !important

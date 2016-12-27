@@ -9,8 +9,7 @@ var layouts = require('metalsmith-layouts'),
     markdown = require('metalsmith-markdown'),
     prism = require('metalsmith-prism'),
     ignore = require('metalsmith-ignore'),
-    jsonToHtml = require('./lib/jsonToHtml'),
-    collections = require('metalsmith-collections');
+    markedToc = require('./lib/markedToc');
 
 var dirname = __dirname,
     env = 'release';
@@ -49,6 +48,10 @@ function build()
 
     var metalsmith = require('metalsmith')(dirname);
 
+    var renderer = new marked.Renderer();
+
+    renderer.heading = heading;
+
     console.time('[metalsmith] build/site finished');
 
     metalsmith.metadata({
@@ -57,25 +60,23 @@ function build()
         'src'
     ).clean(
         false
-    ).use(collections({
-        guide: {
-            pattern: 'guide/!(index).md'
-        }
+    ).use(markedToc({
+        omit: ['Eustia Documentation'],
+        maxDepth: 1,
+        slugify: slugify
     })).use(markdown({
-        renderer: new marked.Renderer(),
+        renderer: renderer,
         langPrefix: 'language-'
     })).use(stylus({
         compress: true,
-        paths   : [dirPath('layout/css')],
-        use     : [autoprefixer()]
+        paths: [dirPath('layout/css')],
+        use: [autoprefixer()]
     })).use(ignore([
         'site.json'
-    ])).use(
-        jsonToHtml()
-    ).use(layouts({
-        engine   : 'jade',
+    ])).use(layouts({
+        engine: 'jade',
         directory: 'layout',
-        pattern  : '**/*.html'
+        pattern: '**/*.html'
     })).use(
         prism()
     ).destination(
@@ -96,11 +97,11 @@ function fullBuild()
 
 function server()
 {
-    var st   = require('st'),
+    var st = require('st'),
         http = require('http');
 
     var mount = st({
-        path : dirPath('dist'),
+        path: dirPath('dist'),
         cache: false,
         index: 'index.html'
     });
@@ -116,19 +117,19 @@ function server()
     var chokidar = require('chokidar');
 
     var options = {
-        persistent    : true,
-        ignoreInitial : true,
+        persistent: true,
+        ignoreInitial: true,
         followSymlinks: true,
-        usePolling    : true,
-        alwaysStat    : false,
-        depth         : undefined,
-        interval      : 100,
-        atomic        : true,
+        usePolling: true,
+        alwaysStat: false,
+        depth: undefined,
+        interval: 100,
+        atomic: true,
         ignorePermissionErrors: false
     };
 
-    var layout  = chokidar.watch(dirPath('layout'), options),
-        src     = chokidar.watch(dirPath('src'), options),
+    var layout = chokidar.watch(dirPath('layout'), options),
+        src = chokidar.watch(dirPath('src'), options),
         staticFiles = chokidar.watch(dirPath('static'), options);
 
     layout.on('change', build);
@@ -140,6 +141,16 @@ if (process.argv[2] === 'serve')
 {
     env = 'development';
     server();
+}
+
+function heading(text, level)
+{
+    return '<h' + level + ' id="' + slugify(text) + '">' + text + '</h' + level + '>';
+}
+
+function slugify(str)
+{
+    return str.toLowerCase().replace(/\$/, 'dollar-').replace(/[^\w]+/g, '-')
 }
 
 fullBuild();
