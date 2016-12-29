@@ -145,6 +145,8 @@ if (process.argv[2] === 'serve')
 
 function heading(text, level)
 {
+    if (level !== 2) return '<h' + level + '>' + text + '</h' + level + '>';
+
     return '<h' + level + ' id="' + slugify(text) + '">' + text + '</h' + level + '>';
 }
 
