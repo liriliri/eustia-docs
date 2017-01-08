@@ -567,6 +567,56 @@ url.rmQuery('eruda');
 utl.toString(); // -> 'http://example.com:8080/?foo=bar'
 ```
 
+## Validator 
+
+Object values validation.
+
+### constructor
+
+|Name   |Type  |Desc                    |
+|-------|------|------------------------|
+|options|object|Validation configuration|
+
+### validate
+
+Validate object.
+
+|Name  |Type  |Desc                            |
+|------|------|--------------------------------|
+|obj   |object|Object to validate              |
+|return|*     |Validation result, true means ok|
+
+### addPlugin
+
+[static] Add plugin.
+
+|Name  |Type    |Desc              |
+|------|--------|------------------|
+|name  |string  |Plugin name       |
+|plugin|function|Validation handler|
+
+### Default Plugins
+
+Required, number, boolean, string and regexp.
+
+```javascript
+Validator.addPlugin('custom', function (val, key, config)
+{
+    if (typeof val === 'string' && val.length === 5) return true;
+
+    return key + ' should be a string with length 5';
+});
+var validator = new Validator({
+    'test': {
+        required: true,
+        custom: true
+    }
+});
+validator.validate({}); // -> 'test is required'
+validator.validate({test: 1}); // -> 'test should be a string with length 5';
+validator.validate({test: 'eris'}); // -> true
+```
+
 ## after 
 
 Create a function that invokes once it's called n or more times.
@@ -935,6 +985,21 @@ Used to create extend, extendOwn and defaults.
 |keysFn  |function|Function to get object keys   |
 |defaults|boolean |No override when set to true  |
 |return  |function|Result function, extend...    |
+
+## curry 
+
+Function currying.
+
+|Name  |Type    |Desc                |
+|------|--------|--------------------|
+|fn    |function|Function to curry   |
+|return|function|New curried function|
+
+```javascript
+var add = function (a, b) { return a + b };
+var add1 = add(1);
+add1(2); // -> 3
+```
 
 ## dateFormat 
 
@@ -1829,6 +1894,29 @@ kebabCase('foo_bar'); // -> foo-bar
 kebabCase('foo.bar'); // -> foo-bar
 ```
 
+## keyCode 
+
+Key codes and key names conversion.
+
+Get key code's name.
+
+|Name  |Type  |Desc                  |
+|------|------|----------------------|
+|code  |number|Key code              |
+|return|string|Corresponding key name|
+
+Get key name's code.
+
+|Name  |Type  |Desc                  |
+|------|------|----------------------|
+|name  |string|Key name              |
+|return|number|Corresponding key code|
+
+```javascript
+keyCode(13); // -> 'enter'
+keyCode('enter'); // -> 13
+```
+
 ## keys 
 
 Create an array of the own enumerable property names of object.
@@ -1972,6 +2060,17 @@ Get maximum value of given numbers.
 
 ```javascript
 max(2.3, 1, 4.5, 2); // 4.5
+```
+
+## memStorage 
+
+Memory-backed implementation of the Web Storage API.
+
+A replacement for environments where localStorage or sessionStorage is not available.
+
+```javascript
+var localStorage = window.localStorage || memStorage;
+localStorage.setItem('test', 'eris');
 ```
 
 ## memoize 
