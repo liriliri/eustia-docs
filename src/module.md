@@ -454,7 +454,7 @@ $test.find('.test').each(function (idx, element)
 
 Simple state machine.
 
-Extends from Emitter.
+Extend from Emitter.
 
 ### constructor
 
@@ -492,6 +492,60 @@ state.on('error', function (err, event)
     // Error handler
 });
 state.play('eustia');
+```
+
+## Tween 
+
+Tween engine for JavaScript animations.
+
+Extend from Emitter.
+
+### constructor
+
+|Name|Type  |Desc           |
+|----|------|---------------|
+|obj |object|Values to tween|
+
+### to
+
+|Name       |Type           |Desc            |
+|-----------|---------------|----------------|
+|destination|obj            |Final properties|
+|duration   |number         |Tween duration  |
+|ease       |string function|Easing function |
+
+### play
+
+Begin playing forward.
+
+### pause
+
+Pause the animation.
+
+### paused
+
+Get animation paused state.
+
+### progress
+
+Update or get animation progress.
+
+|Name      |Type  |Desc                  |
+|----------|------|----------------------|
+|[progress]|number|Number between 0 and 1|
+
+```javascript
+var pos = {x: 0, y: 0};
+
+var tween = new Tween(pos);
+tween.on('update', function (target)
+{
+    console.log(target.x, target.y);
+}).on('end', function ()
+{
+    console.log(target.x, target.y); // -> 100, 100
+});
+tween.to({x: 100, y: 100}, 1000, 'inElastic').play();
 ```
 
 ## Url 
@@ -1186,6 +1240,20 @@ Iterates over elements of collection and invokes iteratee for each element.
 
 ```javascript
 each({'a': 1, 'b': 2}, function (val, key) {});
+```
+
+## easing 
+
+Easing functions adapted from http://jqueryui.com/
+
+|Name   |Type  |Desc                  |
+|-------|------|----------------------|
+|percent|number|Number between 0 and 1|
+|return |number|Calculated number     |
+
+```javascript
+easing.linear(0.5); // -> 0.5
+easing.inElastic(0.5, 500); // -> 0.03125
 ```
 
 ## endWith 
@@ -2148,6 +2216,25 @@ function even(n) { return n % 2 === 0 }
 filter([1, 2, 3, 4, 5, 6], negate(even)); // -> [1, 3, 5]
 ```
 
+## nextTick 
+
+Next tick for both node and browser.
+
+|Name|Type    |Desc            |
+|----|--------|----------------|
+|cb  |function|Function to call|
+
+Use process.nextTick if available.
+
+Otherwise setImmediate or setTimeout is used as fallback.
+
+```javascript
+nextTick(function ()
+{
+    // Do something...
+});
+```
+
 ## noop 
 
 A no-operation function.
@@ -2341,11 +2428,12 @@ raf.cancel(id);
 
 Produces a random number between min and max(inclusive).
 
-|Name  |Type  |Desc                      |
-|------|------|--------------------------|
-|min   |number|The minimum possible value|
-|max   |number|The maximum possible value|
-|return|number|The random number         |
+|Name            |Type   |Desc                  |
+|----------------|-------|----------------------|
+|min             |number |Minimum possible value|
+|max             |number |Maximum possible value|
+|[floating=false]|boolean|Float or not          |
+|return          |number |Random number         |
 
 ```javascript
 random(1, 5); // -> an integer between 0 and 5
@@ -3002,7 +3090,7 @@ uuid(); // -> '53ce0497-6554-49e9-8d79-347406d2a88b'
 
 ## values 
 
-Creates an array of the own enumerable property values of object.
+Create an array of the own enumerable property values of object.
 
 |Name  |Type  |Desc                    |
 |------|------|------------------------|
@@ -3011,6 +3099,32 @@ Creates an array of the own enumerable property values of object.
 
 ```javascript
 values({one: 1, two: 2}); // -> [1, 2]
+```
+
+## waterfall 
+
+Run an array of functions in series.
+
+|Name |Type    |Desc                   |
+|-----|--------|-----------------------|
+|tasks|array   |Array of functions     |
+|[cb] |function|Callback once completed|
+
+```javascript
+waterfall([
+    function (cb)
+    {
+        cb(null, 'one');
+    },
+    function (arg1)
+    {
+        // arg1 -> 'one'
+        cb(null, 'done');
+    }
+], function (err, result)
+{
+    // result -> 'done'
+});
 ```
 
 ## wrap 
