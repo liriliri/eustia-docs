@@ -416,6 +416,114 @@ event.emit('test'); // Logs out 'test'.
 Emitter.mixin({});
 ```
 
+## JsonTransformer 
+
+Json to json transformer.
+
+### constructor
+
+|Name     |Type  |Desc                     |
+|---------|------|-------------------------|
+|[data={}]|object|Json object to manipulate|
+
+### set
+
+Set object value.
+
+|Name |Type  |Desc        |
+|-----|------|------------|
+|[key]|string|Object key  |
+|val  |*     |Value to set|
+
+If key is not given, the whole source object is replaced by val.
+
+### get
+
+Get object value.
+
+|Name  |Type  |Desc                           |
+|------|------|-------------------------------|
+|[key] |string|Object key                     |
+|return|*     |Specified value or whole object|
+
+### remove
+
+|Name|Type        |Desc                 |
+|----|------------|---------------------|
+|key |array string|Object keys to remove|
+
+### map
+
+Shortcut for array map.
+
+|Name|Type    |Desc                          |
+|----|--------|------------------------------|
+|from|string  |From object path              |
+|to  |string  |Target object path            |
+|fn  |function|Function invoked per iteration|
+
+### filter
+
+Shortcut for array filter.
+
+### compute
+
+Compute value from several object values.
+
+|Name|Type        |Desc                            |
+|----|------------|--------------------------------|
+|from|array string|Source values                   |
+|to  |string      |Target object path              |
+|fn  |function    |Function to compute target value|
+
+```javascript
+var data = new JsonTransformer({
+    books: [{
+        title: 'Book 1',
+        price: 5
+    }, {
+        title: 'Book 2',
+        price: 10
+    }],
+    author: {
+        lastname: 'Su',
+        firstname: 'RedHood'
+    }
+});
+data.filter('books', function (book) { return book.price > 5 });
+data.compute('author', function (author) { return author.firstname + author.lastname });
+data.set('count', data.get('books').length);
+data.get(); // -> {books: [{title: 'Book 2', price: 10}], author: 'RedHoodSu', count: 1}
+```
+
+## Promise 
+
+Lightweight Promise implementation.
+
+[Promises spec](https://github.com/promises-aplus/promises-spec)
+
+```javascript
+function get(url)
+{
+    return new Promise(function (resolve, reject)
+    {
+        var req = new XMLHttpRequest();
+        req.open('GET', url);
+        req.onload = function ()
+        {
+            req.status == 200 ? resolve(req.reponse) : reject(Error(req.statusText));
+        };
+        req.onerror = function () { reject(Error('Network Error')) };
+        req.send();
+    });
+}
+
+get('test.json').then(function (result)
+{
+    // Do something...
+});
+```
+
 ## Select 
 
 Simple wrapper of querySelectorAll to make dom selection easier.
@@ -541,7 +649,7 @@ var tween = new Tween(pos);
 tween.on('update', function (target)
 {
     console.log(target.x, target.y);
-}).on('end', function ()
+}).on('end', function (target)
 {
     console.log(target.x, target.y); // -> 100, 100
 });
@@ -698,14 +806,15 @@ Perform an asynchronous HTTP request.
 
 Available options:
 
-|Name         |Type         |Desc                  |
-|-------------|-------------|----------------------|
-|url          |string       |Request url           |
-|data         |string object|Request data          |
-|dataType=json|string       |Response type         |
-|success      |function     |Success callback      |
-|error        |function     |Error callback        |
-|complete     |function     |Callback after request|
+|Name         |Type         |Desc                    |
+|-------------|-------------|------------------------|
+|url          |string       |Request url             |
+|data         |string object|Request data            |
+|dataType=json|string       |Response type(json, xml)|
+|success      |function     |Success callback        |
+|error        |function     |Error callback          |
+|complete     |function     |Callback after request  |
+|timeout      |number       |Request timeout         |
 
 ### get
 
@@ -718,7 +827,7 @@ Shortcut for type = POST;
 |Name    |Type         |Desc            |
 |--------|-------------|----------------|
 |url     |string       |Request url     |
-|data    |string object|Request data    |
+|[data]  |string object|Request data    |
 |success |function     |Success callback|
 |dataType|function     |Response type   |
 
@@ -1392,6 +1501,33 @@ Extract block comments from source code.
 extractBlockCmts('\/*eris*\/'); // -> ['eris']
 ```
 
+## fetch 
+
+Turn XMLHttpRequest into promise like.
+
+Note: This is not a complete fetch pollyfill.
+
+|Name   |Type   |Desc           |
+|-------|-------|---------------|
+|url    |string |Request url    |
+|options|object |Request options|
+|return |promise|Request promise|
+
+```javascript
+fetch('test.json', {
+    method: 'GET',
+    timeout: 3000,
+    headers: {},
+    body: ''
+}).then(function (res)
+{
+    return res.json();
+}).then(function (data)
+{
+    console.log(data);
+});
+```
+
 ## filter 
 
 Iterates over elements of collection, returning an array of all the values that pass a truth test.
@@ -1628,6 +1764,14 @@ isBool(false); // -> true
 isBool(1); // -> false
 ```
 
+## isBrowser 
+
+Check if running in a browser.
+
+```javascript
+console.log(isBrowser); // -> true if running in a browser
+```
+
 ## isBuffer 
 
 Check if value is a buffer.
@@ -1778,10 +1922,10 @@ isMatch({a: 1, b: 2}, {a: 1}); // -> true
 
 Check whether client is using a mobile browser using ua.
 
-|Name  |Type   |Desc                                 |
-|------|-------|-------------------------------------|
-|ua    |string |User agent                           |
-|return|boolean|True if ua belongs to mobile browsers|
+|Name                    |Type   |Desc                                 |
+|------------------------|-------|-------------------------------------|
+|[ua=navigator.userAgent]|string |User agent                           |
+|return                  |boolean|True if ua belongs to mobile browsers|
 
 ```javascript
 isMobile(navigator.userAgent);
@@ -1801,6 +1945,14 @@ Undefined is not an NaN, different from global isNaN function.
 ```javascript
 isNaN(0); // -> false
 isNaN(NaN); // -> true
+```
+
+## isNode 
+
+Check if running in node.
+
+```javascript
+console.log(isNode); // -> true if running in node
 ```
 
 ## isNull 
@@ -1902,7 +2054,7 @@ isRelative('README.md'); // -> true
 Determine if running on a high DPR device or not.
 
 ```javascript
-isRetina(); // -> true if high DPR
+console.log(isRetina); // -> true if high DPR
 ```
 
 ## isStr 
@@ -1993,6 +2145,10 @@ Create an array of the own enumerable property names of object.
 |------|------|-----------------------|
 |obj   |object|Object to query        |
 |return|array |Array of property names|
+
+```javascript
+keys({a: 1}); // -> ['a']
+```
 
 ## last 
 
@@ -2592,6 +2748,23 @@ rtrim('_abc_', ['c', '_']); // -> '_ab'
 
 Create callback based on input value.
 
+## safeDel 
+
+Delete object property.
+
+|Name  |Type        |Desc                      |
+|------|------------|--------------------------|
+|obj   |object      |Object to query           |
+|path  |array string|Path of property to delete|
+|return|*           |Deleted value or undefined|
+
+```javascript
+var obj = {a: {aa: {aaa: 1}}};
+safeDel(obj, 'a.aa.aaa'); // -> 1
+safeDel(obj, ['a', 'aa']); // -> {}
+safeDel(obj, 'a.b'); // -> undefined
+```
+
 ## safeGet 
 
 Get object property, don't throw undefined error.
@@ -2889,6 +3062,21 @@ toArr({a: 1, b: 2}); // -> [{a: 1, b: 2}]
 toArr('abc'); // -> ['abc']
 toArr(1); // -> []
 toArr(null); // -> []
+```
+
+## toEl 
+
+Convert html string to dom elements.
+
+There should be only one root element.
+
+|Name  |Type   |Desc        |
+|------|-------|------------|
+|str   |string |Html string |
+|return|element|Html element|
+
+```javascript
+toEl('<div>test</div>');
 ```
 
 ## toInt 
