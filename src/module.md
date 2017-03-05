@@ -1073,14 +1073,15 @@ concat([1, 2], [3], [4, 5]); // -> [1, 2, 3, 4, 5]
 
 Check if the value is present in the list.
 
-|Name  |Type   |Desc                                |
-|------|-------|------------------------------------|
-|array |array  |Target list                         |
-|value |*      |Value to check                      |
-|return|boolean|True if value is present in the list|
+|Name  |Type        |Desc                                |
+|------|------------|------------------------------------|
+|array |array object|Target list                         |
+|value |*           |Value to check                      |
+|return|boolean     |True if value is present in the list|
 
 ```javascript
 contain([1, 2, 3], 1); // -> true
+contain({a: 1, b: 2}, 1); // -> true
 ```
 
 ## convertBase 
@@ -1307,6 +1308,43 @@ function clickHandler()
 }
 delegate.add(container, 'click', '.children', clickHandler);
 delegate.remove(container, 'click', '.children', clickHandler);
+```
+
+## detectBrowser 
+
+Detect browser info using ua.
+
+|Name                    |Type  |Desc                              |
+|------------------------|------|----------------------------------|
+|[ua=navigator.userAgent]|string|Browser userAgent                 |
+|return                  |object|Object containing name and version|
+
+Browsers supported: ie, chrome, edge, firefox, opera, safari, ios(mobile safari), android(android browser)
+
+```javascript
+var browser = detectBrowser();
+if (browser.name === 'ie' && browser.version < 9)
+{
+    // Do something about old IE...
+}
+```
+
+## detectOs 
+
+Detect operating system using ua.
+
+|Name                    |Type  |Desc                 |
+|------------------------|------|---------------------|
+|[ua=navigator.userAgent]|string|Browser userAgent    |
+|return                  |string|Operating system name|
+
+Supported os: windows, os x, linux, ios, android, windows phone
+
+```javascript
+if (detectOs() === 'ios')
+{
+    // Do something about ios...
+}
 ```
 
 ## difference 
@@ -1836,6 +1874,7 @@ Check if value is an empty object or array.
 ```javascript
 isEmpty([]); // -> true
 isEmpty({}); // -> true
+isEmpty(''); // -> true
 ```
 
 ## isEqual 
@@ -2472,6 +2511,31 @@ Convert an object into a list of [key, value] pairs.
 pairs({a: 1, b: 2}); // -> [['a', 1], ['b', 2]]
 ```
 
+## parallel 
+
+Run an array of functions in parallel.
+
+|Name |Type    |Desc                   |
+|-----|--------|-----------------------|
+|tasks|array   |Array of functions     |
+|[cb] |function|Callback once completed|
+
+```javascript
+parallel([
+    function(cb)
+    {
+        setTimeout(function () { cb(null, 'one') }, 200);
+    },
+    function(cb)
+    {
+        setTimeout(function () { cb(null, 'two') }, 100);
+    }
+], function (err, results)
+{
+    // results -> ['one', 'two']
+});
+```
+
 ## partial 
 
 Partially apply a function by filling in given arguments.
@@ -3060,7 +3124,7 @@ Convert value to an array.
 ```javascript
 toArr({a: 1, b: 2}); // -> [{a: 1, b: 2}]
 toArr('abc'); // -> ['abc']
-toArr(1); // -> []
+toArr(1); // -> [1]
 toArr(null); // -> []
 ```
 
@@ -3304,7 +3368,7 @@ waterfall([
     {
         cb(null, 'one');
     },
-    function (arg1)
+    function (arg1, cb)
     {
         // arg1 -> 'one'
         cb(null, 'done');
