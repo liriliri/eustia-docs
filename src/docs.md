@@ -48,8 +48,7 @@ npm install -g eustia
 
 ### Syntax supported
 
-Eustia scans code files to find the modules you need with three types of syntax
-supported, **global**, **commonjs** and **es6**.
+Eustia scans code files to find the modules you need with three types of syntax supported, **global**, **commonjs** and **es6**.
 
 ```html
 <html>
@@ -82,8 +81,7 @@ var projectName = trim(' Eustia ');
 
 ### Run in command prompt
 
-You can use Eustia with command lines totally. It usually follows the same
-pattern described below:
+You can use Eustia with command lines totally. It usually follows the same pattern described below:
 
 ```bash
 eustia <command> [<options>]
@@ -97,9 +95,7 @@ eustia build -o util.js index.html *.js ...<list of files to be scanned>
 
 ### Run through configuration file
 
-It's also possible to use a configuration file to save settings. This is pretty
-helpful especially when you want to generate multiple utility libraries for
-different sections of your website.
+It's also possible to use a configuration file to save settings. This is pretty helpful especially when you want to generate multiple utility libraries for different sections of your website.
 
 Just create a file named .eustia in your project root.
 
@@ -110,10 +106,7 @@ Just create a file named .eustia in your project root.
 }
 ```
 
-Running Eustia without any sub commands, the tool will find **.eustia** under
-current working directory to read configuration to generate libraries. It is
-almost the same as running [build command](#build-command) from console, just 
-a different way of passing options.
+Running Eustia without any sub commands, the tool will find **.eustia** under current working directory to read configuration to generate libraries. It is almost the same as running [build command](#build-command) from console, just a different way of passing options.
 
 Configuration can be written in json format or js format.
 
@@ -131,14 +124,13 @@ module.exports = {
 };
 ```
 
-Obviously, multiple configuration is also supported. To specify which task to
-run, just append the task name after command name.
+Obviously, multiple configuration is also supported. To specify which task to run, just append the task name after command name.
 
 ```bash
 eustia <task-name>
 ```
 
-> Configuration could be overwritten by command line options.
+> Configuration could be overwritten by command line options. And it's possible to specify another configuration path using **config** options.
 
 ### Use in JavaScript
 
@@ -167,8 +159,7 @@ eustia.build({
 
 ### Build Command
 
-Build JavaScript libraries by scanning files. When used in command line, the
-rest arguments will be treated as files.
+Build JavaScript libraries by scanning files. When used in command line, the rest arguments will be treated as files.
 
 ```bash
 eustia build [<options>]
@@ -192,13 +183,11 @@ eusita build index.html src/*.js -o lib.js
 |transpilers|         |                    |Use for writing modules in different formats|
 |watch      |w        |false               |Watch files to regenerate automatically     |
 
-> **Transpilers** and **extension** are not available via command line
-arguments, use them only in configurations.
+> **Transpilers** and **extension** are not available via command line arguments, use them only in configurations.
 
 ### Search Command
 
-Search for [modules](http://liriliri.github.io/eustia/module.html) directly
-through command line.
+Search for [modules](http://liriliri.github.io/eustia/module.html) directly through command line.
 
 ```bash
 eustia search <keyword>
@@ -242,15 +231,9 @@ eustia cache clear
 
 ## Create Module
 
-Materials must be prepared first to cook a good meal. Right now, our materials 
-is a bunch of small modules. Eustia provides many 
-[utilities](http://liriliri.github.io/eustia/module.html) itself(currently under 
-development). Still, there are times you want to add your own ones. 
-To achieve that, create a directory named **eustia** in the root directory.
+Materials must be prepared first to cook a good meal. Right now, our materials is a bunch of small modules. Eustia provides many [utilities](http://liriliri.github.io/eustia/module.html) itself(currently under development). Still, there are times you want to add your own ones. To achieve that, create a directory named **eustia** in the root directory.
 
-Now, let's say I want to have a function to compare version numbers. The first 
-step is to create a js file named **compareVersion.js** in **eustia** directory. 
-Then fills it with actual codes to finish the procedure.
+Now, let's say I want to have a function to compare version numbers. The first step is to create a js file named **compareVersion.js** in **eustia** directory. Then fills it with actual codes to finish the procedure.
 
 ```javascript
 // eustia/compareVersion.js
@@ -266,10 +249,7 @@ exports = function (v1, v2)
 
 Now you can use **compareVersion** anywhere in your project.
 
-> Using option **library** allows you to search functions in other paths, 
-quite useful when sharing functions among several projects. Besides, **Lodash** 
-functions is available by using 
-[eustia-lodash](https://github.com/liriliri/eustia-lodash).
+> Using option **library** allows you to search functions in other paths, quite useful when sharing functions among several projects. Besides, **Lodash** functions is available by using [eustia-lodash](https://github.com/liriliri/eustia-lodash).
 
 ## Relative Projects
 
