@@ -85,6 +85,31 @@ window._ = (function()
         return exports;
     })();
 
+    /* ------------------------------ startWith ------------------------------ */
+
+    var startWith = _.startWith = (function ()
+    {
+        /* Check if string starts with the given target string.
+         *
+         * |Name  |Type   |Desc                             |
+         * |------|-------|---------------------------------|
+         * |str   |string |String to search                 |
+         * |prefix|string |String prefix                    |
+         * |return|boolean|True if string starts with prefix|
+         *
+         * ```javascript
+         * startWith('ab', 'a'); // -> true
+         * ```
+         */
+
+        function exports(str, prefix)
+        {
+            return str.indexOf(prefix) === 0;
+        }
+
+        return exports;
+    })();
+
     /* ------------------------------ inherits ------------------------------ */
 
     var inherits = _.inherits = (function ()
@@ -117,17 +142,17 @@ window._ = (function()
          * ```
          */
 
-        var objCreate = Object.create;
-
-        function noop() {}
-
         function exports(Class, SuperClass)
         {
             if (objCreate) return Class.prototype = objCreate(SuperClass.prototype);
 
-            noop.prototype  = SuperClass.prototype;
+            noop.prototype = SuperClass.prototype;
             Class.prototype = new noop();
         }
+
+        var objCreate = Object.create;
+
+        function noop() {}
 
         return exports;
     })();
@@ -159,6 +184,77 @@ window._ = (function()
         return exports;
     })();
 
+    /* ------------------------------ slice ------------------------------ */
+
+    var slice = _.slice = (function ()
+    {
+        /* Create slice of source array or array-like object.
+         *
+         * |Name              |Type  |Desc                      |
+         * |------------------|------|--------------------------|
+         * |array             |array |Array to slice            |
+         * |[start=0]         |number|Start position            |
+         * |[end=array.length]|number|End position, not included|
+         *
+         * ```javascript
+         * slice([1, 2, 3, 4], 1, 2); // -> [2]
+         * ```
+         */
+
+        function exports(arr, start, end)
+        {
+            var len = arr.length;
+
+            if (start == null)
+            {
+                start = 0;
+            } else if (start < 0)
+            {
+                start = Math.max(len + start, 0);
+            } else
+            {
+                start = Math.min(start, len);
+            }
+
+            if (end == null)
+            {
+                end = len;
+            } else if (end < 0)
+            {
+                end = Math.max(len + end, 0);
+            } else
+            {
+                end = Math.min(end, len);
+            }
+
+            var ret = [];
+            while (start < end) ret.push(arr[start++]);
+
+            return ret;
+        }
+
+        return exports;
+    })();
+
+    /* ------------------------------ now ------------------------------ */
+
+    var now = _.now = (function (exports)
+    {
+        /* Gets the number of milliseconds that have elapsed since the Unix epoch.
+         *
+         * ```javascript
+         * now(); // -> 1468826678701
+         * ```
+         */
+
+        exports = Date.now || function ()
+        {
+            return new Date().getTime();
+        };
+
+        return exports;
+    })({});
+
     /* ------------------------------ allKeys ------------------------------ */
 
     var allKeys = _.allKeys = (function ()
@@ -186,6 +282,42 @@ window._ = (function()
             for (key in obj) ret.push(key);
 
             return ret;
+        }
+
+        return exports;
+    })();
+
+    /* ------------------------------ before ------------------------------ */
+
+    var before = _.before = (function ()
+    {
+        /* Create a function that invokes less than n times.
+         *
+         * |Name  |Type    |Desc                                            |
+         * |------|--------|------------------------------------------------|
+         * |n     |number  |Number of calls at which fn is no longer invoked|
+         * |fn    |function|Function to restrict                            |
+         * |return|function|New restricted function                         |
+         *
+         * Subsequent calls to the created function return the result of the last fn invocation.
+         *
+         * ```javascript
+         * $(element).on('click', before(5, function() {}));
+         * // -> allow function to be call 4 times at last.
+         * ```
+         */
+
+        function exports(n, fn)
+        {
+            var memo;
+
+            return function ()
+            {
+                if (--n > 0) memo = fn.apply(this, arguments);
+                if (n <= 1) fn = null;
+
+                return memo;
+            };
         }
 
         return exports;
@@ -248,6 +380,10 @@ window._ = (function()
          * ```
          */
 
+        /* dependencies
+         * splitCase 
+         */
+
         function exports(str)
         {
             var arr = splitCase(str);
@@ -291,6 +427,10 @@ window._ = (function()
          * ```
          */
 
+        /* dependencies
+         * splitCase 
+         */
+
         function exports(str)
         {
             return splitCase(str).join('-');
@@ -324,56 +464,6 @@ window._ = (function()
         return exports;
     })();
 
-    /* ------------------------------ define ------------------------------ */
-
-    var define = _.define = (function ()
-    {
-        /* Define a module, should be used along with use.
-         *
-         * |Name      |Type    |Desc        |
-         * |----------|--------|------------|
-         * |name      |string  |Module name |
-         * |[requires]|array   |Dependencies|
-         * |method    |function|Module body |
-         *
-         * The module won't be executed until it's used by use function.
-         *
-         * ```javascript
-         * define('A', function ()
-         * {
-         *     return 'A';
-         * });
-         * define('B', ['A'], function (A)
-         * {
-         *     return 'B' + A;
-         * });
-         * ```
-         */
-
-        function exports(name, requires, method)
-        {
-            if (arguments.length === 2)
-            {
-                method = requires;
-                requires = [];
-            }
-
-            define(name, requires, method);
-        }
-
-        var modules = exports._modules = {};
-
-        function define(name, requires, method)
-        {
-            modules[name] = {
-                requires: toArr(requires),
-                body: method
-            };
-        }
-
-        return exports;
-    })();
-
     /* ------------------------------ keys ------------------------------ */
 
     var keys = _.keys = (function (exports)
@@ -384,6 +474,14 @@ window._ = (function()
          * |------|------|-----------------------|
          * |obj   |object|Object to query        |
          * |return|array |Array of property names|
+         * 
+         * ```javascript
+         * keys({a: 1}); // -> ['a']
+         * ```
+         */
+
+        /* dependencies
+         * has 
          */
 
         exports = Object.keys || function (obj)
@@ -400,6 +498,72 @@ window._ = (function()
 
         return exports;
     })({});
+
+    /* ------------------------------ optimizeCb ------------------------------ */
+
+    var optimizeCb = _.optimizeCb = (function ()
+    {
+        /* Used for function context binding.
+         */
+
+        /* dependencies
+         * isUndef 
+         */
+
+        function exports(fn, ctx, argCount)
+        {
+            if (isUndef(ctx)) return fn;
+
+            switch (argCount == null ? 3 : argCount)
+            {
+                case 1: return function (val)
+                {
+                    return fn.call(ctx, val);
+                };
+                case 3: return function (val, idx, collection)
+                {
+                    return fn.call(ctx, val, idx, collection);
+                };
+                case 4: return function (accumulator, val, idx, collection)
+                {
+                    return fn.call(ctx, accumulator, val, idx, collection);
+                }
+            }
+
+            return function ()
+            {
+                return fn.apply(ctx, arguments);
+            };
+        }
+
+        return exports;
+    })();
+
+    /* ------------------------------ upperFirst ------------------------------ */
+
+    var upperFirst = _.upperFirst = (function ()
+    {
+        /* Convert the first character of string to upper case.
+         *
+         * |Name  |Type  |Desc             |
+         * |------|------|-----------------|
+         * |str   |string|String to convert|
+         * |return|string|Converted string |
+         *
+         * ```javascript
+         * upperFirst('red'); // -> Red
+         * ```
+         */
+
+        function exports(str)
+        {
+            if (str.length < 1) return str;
+
+            return str[0].toUpperCase() + str.slice(1);
+        }
+
+        return exports;
+    })();
 
     /* ------------------------------ identity ------------------------------ */
 
@@ -468,6 +632,10 @@ window._ = (function()
          * ```
          */
 
+        /* dependencies
+         * objToStr 
+         */
+
         exports = Array.isArray || function (val)
         {
             return objToStr(val) === '[object Array]';
@@ -475,50 +643,6 @@ window._ = (function()
 
         return exports;
     })({});
-
-    /* ------------------------------ isNum ------------------------------ */
-
-    var isNum = _.isNum = (function ()
-    {
-        /* Checks if value is classified as a Number primitive or object.
-         *
-         * |Name  |Type   |Desc                                 |
-         * |------|-------|-------------------------------------|
-         * |value |*      |Value to check                       |
-         * |return|boolean|True if value is correctly classified|
-         */
-
-        function exports(val)
-        {
-            return objToStr(val) === '[object Number]';
-        }
-
-        return exports;
-    })();
-
-    /* ------------------------------ isStr ------------------------------ */
-
-    var isStr = _.isStr = (function ()
-    {
-        /* Check if value is a string primitive.
-         *
-         * |Name  |Type   |Desc                               |
-         * |------|-------|-----------------------------------|
-         * |val   |*      |Value to check                     |
-         * |return|boolean|True if value is a string primitive|
-         *
-         * ```javascript
-         * isStr('eris'); // -> true
-         * ```
-         */
-
-        function exports(val)
-        {
-            return objToStr(val) === '[object String]';
-        }
-
-        return exports;
-    })();
 
     /* ------------------------------ isFn ------------------------------ */
 
@@ -539,11 +663,39 @@ window._ = (function()
          * ```
          */
 
+        /* dependencies
+         * objToStr 
+         */
+
         function exports(val)
         {
             var objStr = objToStr(val);
 
             return objStr === '[object Function]' || objStr === '[object GeneratorFunction]';
+        }
+
+        return exports;
+    })();
+
+    /* ------------------------------ isNum ------------------------------ */
+
+    var isNum = _.isNum = (function ()
+    {
+        /* Checks if value is classified as a Number primitive or object.
+         *
+         * |Name  |Type   |Desc                                 |
+         * |------|-------|-------------------------------------|
+         * |value |*      |Value to check                       |
+         * |return|boolean|True if value is correctly classified|
+         */
+
+        /* dependencies
+         * objToStr 
+         */
+
+        function exports(val)
+        {
+            return objToStr(val) === '[object Number]';
         }
 
         return exports;
@@ -567,6 +719,10 @@ window._ = (function()
          * isArrLike(document.body.children); // -> true;
          * isArrLike([1, 2, 3]); // -> true
          * ```
+         */
+
+        /* dependencies
+         * isNum has isFn 
          */
 
         var MAX_ARR_IDX = Math.pow(2, 53) - 1;
@@ -600,19 +756,25 @@ window._ = (function()
          * ```
          */
 
+        /* dependencies
+         * isArrLike keys optimizeCb 
+         */
+
         function exports(obj, iteratee, ctx)
         {
+            iteratee = optimizeCb(iteratee, ctx);
+
             var i, len;
 
             if (isArrLike(obj))
             {
-                for (i = 0, len = obj.length; i < len; i++) iteratee.call(ctx, obj[i], i, obj);
+                for (i = 0, len = obj.length; i < len; i++) iteratee(obj[i], i, obj);
             } else
             {
                 var _keys = keys(obj);
                 for (i = 0, len = _keys.length; i < len; i++)
                 {
-                    iteratee.call(ctx, obj[_keys[i]], _keys[i], obj);
+                    iteratee(obj[_keys[i]], _keys[i], obj);
                 }
             }
 
@@ -633,6 +795,10 @@ window._ = (function()
          * |keysFn  |function|Function to get object keys   |
          * |defaults|boolean |No override when set to true  |
          * |return  |function|Result function, extend...    |
+         */
+
+        /* dependencies
+         * isUndef each 
          */
 
         function exports(keysFn, defaults)
@@ -667,12 +833,16 @@ window._ = (function()
          * |Name  |Type  |Desc              |
          * |------|------|------------------|
          * |obj   |object|Destination object|
-         * |*src  |object|Sources objects   |
+         * |...src|object|Sources objects   |
          * |return|object|Destination object|
          *
          * ```javascript
          * extend({name: 'RedHood'}, {age: 24}); // -> {name: 'RedHood', age: 24}
          * ```
+         */
+
+        /* dependencies
+         * createAssigner allKeys 
          */
 
         exports = createAssigner(allKeys);
@@ -697,7 +867,106 @@ window._ = (function()
          * ```
          */
 
+        /* dependencies
+         * keys createAssigner 
+         */
+
         exports = createAssigner(keys);
+
+        return exports;
+    })({});
+
+    /* ------------------------------ easing ------------------------------ */
+
+    var easing = _.easing = (function (exports)
+    {
+        /* Easing functions adapted from http://jqueryui.com/
+         *
+         * |Name   |Type  |Desc                  |
+         * |-------|------|----------------------|
+         * |percent|number|Number between 0 and 1|
+         * |return |number|Calculated number     |
+         *
+         * ```javascript
+         * easing.linear(0.5); // -> 0.5
+         * easing.inElastic(0.5, 500); // -> 0.03125
+         * ```
+         */
+
+        /* dependencies
+         * each upperFirst 
+         */
+
+        exports.linear = function (t) { return t };
+
+        var pow = Math.pow,
+            sqrt = Math.sqrt,
+            sin = Math.sin,
+            min = Math.min,
+            asin = Math.asin,
+            PI = Math.PI;
+
+        var fns = {
+            sine: function(t)
+            {
+                return 1 + sin(PI / 2 * t - PI / 2);
+            },
+            circ: function(t)
+            {
+                return 1 - sqrt(1 - t * t);
+            },
+            elastic: function(t, m)
+            {
+                m = m || DEFAULT_ELASTICITY;
+
+                if(t === 0 || t === 1) return t;
+
+                var p = (1 - min(m, 998) / 1000), st = t / 1, st1 = st - 1, s = p / (2 * PI) * asin(1);
+
+                return -(pow(2, 10 * st1) * sin((st1 - s) * (2 * PI) / p));
+            },
+            back: function(t)
+            {
+                return t * t * (3 * t - 2);
+            },
+            bounce: function(t)
+            {
+                var pow2, bounce = 4;
+
+                /* eslint-disable no-empty */
+                while (t < ((pow2 = pow(2, --bounce)) - 1) / 11) {}
+
+                return 1 / pow(4, 3 - bounce) - 7.5625 * pow((pow2 * 3 - 2) / 22 - t, 2);
+            }
+        };
+
+        each(['quad', 'cubic', 'quart', 'quint', 'expo'], function (name, i)
+        {
+            fns[name] = function (t)
+            {
+                return pow(t, i + 2);
+            };
+        });
+
+        var DEFAULT_ELASTICITY = 400;
+
+        each(fns, function (fn, name)
+        {
+            name = upperFirst(name);
+            exports['in' + name] = fn;
+            exports['out' + name] = function(t, m)
+            {
+                return 1 - fn(1 - t, m);
+            };
+            exports['inOut' + name] = function(t, m)
+            {
+                return t < 0.5 ? fn(t * 2, m) / 2 : 1 - fn(t * -2 + 2, m) / 2;
+            };
+            exports['outIn' + name] = function(t, m)
+            {
+                return t < 0.5 ? (1 - fn(1 - 2 * t, m)) / 2 : (fn(t * 2 - 1, m) + 1) / 2;
+            };
+        });
 
         return exports;
     })({});
@@ -706,7 +975,7 @@ window._ = (function()
 
     var values = _.values = (function ()
     {
-        /* Creates an array of the own enumerable property values of object.
+        /* Create an array of the own enumerable property values of object.
          *
          * |Name  |Type  |Desc                    |
          * |------|------|------------------------|
@@ -716,6 +985,10 @@ window._ = (function()
          * ```javascript
          * values({one: 1, two: 2}); // -> [1, 2]
          * ```
+         */
+
+        /* dependencies
+         * each 
          */
 
         function exports(obj)
@@ -736,15 +1009,20 @@ window._ = (function()
     {
         /* Check if the value is present in the list.
          *
-         * |Name  |Type   |Desc                                |
-         * |------|-------|------------------------------------|
-         * |array |array  |Target list                         |
-         * |value |*      |Value to check                      |
-         * |return|boolean|True if value is present in the list|
+         * |Name  |Type        |Desc                                |
+         * |------|------------|------------------------------------|
+         * |array |array object|Target list                         |
+         * |value |*           |Value to check                      |
+         * |return|boolean     |True if value is present in the list|
          *
          * ```javascript
          * contain([1, 2, 3], 1); // -> true
+         * contain({a: 1, b: 2}, 1); // -> true
          * ```
+         */
+
+        /* dependencies
+         * idxOf isArrLike values 
          */
 
         function exports(arr, val)
@@ -756,6 +1034,156 @@ window._ = (function()
 
         return exports;
     })();
+
+    /* ------------------------------ isStr ------------------------------ */
+
+    var isStr = _.isStr = (function ()
+    {
+        /* Check if value is a string primitive.
+         *
+         * |Name  |Type   |Desc                               |
+         * |------|-------|-----------------------------------|
+         * |val   |*      |Value to check                     |
+         * |return|boolean|True if value is a string primitive|
+         *
+         * ```javascript
+         * isStr('eris'); // -> true
+         * ```
+         */
+
+        /* dependencies
+         * objToStr 
+         */
+
+        function exports(val)
+        {
+            return objToStr(val) === '[object String]';
+        }
+
+        return exports;
+    })();
+
+    /* ------------------------------ safeGet ------------------------------ */
+
+    var safeGet = _.safeGet = (function ()
+    {
+        /* Get object property, don't throw undefined error.
+         *
+         * |Name  |Type        |Desc                     |
+         * |------|------------|-------------------------|
+         * |obj   |object      |Object to query          |
+         * |path  |array string|Path of property to get  |
+         * |return|*           |Target value or undefined|
+         *
+         * ```javascript
+         * var obj = {a: {aa: {aaa: 1}}};
+         * safeGet(obj, 'a.aa.aaa'); // -> 1
+         * safeGet(obj, ['a', 'aa']); // -> {aaa: 1}
+         * safeGet(obj, 'a.b'); // -> undefined
+         * ```
+         */
+
+        /* dependencies
+         * isStr isUndef 
+         */
+
+        function exports(obj, path)
+        {
+            if (isStr(path)) path = path.split('.');
+
+            var prop;
+
+            /* eslint-disable no-cond-assign */
+            while (prop = path.shift())
+            {
+                obj = obj[prop];
+                if (isUndef(obj)) return;
+            }
+
+            return obj;
+        }
+
+        return exports;
+    })();
+
+    /* ------------------------------ isBrowser ------------------------------ */
+
+    var isBrowser = _.isBrowser = (function (exports)
+    {
+        /* Check if running in a browser.
+         *
+         * ```javascript
+         * console.log(isBrowser); // -> true if running in a browser
+         * ```
+         */
+
+        exports = typeof window === 'object' &&
+                  typeof document === 'object' &&
+                  document.nodeType === 9;
+
+        return exports;
+    })({});
+
+    /* ------------------------------ raf ------------------------------ */
+
+    var raf = _.raf = (function (exports)
+    {
+        /* Shortcut for requestAnimationFrame.
+         *
+         * Use setTimeout if native requestAnimationFrame is not supported.
+         *
+         * ```javascript
+         * var id = raf(function tick()
+         * {
+         *     // Animation stuff
+         *     raf(tick);
+         * });
+         * raf.cancel(id);
+         * ```
+         */
+
+        /* dependencies
+         * now isBrowser 
+         */
+
+        var raf, cancel;
+
+        if (isBrowser)
+        {
+            raf = window.requestAnimationFrame;
+            cancel = window.cancelAnimationFrame;
+
+            var lastTime = 0,
+                vendors = ['ms', 'moz', 'webkit', 'o'];
+
+            for (var i = 0, len = vendors.length; i < len && !raf; i++)
+            {
+                raf = window[vendors[i] + 'RequestAnimationFrame'];
+                cancel = window[vendors[i] + 'CancelAnimationFrame'] ||
+                         window[vendors[i] + 'CancelRequestAnimationFrame'];
+            }
+        }
+
+        raf = raf || function(cb)
+        {
+            var curTime = now();
+
+            var timeToCall = Math.max(0, 16 - (curTime - lastTime)),
+                id = setTimeout(function() { cb(curTime + timeToCall) }, timeToCall);
+
+            lastTime = curTime + timeToCall;
+
+            return id;
+        };
+
+        cancel = cancel || function(id) { clearTimeout(id) };
+
+        raf.cancel = cancel;
+
+        exports = raf;
+
+        return exports;
+    })({});
 
     /* ------------------------------ isMatch ------------------------------ */
 
@@ -772,6 +1200,10 @@ window._ = (function()
          * ```javascript
          * isMatch({a: 1, b: 2}, {a: 1}); // -> true
          * ```
+         */
+
+        /* dependencies
+         * keys 
          */
 
         function exports(obj, src)
@@ -815,6 +1247,10 @@ window._ = (function()
          * ```
          */
 
+        /* dependencies
+         * extendOwn isMatch 
+         */
+
         function exports(attrs)
         {
             attrs = extendOwn({}, attrs);
@@ -828,47 +1264,15 @@ window._ = (function()
         return exports;
     })();
 
-    /* ------------------------------ optimizeCb ------------------------------ */
-
-    var optimizeCb = _.optimizeCb = (function ()
-    {
-        /* Used for function context binding.
-         */
-
-        function exports(fn, ctx, argCount)
-        {
-            if (isUndef(ctx)) return fn;
-
-            switch (argCount == null ? 3 : argCount)
-            {
-                case 1: return function (val)
-                {
-                    return fn.call(ctx, val);
-                };
-                case 3: return function (val, idx, collection)
-                {
-                    return fn.call(ctx, val, idx, collection);
-                };
-                case 4: return function (accumulator, val, idx, collection)
-                {
-                    return fn.call(ctx, accumulator, val, idx, collection);
-                }
-            }
-
-            return function ()
-            {
-                return fn.apply(ctx, arguments);
-            };
-        }
-
-        return exports;
-    })();
-
     /* ------------------------------ safeCb ------------------------------ */
 
     var safeCb = _.safeCb = (function (exports)
     {
         /* Create callback based on input value.
+         */
+
+        /* dependencies
+         * isFn isObj optimizeCb matcher identity 
          */
 
         exports = function (val, ctx, argCount)
@@ -909,6 +1313,10 @@ window._ = (function()
          * ```
          */
 
+        /* dependencies
+         * safeCb keys isArrLike 
+         */
+
         function exports(obj, iteratee, ctx)
         {
             iteratee = safeCb(iteratee, ctx);
@@ -943,9 +1351,13 @@ window._ = (function()
          * ```javascript
          * toArr({a: 1, b: 2}); // -> [{a: 1, b: 2}]
          * toArr('abc'); // -> ['abc']
-         * toArr(1); // -> []
+         * toArr(1); // -> [1]
          * toArr(null); // -> []
          * ```
+         */
+
+        /* dependencies
+         * isArrLike map isArr isStr 
          */
 
         function exports(val)
@@ -976,7 +1388,7 @@ window._ = (function()
          *
          * ```javascript
          * var People = Class({
-         *     initialize: function (name, age)
+         *     initialize: function People(name, age)
          *     {
          *         this.name = name;
          *         this.age = age;
@@ -988,7 +1400,7 @@ window._ = (function()
          * });
          *
          * var Student = People.extend({
-         *     initialize: function (name, age, school)
+         *     initialize: function Student(name, age, school)
          *     {
          *         this.callSuper(People, 'initialize', arguments);
          *
@@ -1002,7 +1414,7 @@ window._ = (function()
          *     is: function (obj)
          *     {
          *         return obj instanceof Student;
-          *    }
+         *     }
          * });
          *
          * var a = new Student('allen', 17, 'Hogwarts');
@@ -1011,28 +1423,29 @@ window._ = (function()
          * ```
          */
 
+        /* dependencies
+         * extend toArr inherits has safeGet 
+         */
+
         function exports(methods, statics)
         {
             return Base.extend(methods, statics);
         }
 
-        var regCallSuper = /callSuper/;
-
         function makeClass(parent, methods, statics)
         {
             statics = statics || {};
+            var className = methods.className || safeGet(methods, 'initialize.name') || '';
+            delete methods.className;
 
-            var ctor = function ()
-            {
-                var args = toArr(arguments);
-
-                return this.initialize
-                       ? this.initialize.apply(this, args) || this
-                       : this;
-            };
+            var ctor = new Function('toArr', 'return function ' + className + '()' + 
+            '{' +
+                'var args = toArr(arguments);' +
+                'return this.initialize ? this.initialize.apply(this, args) || this : this;' +
+            '};')(toArr);
 
             inherits(ctor, parent);
-            ctor.prototype.superclass = parent;
+            ctor.prototype.constructor = ctor;
 
             ctor.extend = function (methods, statics)
             {
@@ -1040,7 +1453,7 @@ window._ = (function()
             };
             ctor.inherits = function (Class)
             {
-                inherits(Class, ctor);
+                inherits(ctor, Class);
             };
             ctor.methods = function (methods)
             {
@@ -1064,13 +1477,11 @@ window._ = (function()
             {
                 var superMethod = parent.prototype[name];
 
-                if (!superMethod) return;
-
                 return superMethod.apply(this, args);
             },
             toString: function ()
             {
-                return this.className;
+                return this.constructor.name;
             }
         });
 
@@ -1112,6 +1523,10 @@ window._ = (function()
          *     // Manipulate dom nodes
          * });
          * ```
+         */
+
+        /* dependencies
+         * Class isStr each 
          */
 
         exports = Class({
@@ -1185,6 +1600,10 @@ window._ = (function()
          * ```
          */
 
+        /* dependencies
+         * isStr toArr Select 
+         */
+
         function exports(val)
         {
             return toArr(isStr(val) ? new Select(val) : val);
@@ -1238,6 +1657,10 @@ window._ = (function()
          *     'attr2': 'test'
          * });
          * ```
+         */
+
+        /* dependencies
+         * toArr isObj isStr each isUndef $safeEls 
          */
 
         function exports(els, name, val)
@@ -1301,6 +1724,10 @@ window._ = (function()
          * ```
          */
 
+        /* dependencies
+         * $attr isStr isObj each 
+         */
+
         function exports(nodes, name, val)
         {
             var dataName = name;
@@ -1358,6 +1785,10 @@ window._ = (function()
          * ```
          */
 
+        /* dependencies
+         * isStr isObj camelCase kebabCase isUndef contain isNum $safeEls startWith 
+         */
+
         function exports(nodes, name, val)
         {
             nodes = $safeEls(nodes);
@@ -1387,7 +1818,8 @@ window._ = (function()
                 var cssText = ';';
                 each(css, function (val, key)
                 {
-                    cssText += kebabCase(key) + ':' + addPx(key, val) + ';';
+                    key = dasherize(key);
+                    cssText += key + ':' + addPx(key, val) + ';';
                 });
                 node.style.cssText += cssText;
             });
@@ -1408,6 +1840,14 @@ window._ = (function()
             var needPx = isNum(val) && !contain(cssNumProps, kebabCase(key));
 
             return needPx ? val + 'px' : val;
+        }
+
+        function dasherize(str) 
+        {
+            // -webkit- -o- 
+            if (startWith(str, '-')) return str;
+
+            return kebabCase(str);
         }
 
         return exports;
@@ -1453,6 +1893,10 @@ window._ = (function()
          * ```
          */
 
+        /* dependencies
+         * each $safeEls 
+         */
+
         exports = {
             before: insertFactory('beforebegin'),
             after: insertFactory('afterend'),
@@ -1489,6 +1933,10 @@ window._ = (function()
          * ```javascript
          * $offset('#test'); // -> {left: 0, top: 0, width: 0, height: 0}
          * ```
+         */
+
+        /* dependencies
+         * $safeEls 
          */
 
         function exports(els)
@@ -1538,6 +1986,10 @@ window._ = (function()
          * ```
          */
 
+        /* dependencies
+         * isUndef each $safeEls 
+         */
+
         exports = {
             html: propFactory('innerHTML'),
             text: propFactory('textContent'),
@@ -1577,6 +2029,10 @@ window._ = (function()
          * ```
          */
 
+        /* dependencies
+         * each $safeEls 
+         */
+
         function exports(els)
         {
             els = $safeEls(els);
@@ -1607,6 +2063,10 @@ window._ = (function()
          * ```
          */
 
+        /* dependencies
+         * each $safeEls 
+         */
+
         function exports(els)
         {
             els = $safeEls(els);
@@ -1635,9 +2095,9 @@ window._ = (function()
             {
                 el = document.createElement(elName);
                 document.documentElement.appendChild(el);
-                display = getComputedStyle(el, '').getPropertyValue("display");
+                display = getComputedStyle(el, '').getPropertyValue('display');
                 el.parentNode.removeChild(el);
-                display == "none" && (display = "block");
+                display == 'none' && (display = 'block');
                 elDisplay[elName] = display;
             }
 
@@ -1677,6 +2137,10 @@ window._ = (function()
          * delegate.add(container, 'click', '.children', clickHandler);
          * delegate.remove(container, 'click', '.children', clickHandler);
          * ```
+         */
+
+        /* dependencies
+         * Class contain 
          */
 
         function retTrue()  { return true }
@@ -1844,6 +2308,10 @@ window._ = (function()
          * ```
          */
 
+        /* dependencies
+         * delegate isUndef $safeEls 
+         */
+
         exports = {
             on: eventFactory('add'),
             off: eventFactory('remove')
@@ -1871,6 +2339,60 @@ window._ = (function()
         return exports;
     })({});
 
+    /* ------------------------------ define ------------------------------ */
+
+    var define = _.define = (function ()
+    {
+        /* Define a module, should be used along with use.
+         *
+         * |Name      |Type    |Desc        |
+         * |----------|--------|------------|
+         * |name      |string  |Module name |
+         * |[requires]|array   |Dependencies|
+         * |method    |function|Module body |
+         *
+         * The module won't be executed until it's used by use function.
+         *
+         * ```javascript
+         * define('A', function ()
+         * {
+         *     return 'A';
+         * });
+         * define('B', ['A'], function (A)
+         * {
+         *     return 'B' + A;
+         * });
+         * ```
+         */
+
+        /* dependencies
+         * toArr 
+         */
+
+        function exports(name, requires, method)
+        {
+            if (arguments.length === 2)
+            {
+                method = requires;
+                requires = [];
+            }
+
+            define(name, requires, method);
+        }
+
+        var modules = exports._modules = {};
+
+        function define(name, requires, method)
+        {
+            modules[name] = {
+                requires: toArr(requires),
+                body: method
+            };
+        }
+
+        return exports;
+    })();
+
     /* ------------------------------ some ------------------------------ */
 
     var some = _.some = (function ()
@@ -1890,6 +2412,10 @@ window._ = (function()
          *     return val % 2 === 0;
          * }); // -> true
          * ```
+         */
+
+        /* dependencies
+         * safeCb isArrLike keys 
          */
 
         function exports(obj, predicate, ctx)
@@ -1965,11 +2491,15 @@ window._ = (function()
          * ```
          */
 
+        /* dependencies
+         * toArr some $safeEls isStr 
+         */
+
         exports = {
             add: function (els, name)
             {
                 els = $safeEls(els);
-                var names = toArr(name);
+                var names = safeName(name);
 
                 each(els, function (el)
                 {
@@ -2008,7 +2538,7 @@ window._ = (function()
             remove: function (els, name)
             {
                 els = $safeEls(els);
-                var names = toArr(name);
+                var names = safeName(name);
 
                 each(els, function (el)
                 {
@@ -2020,12 +2550,17 @@ window._ = (function()
             }
         };
 
+        function safeName(name)
+        {
+            return isStr(name) ? name.split(/\s/) : toArr(name);
+        }
+
         return exports;
     })({});
 
     /* ------------------------------ $ ------------------------------ */
 
-    var $ = _.$ = (function ()
+    _.$ = (function ()
     {
         /* jQuery like style dom manipulator.
          *
@@ -2045,6 +2580,10 @@ window._ = (function()
          *     // Do something...
          * });
          * ```
+         */
+
+        /* dependencies
+         * Select $offset $show $css $attr $property last $remove $data $event $class $insert isUndef isStr 
          */
 
         function exports(selector)
@@ -2069,10 +2608,10 @@ window._ = (function()
             },
             first: function ()
             {
-                return $(this[0]);
+                return exports(this[0]);
             },
             last: function () {
-                return $(last(this));
+                return exports(last(this));
             },
             get: function (idx)
             {
@@ -2080,7 +2619,7 @@ window._ = (function()
             },
             eq: function (idx)
             {
-                return $(this[idx]);
+                return exports(this[idx]);
             },
             on: function (event, selector, handler)
             {
@@ -2178,7 +2717,7 @@ window._ = (function()
             },
             parent: function ()
             {
-                return $(this[0].parentNode);
+                return exports(this[0].parentNode);
             },
             append: function (val)
             {
@@ -2214,9 +2753,515 @@ window._ = (function()
         return exports;
     })();
 
+    /* ------------------------------ restArgs ------------------------------ */
+
+    var restArgs = _.restArgs = (function ()
+    {
+        /* This accumulates the arguments passed into an array, after a given index.
+         *
+         * |Name      |Type    |Desc                                   |
+         * |----------|--------|---------------------------------------|
+         * |function  |function|Function that needs rest parameters    |
+         * |startIndex|number  |The start index to accumulates         |
+         * |return    |function|Generated function with rest parameters|
+         *
+         * ```javascript
+         * var paramArr = _.restArgs(function (rest) { return rest });
+         * paramArr(1, 2, 3, 4); // -> [1, 2, 3, 4]
+         * ```
+         */
+
+        function exports(fn, startIdx)
+        {
+            startIdx = startIdx == null ? fn.length - 1 : +startIdx;
+
+            return function ()
+            {
+                var len = Math.max(arguments.length - startIdx, 0),
+                    rest = new Array(len),
+                    i;
+
+                for (i = 0; i < len; i++) rest[i] = arguments[i + startIdx];
+
+                // Call runs faster than apply.
+                switch (startIdx)
+                {
+                    case 0: return fn.call(this, rest);
+                    case 1: return fn.call(this, arguments[0], rest);
+                    case 2: return fn.call(this, arguments[0], arguments[1], rest);
+                }
+
+                var args = new Array(startIdx + 1);
+
+                for (i = 0; i < startIdx; i++) args[i] = arguments[i];
+
+                args[startIdx] = rest;
+
+                return fn.apply(this, args);
+            };
+        }
+
+        return exports;
+    })();
+
+    /* ------------------------------ partial ------------------------------ */
+
+    var partial = _.partial = (function (exports)
+    {
+        /* Partially apply a function by filling in given arguments.
+         *
+         * |Name    |Type    |Desc                                    |
+         * |--------|--------|----------------------------------------|
+         * |fn      |function|Function to partially apply arguments to|
+         * |partials|...*    |Arguments to be partially applied       |
+         * |return  |function|New partially applied function          |
+         *
+         * ```javascript
+         * var sub5 = partial(function (a, b) { return b - a }, 5);
+         * sub(20); // -> 15
+         * ```
+         */
+
+        /* dependencies
+         * restArgs toArr 
+         */
+
+        exports = restArgs(function (fn, partials)
+        {
+            return function ()
+            {
+                var args = [];
+
+                args = args.concat(partials);
+                args = args.concat(toArr(arguments));
+
+                return fn.apply(this, args);
+            };
+        });
+
+        return exports;
+    })({});
+
+    /* ------------------------------ once ------------------------------ */
+
+    var once = _.once = (function (exports)
+    {
+        /* Create a function that invokes once.
+         *
+         * |Name  |Type    |Desc                   |
+         * |------|--------|-----------------------|
+         * |fn    |function|Function to restrict   |
+         * |return|function|New restricted function|
+         *
+         * ```javascript
+         * function init() {};
+         * var initOnce = once(init);
+         * initOnce();
+         * initOnce(); // -> init is invoked once
+         * ```
+         */
+
+        /* dependencies
+         * partial before 
+         */
+
+        exports = partial(before, 2);
+
+        return exports;
+    })({});
+
+    /* ------------------------------ Emitter ------------------------------ */
+
+    var Emitter = _.Emitter = (function (exports)
+    {
+        /* Event emitter class which provides observer pattern.
+         *
+         * ### on
+         *
+         * Bind event.
+         *
+         * ### off
+         *
+         * Unbind event.
+         *
+         * ### once
+         *
+         * Bind event that trigger once.
+         *
+         * |Name    |Type    |Desc          |
+         * |--------|--------|--------------|
+         * |event   |string  |Event name    |
+         * |listener|function|Event listener|
+         *
+         * ### emit
+         *
+         * Emit event.
+         *
+         * |Name   |Type  |Desc                        |
+         * |-------|------|----------------------------|
+         * |event  |string|Event name                  |
+         * |...args|*     |Arguments passed to listener|
+         *
+         * ### mixin
+         *
+         * [static] Mixin object class methods.
+         *
+         * |Name|Type  |Desc           |
+         * |----|------|---------------|
+         * |obj |object|Object to mixin|
+         *
+         * ```javascript
+         * var event = new Emitter();
+         * event.on('test', function () { console.log('test') });
+         * event.emit('test'); // Logs out 'test'.
+         * Emitter.mixin({});
+         * ```
+         */
+
+        /* dependencies
+         * Class has each slice once 
+         */
+
+        exports = Class({
+            initialize: function Emitter()
+            {
+                this._events = this._events || {};
+            },
+            on: function (event, listener)
+            {
+                this._events[event] = this._events[event] || [];
+                this._events[event].push(listener);
+
+                return this;
+            },
+            off: function (event, listener)
+            {
+                if (!has(this._events, event)) return;
+
+                this._events[event].splice(this._events[event].indexOf(listener), 1);
+
+                return this;
+            },
+            once: function (event, listener)
+            {
+                this.on(event, once(listener));
+
+                return this;
+            },
+            emit: function (event)
+            {
+                if (!has(this._events, event)) return;
+
+                var args = slice(arguments, 1);
+
+                each(this._events[event], function (val)
+                {
+                    val.apply(this, args);
+                }, this);
+
+                return this;
+            }
+        }, {
+            mixin: function (obj)
+            {
+                each(['on', 'off', 'once', 'emit'], function (val)
+                {
+                    obj[val] = Emitter.prototype[val];
+                });
+
+                obj._events = obj._events || {};
+            }
+        });
+
+        return exports;
+    })({});
+
+    /* ------------------------------ State ------------------------------ */
+
+    var State = _.State = (function (exports)
+    {
+        /* Simple state machine.
+         *
+         * Extend from Emitter.
+         *
+         * ### constructor
+         *
+         * |Name   |Type  |Desc                  |
+         * |-------|------|----------------------|
+         * |initial|string|Initial state         |
+         * |events |string|Events to change state|
+         *
+         * ### is
+         *
+         * Check current state.
+         *
+         * |Name  |Type   |Desc                                    |
+         * |------|-------|----------------------------------------|
+         * |value |string |State to check                          |
+         * |return|boolean|True if current state equals given value|
+         *
+         * ```javascript
+         * var state = new State('empty', {
+         *     load: {from: 'empty', to: 'pause'},
+         *     play: {from: 'pause', to: 'play'},
+         *     pause: {from: ['play', 'empty'], to: 'pause'},
+         *     unload: {from: ['play', 'pause'], to: 'empty'}
+         * });
+         *
+         * state.is('empty'); // -> true
+         * state.load();
+         * state.is('pause'); // -> true
+         * state.on('play', function (src)
+         * {
+         *     console.log(src); // -> 'eustia'
+         * });
+         * state.on('error', function (err, event)
+         * {
+         *     // Error handler
+         * });
+         * state.play('eustia');
+         * ```
+         */
+
+        /* dependencies
+         * Emitter each isArr some slice toArr 
+         */
+
+        exports = Emitter.extend({
+            className: 'State',
+            initialize: function (initial, events)
+            {
+                this.callSuper(Emitter, 'initialize');
+
+                this.current = initial;
+
+                var self = this;
+
+                each(events, function (event, key)
+                {
+                    self[key] = buildEvent(key, event);
+                });
+            },
+            is: function (state)
+            {
+                return this.current === state;
+            }
+        });
+
+        function buildEvent(name, event)
+        {
+            var from = toArr(event.from),
+                to = event.to;
+
+            return function ()
+            {
+                var args = toArr(arguments);
+                args.unshift(name);
+
+                var hasEvent = some(from, function (val)
+                {
+                    return this.current === val;
+                }, this);
+
+                if (hasEvent)
+                {
+                    this.current = to;
+                    this.emit.apply(this, args);
+                } else
+                {
+                    this.emit('error', new Error(this.current + ' => ' + to + ' error'), name);
+                }
+            };
+        }
+
+        return exports;
+    })({});
+
+    /* ------------------------------ Tween ------------------------------ */
+
+    _.Tween = (function (exports)
+    {
+        /* Tween engine for JavaScript animations.
+         *
+         * Extend from Emitter.
+         *
+         * ### constructor
+         *
+         * |Name|Type  |Desc           |
+         * |----|------|---------------|
+         * |obj |object|Values to tween|
+         *
+         * ### to
+         *
+         * |Name       |Type           |Desc            |
+         * |-----------|---------------|----------------|
+         * |destination|obj            |Final properties|
+         * |duration   |number         |Tween duration  |
+         * |ease       |string function|Easing function |
+         *
+         * ### play
+         *
+         * Begin playing forward.
+         *
+         * ### pause
+         *
+         * Pause the animation.
+         *
+         * ### paused
+         *
+         * Get animation paused state.
+         *
+         * ### progress
+         *
+         * Update or get animation progress.
+         *
+         * |Name      |Type  |Desc                  |
+         * |----------|------|----------------------|
+         * |[progress]|number|Number between 0 and 1|
+         *
+         * ```javascript
+         * var pos = {x: 0, y: 0};
+         *
+         * var tween = new Tween(pos);
+         * tween.on('update', function (target)
+         * {
+         *     console.log(target.x, target.y);
+         * }).on('end', function (target)
+         * {
+         *     console.log(target.x, target.y); // -> 100, 100
+         * });
+         * tween.to({x: 100, y: 100}, 1000, 'inElastic').play();
+         * ```
+         */
+
+        /* dependencies
+         * Emitter State easing now each raf isFn 
+         */
+
+        exports = Emitter.extend({
+            className: 'Tween',
+            initialize: function (target)
+            {
+                this.callSuper(Emitter, 'initialize', arguments);
+
+                this._target = target;
+                this._dest = {};
+                this._duration = 0;
+                this._progress = 0;
+                this._origin = {};
+                this._diff = {};
+                this._ease = easing['linear'];
+                this._state = new State('pause', {
+                    play: {from: 'pause', to: 'play'},
+                    pause: {from: 'play', to: 'pause'}
+                });
+            },
+            to: function (props, duration, ease)
+            {
+                var origin = {},
+                    target = this._target,
+                    diff = {};
+
+                ease = ease || this._ease;
+
+                this._dest = props;
+                this._duration = duration || this._duration;
+                this._ease = isFn(ease) ? ease : easing[ease];
+
+                each(props, function (val, key)
+                {
+                    origin[key] = target[key];
+                    diff[key] = val - origin[key];
+                });
+
+                this._origin = origin;
+                this._diff = diff;
+
+                return this;
+            },
+            progress: function (progress)
+            {
+                var ease = this._ease,
+                    target = this._target,
+                    origin = this._origin,
+                    diff = this._diff,
+                    dest = this._dest,
+                    self = this;
+
+                if (progress != null)
+                {
+                    progress = progress < 1 ? progress : 1;
+                    this._progress = progress;
+
+                    each(dest, function (val, key)
+                    {
+                        target[key] = origin[key] + diff[key] * ease(progress);
+                    });
+
+                    self.emit('update', target);
+
+                    return this;
+                }
+
+                return this._progress;
+            },
+            play: function ()
+            {
+                var state = this._state;
+
+                if (state.is('play')) return;
+
+                state.play();
+
+                var startTime = now(),
+                    progress = this._progress,
+                    duration = this._duration * (1 - progress),
+                    target = this._target,
+                    self = this;
+
+                function render()
+                {
+                    if (state.is('pause')) return;
+
+                    var time = now();
+
+                    self.progress(progress + (time - startTime) / duration);
+
+                    if (self._progress === 1)
+                    {
+                        state.pause();
+                        self.emit('end', target);
+                        return;
+                    }
+
+                    raf(render);
+                }
+
+                raf(render);
+
+                return this;
+            },
+            pause: function ()
+            {
+                var state = this._state;
+
+                if (state.is('pause')) return;
+                state.pause();
+
+                return this;
+            },
+            paused: function ()
+            {
+                return this._state.is('pause');
+            }
+        });
+
+        return exports;
+    })({});
+
     /* ------------------------------ use ------------------------------ */
 
-    var use = _.use = (function ()
+    _.use = (function ()
     {
         /* Use modules that is created by define.
          *
@@ -2235,6 +3280,10 @@ window._ = (function()
          *     console.log(A + 'B'); // -> 'AB'
          * });
          * ```
+         */
+
+        /* dependencies
+         * map define has toArr 
          */
 
         function exports(requires, method)

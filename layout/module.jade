@@ -5,3 +5,27 @@ block content
     .module-container
         .md.toc-container!= toc
         .md.doc-container!= contents
+
+    script.
+        _.use(function ()
+        {
+            var $docContainer = _.$('.doc-container'),
+                docContainer = $docContainer.get(0),
+                docTop = $docContainer.offset().top;
+
+            _.$('.toc-container').on('click', 'a', function (e)
+            {
+                e.preventDefault();
+
+                var scrollTop = docContainer.scrollTop;
+
+                new _.Tween({
+                    y: scrollTop
+                }).on('update', function (target)
+                {
+                    docContainer.scrollTop = target.y;
+                }).to({
+                    y: _.$(_.$(this).attr('href')).offset().top - docTop + scrollTop
+                }, 300, 'inQuad').play();
+            });
+        });
