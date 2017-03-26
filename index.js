@@ -6,6 +6,7 @@ var path = require('path'),
 
 var layouts = require('metalsmith-layouts'),
     stylus = require('metalsmith-stylus'),
+    uglify = require('metalsmith-uglify'),
     markdown = require('metalsmith-markdown'),
     prism = require('metalsmith-prism'),
     ignore = require('metalsmith-ignore'),
@@ -45,6 +46,7 @@ function build()
 {
     site.baseUrl = (env === 'development') ? "http://localhost:8080/"
                                            : "http://eustia.liriliri.io/";
+    site.env = env;
 
     var metalsmith = require('metalsmith')(dirname);
 
@@ -79,6 +81,8 @@ function build()
         pattern: '**/*.html'
     })).use(
         prism()
+    ).use(
+        uglify()
     ).destination(
         'dist'
     ).build(function (err)
@@ -97,6 +101,9 @@ function fullBuild()
 
 function server()
 {
+    copyStatic();
+    build();
+
     var st = require('st'),
         http = require('http');
 
@@ -137,12 +144,6 @@ function server()
     staticFiles.on('change', copyStatic);
 }
 
-if (process.argv[2] === 'serve')
-{
-    env = 'development';
-    server();
-}
-
 function heading(text, level)
 {
     if (level !== 2) return '<h' + level + '>' + text + '</h' + level + '>';
@@ -155,4 +156,11 @@ function slugify(str)
     return str.toLowerCase().replace(/\$/, 'dollar-').replace(/[^\w]+/g, '-')
 }
 
-fullBuild();
+if (process.argv[2] === 'serve')
+{
+    env = 'development';
+    server();
+} else
+{
+    fullBuild();
+}
