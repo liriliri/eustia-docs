@@ -44,7 +44,7 @@ var site = require('./src/site.json');
 function build()
 {
     site.baseUrl = (env === 'development') ? "http://localhost:8080/"
-                                           : "http://liriliri.github.io/eustia/";
+                                           : "http://eustia.liriliri.io/";
 
     var metalsmith = require('metalsmith')(dirname);
 
