@@ -26,8 +26,7 @@ block content
     .md.container.mobile.intro!= contents
 
     script.
-        // Banner glow effect.
-        _.use(function ()
+        _.ready(function glowEffect()
         {
             var $glow = _.$('.glow');
 

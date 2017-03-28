@@ -13,6 +13,7 @@ var layouts = require('metalsmith-layouts'),
     markedToc = require('./lib/markedToc');
 
 var dirname = __dirname,
+    port = 3000,
     env = 'release';
 
 function dirPath()
@@ -44,8 +45,8 @@ var site = require('./src/site.json');
 
 function build()
 {
-    site.baseUrl = (env === 'development') ? "http://localhost:8080/"
-                                           : "http://eustia.liriliri.io/";
+    site.baseUrl = (env === 'development') ? 'http://localhost:' + port + '/'
+                                           : 'http://eustia.liriliri.io/';
     site.env = env;
 
     var metalsmith = require('metalsmith')(dirname);
@@ -116,9 +117,9 @@ function server()
     http.createServer(function (req, res)
     {
         mount(req, res);
-    }).listen(8080, function ()
+    }).listen(port, function ()
     {
-        console.log('http://localhost:8080/');
+        console.log('http://localhost:' + port + '/');
     });
 
     var chokidar = require('chokidar');

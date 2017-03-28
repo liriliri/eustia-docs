@@ -168,7 +168,7 @@ eustia build index.html src/*.js
 eusita build index.html src/*.js -o lib.js
 ```
 
-|name       |shorthand|default             |description                                 |
+|Name       |Shorthand|Default             |Desc                                        |
 |---------------------------------------------------------------------------------------|
 |encoding   |         |utf-8               |Input file encoding                         |
 |exclude    |e        |                    |Functions excluded                          |
@@ -193,7 +193,7 @@ Search for [modules](http://liriliri.github.io/eustia/module.html) directly thro
 eustia search <keyword>
 ```
 
-|name  |shorthand|default|description                        |
+|Name  |Shorthand|Default|Desc                               |
 |------------------------------------------------------------|
 |update|u        |false  |Update module data before searching|
 
@@ -214,7 +214,7 @@ eustia doc [<options>]
 eustia doc util.js -o doc.html
 ```
 
-|name       |shorthand|default             |description                          |
+|Name       |Shorthand|Default             |Desc                                 |
 |--------------------------------------------------------------------------------|
 |description|d        |                    |Extra description markdown file path |
 |format     |f        |html                |Output format, html, json or markdown|

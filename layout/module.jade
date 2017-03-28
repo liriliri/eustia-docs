@@ -3,11 +3,34 @@ extends ./layout
 block content
 
     .module-container
-        .md.toc-container!= toc
+        .md.toc-container
+            .search
+                input(type="text" placeholder="Search")
+            != toc
         .md.doc-container!= contents
 
     script.
-        _.use(function ()
+        _.ready(function search() 
+        {
+            var $input = _.$('.search input'),
+                $tocList = _.$('.toc-container ul li');
+
+            $input.on('input', function ()
+            {
+                var val = _.$(this).val().toLowerCase();
+
+                $tocList.hide();
+
+                $tocList.each(function () 
+                {
+                    var $this = _.$(this),
+                        name = $this.find('a').text().toLowerCase();
+
+                    if (name.indexOf(val) > -1) $this.show();
+                });
+            });
+        });
+        _.ready(function scrollEffect()
         {
             var $docContainer = _.$('.doc-container'),
                 docContainer = $docContainer.get(0),

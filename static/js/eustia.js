@@ -2339,60 +2339,6 @@ window._ = (function()
         return exports;
     })({});
 
-    /* ------------------------------ define ------------------------------ */
-
-    var define = _.define = (function ()
-    {
-        /* Define a module, should be used along with use.
-         *
-         * |Name      |Type    |Desc        |
-         * |----------|--------|------------|
-         * |name      |string  |Module name |
-         * |[requires]|array   |Dependencies|
-         * |method    |function|Module body |
-         *
-         * The module won't be executed until it's used by use function.
-         *
-         * ```javascript
-         * define('A', function ()
-         * {
-         *     return 'A';
-         * });
-         * define('B', ['A'], function (A)
-         * {
-         *     return 'B' + A;
-         * });
-         * ```
-         */
-
-        /* dependencies
-         * toArr 
-         */
-
-        function exports(name, requires, method)
-        {
-            if (arguments.length === 2)
-            {
-                method = requires;
-                requires = [];
-            }
-
-            define(name, requires, method);
-        }
-
-        var modules = exports._modules = {};
-
-        function define(name, requires, method)
-        {
-            modules[name] = {
-                requires: toArr(requires),
-                body: method
-            };
-        }
-
-        return exports;
-    })();
-
     /* ------------------------------ some ------------------------------ */
 
     var some = _.some = (function ()
@@ -3259,69 +3205,45 @@ window._ = (function()
         return exports;
     })({});
 
-    /* ------------------------------ use ------------------------------ */
+    /* ------------------------------ ready ------------------------------ */
 
-    _.use = (function ()
+    _.ready = (function ()
     {
-        /* Use modules that is created by define.
+        /* Invoke callback when dom is ready, similar to jQuery ready.
          *
-         * |Name      |Type    |Desc                |
-         * |----------|--------|--------------------|
-         * |[requires]|array   |Dependencies        |
-         * |method    |function|Codes to be executed|
+         * |Name|Type    |Desc             |
+         * |----|--------|-----------------|
+         * |fn  |function|Callback function|
          *
          * ```javascript
-         * define('A', function ()
+         * ready(function ()
          * {
-         *     return 'A';
-         * });
-         * use(['A'], function (A)
-         * {
-         *     console.log(A + 'B'); // -> 'AB'
+         *     // It's safe to manipulate dom here.
          * });
          * ```
          */
 
-        /* dependencies
-         * map define has toArr 
-         */
+        var fns = [],
+            listener,
+            doc = document,
+            hack = doc.documentElement.doScroll,
+            domContentLoaded = 'DOMContentLoaded',
+            loaded = (hack ? /^loaded|^c/ : /^loaded|^i|^c/).test(doc.readyState);
 
-        function exports(requires, method)
+        if (!loaded)
         {
-            if (method == null)
+            doc.addEventListener(domContentLoaded, listener = function ()
             {
-                method = requires;
-                requires = [];
-            }
-
-            requires = map(toArr(requires), function (val)
-            {
-                return require(val);
+                doc.removeEventListener(domContentLoaded, listener);
+                loaded = 1;
+                /* eslint-disable no-cond-assign */
+                while (listener = fns.shift()) listener();
             });
-
-            method.apply(null, requires);
         }
 
-        var modules = define._modules;
-
-        var requireMarks = {};
-
-        function require(name)
+        function exports(fn)
         {
-            if (has(requireMarks, name)) return modules[name];
-
-            var requires = modules[name].requires,
-                body = modules[name].body,
-                len = requires.length;
-
-            for (var i = 0; i < len; i++) requires[i] = require(requires[i]);
-
-            var exports = body.apply(null, requires);
-            if (exports) modules[name] = exports;
-
-            requireMarks[name] = true;
-
-            return modules[name];
+            loaded ? setTimeout(fn, 0) : fns.push(fn)
         }
 
         return exports;
