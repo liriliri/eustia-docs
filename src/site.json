@@ -8,6 +8,10 @@
         {
             "text": "MODULE",
             "url": "module.html"
+        },
+        {
+            "text": "PLAYGROUND",
+            "url": "playground.html"
         }
     ]
 }
