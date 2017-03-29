@@ -4,7 +4,7 @@
   "description": "Eustia documentation",
   "main": "index.js",
   "scripts": {
-    "build": "node . && gulp build",
+    "build": "node . && gulp",
     "dev": "node . serve",
     "updateMod": "node script/updateMod"
   },
@@ -19,12 +19,13 @@
   },
   "homepage": "https://github.com/liriliri/caim#readme",
   "devDependencies": {
-    "gulp": "^3.9.1",
-    "gulp-rename": "^1.2.2",
-    "gulp-uglify": "^2.1.2",
     "autoprefixer-stylus": "^0.8.1",
     "chokidar": "^1.3.0",
     "extract-comments": "^0.8.6",
+    "gulp": "^3.9.1",
+    "gulp-htmlmin": "^3.0.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^2.1.2",
     "jade": "^1.11.0",
     "marked": "^0.3.5",
     "marked-toc": "^0.3.0",
