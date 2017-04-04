@@ -179,8 +179,8 @@ var moduleStore = {
 
             return _.nextTick(function ()
             {
-                cb(null, cache);
                 logger.log('BUILD MODULE %s ' + (_.isEmpty(dependencies) ? '' : '<= ' + dependencies.join(' ')), name);
+                cb(null, cache);
             });
         }
 
