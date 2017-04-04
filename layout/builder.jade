@@ -1,0 +1,13 @@
+extends ./layout
+
+block content
+
+    .container.mobile
+
+        textarea#input-modules(rows='3' placeholder="fetch each random...")
+        a.btn#build-btn(href='#') BUILD
+        a.btn#download-btn.disabled(download='eustia.js') DOWNLOAD
+
+        ul#build-logger
+
+    script(src='#{site.baseUrl}static/js/builder#{site.env === "release" ? ".min" : ""}.js')

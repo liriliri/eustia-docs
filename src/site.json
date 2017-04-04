@@ -12,6 +12,10 @@
         {
             "text": "PLAYGROUND",
             "url": "playground.html"
+        },
+        {
+            "text": "BUILDER",
+            "url": "builder.html"
         }
     ]
 }

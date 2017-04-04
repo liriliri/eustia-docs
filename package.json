@@ -17,6 +17,18 @@
   "bugs": {
     "url": "https://github.com/liriliri/caim/issues"
   },
+  "eustia": {
+    "page": {
+      "files": ["layout/**/*.jade", "static/js/*.js"],
+      "output": "static/js/eustia.js",
+      "format": "global"
+    },
+    "node": {
+      "files": ["lib/*.js", "tool/**/*.js"],
+      "output": "./lib/util.js",
+      "format": "commonjs"
+    }
+  },
   "homepage": "https://github.com/liriliri/caim#readme",
   "devDependencies": {
     "autoprefixer-stylus": "^0.8.1",
@@ -38,6 +50,7 @@
     "metalsmith-uglify": "^1.5.1",
     "ncp": "^2.0.0",
     "request": "^2.72.0",
+    "rmdir": "^1.2.0",
     "st": "^1.0.0"
   }
 }

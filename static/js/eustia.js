@@ -236,6 +236,65 @@ window._ = (function()
         return exports;
     })();
 
+    /* ------------------------------ nextTick ------------------------------ */
+
+    var nextTick = _.nextTick = (function (exports)
+    {
+        /* Next tick for both node and browser.
+         *
+         * |Name|Type    |Desc            |
+         * |----|--------|----------------|
+         * |cb  |function|Function to call|
+         *
+         * Use process.nextTick if available.
+         *
+         * Otherwise setImmediate or setTimeout is used as fallback.
+         *
+         * ```javascript
+         * nextTick(function ()
+         * {
+         *     // Do something...
+         * });
+         * ```
+         */
+
+        if (typeof process === 'object' && process.nextTick)
+        {
+            exports = process.nextTick;
+        } else if (typeof setImmediate === 'function')
+        {
+            exports = function (cb) { setImmediate(ensureCallable(cb)) }
+        } else
+        {
+            exports = function (cb) { setTimeout(ensureCallable(cb), 0) };
+        }
+
+        function ensureCallable(fn)
+        {
+            if (typeof fn !== 'function') throw new TypeError(fn + ' is not a function');
+
+            return fn;
+        }
+
+        return exports;
+    })({});
+
+    /* ------------------------------ noop ------------------------------ */
+
+    var noop = _.noop = (function ()
+    {
+        /* A no-operation function.
+         *
+         * ```javascript
+         * noop(); // Does nothing
+         * ```
+         */
+
+        function exports() {}
+
+        return exports;
+    })();
+
     /* ------------------------------ now ------------------------------ */
 
     var now = _.now = (function (exports)
@@ -322,6 +381,94 @@ window._ = (function()
 
         return exports;
     })();
+
+    /* ------------------------------ restArgs ------------------------------ */
+
+    var restArgs = _.restArgs = (function ()
+    {
+        /* This accumulates the arguments passed into an array, after a given index.
+         *
+         * |Name      |Type    |Desc                                   |
+         * |----------|--------|---------------------------------------|
+         * |function  |function|Function that needs rest parameters    |
+         * |startIndex|number  |The start index to accumulates         |
+         * |return    |function|Generated function with rest parameters|
+         *
+         * ```javascript
+         * var paramArr = _.restArgs(function (rest) { return rest });
+         * paramArr(1, 2, 3, 4); // -> [1, 2, 3, 4]
+         * ```
+         */
+
+        function exports(fn, startIdx)
+        {
+            startIdx = startIdx == null ? fn.length - 1 : +startIdx;
+
+            return function ()
+            {
+                var len = Math.max(arguments.length - startIdx, 0),
+                    rest = new Array(len),
+                    i;
+
+                for (i = 0; i < len; i++) rest[i] = arguments[i + startIdx];
+
+                // Call runs faster than apply.
+                switch (startIdx)
+                {
+                    case 0: return fn.call(this, rest);
+                    case 1: return fn.call(this, arguments[0], rest);
+                    case 2: return fn.call(this, arguments[0], arguments[1], rest);
+                }
+
+                var args = new Array(startIdx + 1);
+
+                for (i = 0; i < startIdx; i++) args[i] = arguments[i];
+
+                args[startIdx] = rest;
+
+                return fn.apply(this, args);
+            };
+        }
+
+        return exports;
+    })();
+
+    /* ------------------------------ bind ------------------------------ */
+
+    var bind = _.bind = (function (exports)
+    {
+        /* Create a function bound to a given object.
+         *
+         * |Name  |Type    |Desc                    |
+         * |------|--------|------------------------|
+         * |fn    |function|Function to bind        |
+         * |ctx   |*       |This binding of given fn|
+         * |[rest]|...*    |Optional arguments      |
+         * |return|function|New bound function      |
+         *
+         * ```javascript
+         * var fn = bind(function (msg)
+         * {
+         *     console.log(this.name + ':' + msg);
+         * }, {name: 'eustia'}, 'I am a utility library.');
+         * fn(); // -> 'eustia: I am a utility library.'
+         * ```
+         */
+
+        /* dependencies
+         * restArgs 
+         */
+
+        exports = restArgs(function (fn, ctx, rest)
+        {
+            return restArgs(function (callArgs)
+            {
+                return fn.apply(ctx, rest.concat(callArgs));
+            });
+        });
+
+        return exports;
+    })({});
 
     /* ------------------------------ splitCase ------------------------------ */
 
@@ -565,6 +712,79 @@ window._ = (function()
         return exports;
     })();
 
+    /* ------------------------------ escape ------------------------------ */
+
+    var escape = _.escape = (function ()
+    {
+        /* Escapes a string for insertion into HTML, replacing &, <, >, ", `, and ' characters.
+         *
+         * |Name  |Type  |Desc            |
+         * |------|------|----------------|
+         * |str   |string|String to escape|
+         * |return|string|Escaped string  |
+         *
+         * ```javascript
+         * escape('You & Me'); -> // -> 'You &amp; Me'
+         * ```
+         */
+
+        /* dependencies
+         * keys 
+         */
+
+        function exports(str)
+        {
+            return regTest.test(str) ? str.replace(regReplace, replaceFn) : str;
+        }
+
+        var map = exports.map = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            '\'': '&#x27;',
+            '`': '&#x60;'
+        };
+
+        var regSrc = '(?:' + keys(map).join('|') + ')',
+            regTest = new RegExp(regSrc),
+            regReplace = new RegExp(regSrc, 'g');
+
+        function replaceFn(match)
+        {
+            return map[match];
+        }
+
+        return exports;
+    })();
+
+    /* ------------------------------ toStr ------------------------------ */
+
+    var toStr = _.toStr = (function ()
+    {
+        /* Convert value to a string.
+         *
+         * |Name  |Type  |Desc            |
+         * |------|------|----------------|
+         * |val   |*     |Value to convert|
+         * |return|string|Resulted string |
+         *
+         * ```javascript
+         * toStr(null); // -> ''
+         * toStr(1); // -> '1'
+         * toStr(false); // -> 'false'
+         * toStr([1, 2, 3]); // -> '1,2,3'
+         * ```
+         */
+
+        function exports(val)
+        {
+            return val == null ? '' : val.toString();
+        }
+
+        return exports;
+    })();
+
     /* ------------------------------ identity ------------------------------ */
 
     var identity = _.identity = (function ()
@@ -589,6 +809,44 @@ window._ = (function()
         return exports;
     })();
 
+    /* ------------------------------ repeat ------------------------------ */
+
+    var repeat = _.repeat = (function (exports)
+    {
+        /* Repeat string n-times.
+         *
+         * |Name  |Type  |Desc            |
+         * |------|------|----------------|
+         * |str   |string|String to repeat|
+         * |n     |number|Repeat times    |
+         * |return|string|Repeated string |
+         *
+         * ```javascript
+         * repeat('a', 3); // -> 'aaa'
+         * repeat('ab', 2); // -> 'abab'
+         * repeat('*', 0); // -> ''
+         * ```
+         */
+
+        exports = function (str, n)
+        {
+            var ret = '';
+
+            if (n < 1) return '';
+
+            while (n > 0)
+            {
+                if (n & 1) ret += str;
+                n >>= 1;
+                str += str;
+            }
+
+            return ret;
+        };
+
+        return exports;
+    })({});
+
     /* ------------------------------ objToStr ------------------------------ */
 
     var objToStr = _.objToStr = (function ()
@@ -610,6 +868,36 @@ window._ = (function()
         function exports(val)
         {
             return ObjToStr.call(val);
+        }
+
+        return exports;
+    })();
+
+    /* ------------------------------ isArgs ------------------------------ */
+
+    var isArgs = _.isArgs = (function ()
+    {
+        /* Check if value is classified as an arguments object.
+         *
+         * |Name  |Type   |Desc                                |
+         * |------|-------|------------------------------------|
+         * |value |*      |Value to check                      |
+         * |return|boolean|True if value is an arguments object|
+         *
+         * ```javascript
+         * (function () {
+         *     isArgs(arguments); // -> true
+         * })();
+         * ```
+         */
+
+        /* dependencies
+         * objToStr 
+         */
+
+        function exports(val)
+        {
+            return objToStr(val) === '[object Arguments]';
         }
 
         return exports;
@@ -696,6 +984,48 @@ window._ = (function()
         function exports(val)
         {
             return objToStr(val) === '[object Number]';
+        }
+
+        return exports;
+    })();
+
+    /* ------------------------------ indent ------------------------------ */
+
+    _.indent = (function ()
+    {
+        /* Indent each line in a string.
+         *
+         * |Name  |Type  |Desc                |
+         * |------|------|--------------------|
+         * |str   |string|String to indent    |
+         * |[char]|string|Character to prepend|
+         * |[len] |number|Indent length       |
+         * |return|string|Indented string     |
+         *
+         * ```javascript
+         * indent('foo\nbar', ' ', 4); // -> 'foo\n    bar'
+         * ```
+         */
+
+        /* dependencies
+         * isNum isUndef repeat 
+         */
+
+        var regLineBegin = /^(?!\s*$)/mg;
+
+        function exports(str, char, len)
+        {
+            if (isNum(char))
+            {
+                len = char;
+                char = ' ';
+            }
+            if (isUndef(len)) len = 4;
+            if (isUndef(char)) char = ' ';
+
+            char = repeat(char, len);
+
+            return str.replace(regLineBegin, char);
         }
 
         return exports;
@@ -823,6 +1153,32 @@ window._ = (function()
 
         return exports;
     })();
+
+    /* ------------------------------ defaults ------------------------------ */
+
+    var defaults = _.defaults = (function (exports)
+    {
+        /* Fill in undefined properties in object with the first value present in the following list of defaults objects.
+         *
+         * |Name  |Type  |Desc              |
+         * |------|------|------------------|
+         * |obj   |object|Destination object|
+         * |*src  |object|Sources objects   |
+         * |return|object|Destination object|
+         *
+         * ```javascript
+         * defaults({name: 'RedHood'}, {name: 'Unknown', age: 24}); // -> {name: 'RedHood', age: 24}
+         * ```
+         */
+
+        /* dependencies
+         * createAssigner allKeys 
+         */
+
+        exports = createAssigner(allKeys, true);
+
+        return exports;
+    })({});
 
     /* ------------------------------ extend ------------------------------ */
 
@@ -1106,6 +1462,164 @@ window._ = (function()
         return exports;
     })();
 
+    /* ------------------------------ toNum ------------------------------ */
+
+    var toNum = _.toNum = (function (exports)
+    {
+        /* Convert value to a number.
+         *
+         * |Name  |Type  |Desc            |
+         * |------|------|----------------|
+         * |val   |*     |Value to process|
+         * |return|number|Resulted number |
+         *
+         * ```javascript
+         * toNum('5'); // -> 5
+         * ```
+         */
+
+        /* dependencies
+         * isNum isObj isFn isStr 
+         */
+
+        exports = function (val)
+        {
+            if (isNum(val)) return val;
+
+            if (isObj(val))
+            {
+                var temp = isFn(val.valueOf) ? val.valueOf() : val;
+                val = isObj(temp) ? (temp + '') : temp;
+            }
+
+            if (!isStr(val)) return val === 0 ? val : +val;
+
+            return +val;
+        };
+
+        return exports;
+    })({});
+
+    /* ------------------------------ toInt ------------------------------ */
+
+    var toInt = _.toInt = (function ()
+    {
+        /* Convert value to an integer.
+         *
+         * |Name  |Type  |Desc             |
+         * |------|------|-----------------|
+         * |val   |*     |Value to convert |
+         * |return|number|Converted integer|
+         *
+         * ```javascript
+         * toInt(1.1); // -> 1
+         * toInt(undefined); // -> 0
+         * ```
+         */
+
+        /* dependencies
+         * toNum 
+         */
+
+        function exports(val)
+        {
+            if (!val) return val === 0 ? val : 0;
+
+            val = toNum(val);
+
+            return val - val % 1;
+        }
+
+        return exports;
+    })();
+
+    /* ------------------------------ format ------------------------------ */
+
+    _.format = (function (exports)
+    {
+        /* Format string in a printf-like format.
+         *
+         * |Name     |Type  |Desc                               |
+         * |---------|------|-----------------------------------|
+         * |str      |string|String to format                   |
+         * |...values|*     |Values to replace format specifiers|
+         * |return   |string|Formatted string                   |
+         *
+         * ### Format Specifiers
+         *
+         * |Specifier|Desc                |
+         * |---------|--------------------|
+         * |%s       |String              |
+         * |%d, %i   |Integer             |
+         * |%f       |Floating point value|
+         * |%o       |Object              |
+         *
+         * ```javascript
+         * format('%s_%s', 'foo', 'bar'); // -> 'foo bar'
+         * ```
+         */
+
+        /* dependencies
+         * restArgs toInt toNum toStr 
+         */
+
+        exports = restArgs(function (str, values)
+        {
+            var ret = '';
+
+            for (var i = 0, len = str.length; i < len; i++)
+            {
+                 var c = str[i];
+
+                 if (c !== '%' || values.length === 0)
+                 {
+                    ret += c;
+                    continue;
+                 }
+
+                 i++;
+
+                 var val = values.shift();
+
+                 switch (str[i])
+                 {
+                     case 'i':
+                     case 'd':
+                         ret += toInt(val);
+                         break;
+                     case 'f':
+                         ret += toNum(val);
+                         break;
+                     case 's':
+                         ret += toStr(val);
+                         break;
+                     case 'o':
+                         ret += tryStringify(val);
+                         break;
+                     default:
+                         i--;
+                         values.unshift(val);
+                         ret += c;
+                 }
+            }
+
+            return ret;
+        });
+
+        function tryStringify(obj)
+        {
+            try
+            {
+                return JSON.stringify(obj);
+            } catch (err)
+            {
+                return '[Error Stringify]';
+            }
+        }
+
+        return exports;
+    })({});
+
     /* ------------------------------ isBrowser ------------------------------ */
 
     var isBrowser = _.isBrowser = (function (exports)
@@ -1185,6 +1699,43 @@ window._ = (function()
         return exports;
     })({});
 
+    /* ------------------------------ isEmpty ------------------------------ */
+
+    _.isEmpty = (function ()
+    {
+        /* Check if value is an empty object or array.
+         *
+         * |Name  |Type   |Desc                  |
+         * |------|-------|----------------------|
+         * |val   |*      |Value to check        |
+         * |return|boolean|True if value is empty|
+         *
+         * ```javascript
+         * isEmpty([]); // -> true
+         * isEmpty({}); // -> true
+         * isEmpty(''); // -> true
+         * ```
+         */
+
+        /* dependencies
+         * isArrLike isArr isStr isArgs keys 
+         */
+
+        function exports(val)
+        {
+            if (val == null) return true;
+
+            if (isArrLike(val) && (isArr(val) || isStr(val) || isArgs(val)))
+            {
+                return val.length === 0;
+            }
+
+            return keys(val).length === 0;
+        }
+
+        return exports;
+    })();
+
     /* ------------------------------ isMatch ------------------------------ */
 
     var isMatch = _.isMatch = (function ()
@@ -1222,6 +1773,60 @@ window._ = (function()
             }
 
             return true;
+        }
+
+        return exports;
+    })();
+
+    /* ------------------------------ ltrim ------------------------------ */
+
+    var ltrim = _.ltrim = (function ()
+    {
+        /* Remove chars or white-spaces from beginning of string.
+         *
+         * |Name  |Type        |Desc              |
+         * |------|------------|------------------|
+         * |str   |string      |String to trim    |
+         * |chars |string array|Characters to trim|
+         * |return|string      |Trimmed string    |
+         *
+         * ```javascript
+         * ltrim(' abc  '); // -> 'abc  '
+         * ltrim('_abc_', '_'); // -> 'abc_'
+         * ltrim('_abc_', ['a', '_']); // -> 'bc_'
+         * ```
+         */
+
+        var regSpace = /^\s+/;
+
+        function exports(str, chars)
+        {
+            if (chars == null) return str.replace(regSpace, '');
+
+            var start = 0,
+                len = str.length,
+                charLen = chars.length,
+                found = true,
+                i, c;
+
+            while (found && start < len)
+            {
+                found = false;
+                i = -1;
+                c = str.charAt(start);
+
+                while (++i < charLen)
+                {
+                    if (c === chars[i])
+                    {
+                        found = true;
+                        start++;
+                        break;
+                    }
+                }
+            }
+
+            return start >= len ? '' : str.substr(start, len);
         }
 
         return exports;
@@ -1294,6 +1899,48 @@ window._ = (function()
 
         return exports;
     })({});
+
+    /* ------------------------------ filter ------------------------------ */
+
+    var filter = _.filter = (function ()
+    {
+        /* Iterates over elements of collection, returning an array of all the values that pass a truth test.
+         *
+         * |Name     |Type    |Desc                                   |
+         * |---------|--------|---------------------------------------|
+         * |obj      |array   |Collection to iterate over             |
+         * |predicate|function|Function invoked per iteration         |
+         * |[ctx]    |*       |Predicate context                      |
+         * |return   |array   |Array of all values that pass predicate|
+         *
+         * ```javascript
+         * filter([1, 2, 3, 4, 5], function (val)
+         * {
+         *     return val % 2 === 0;
+         * }); // -> [2, 4]
+         * ```
+         */
+
+        /* dependencies
+         * safeCb each 
+         */
+
+        function exports(obj, predicate, ctx)
+        {
+            var ret = [];
+
+            predicate = safeCb(predicate, ctx);
+
+            each(obj, function (val, idx, list)
+            {
+                if (predicate(val, idx, list)) ret.push(val);
+            });
+
+            return ret;
+        }
+
+        return exports;
+    })();
 
     /* ------------------------------ map ------------------------------ */
 
@@ -2498,7 +3145,7 @@ window._ = (function()
 
         function safeName(name)
         {
-            return isStr(name) ? name.split(/\s/) : toArr(name);
+            return isStr(name) ? name.split(/\s+/) : toArr(name);
         }
 
         return exports;
@@ -2694,57 +3341,6 @@ window._ = (function()
         function isGetter(name, val)
         {
             return isUndef(val) && isStr(name);
-        }
-
-        return exports;
-    })();
-
-    /* ------------------------------ restArgs ------------------------------ */
-
-    var restArgs = _.restArgs = (function ()
-    {
-        /* This accumulates the arguments passed into an array, after a given index.
-         *
-         * |Name      |Type    |Desc                                   |
-         * |----------|--------|---------------------------------------|
-         * |function  |function|Function that needs rest parameters    |
-         * |startIndex|number  |The start index to accumulates         |
-         * |return    |function|Generated function with rest parameters|
-         *
-         * ```javascript
-         * var paramArr = _.restArgs(function (rest) { return rest });
-         * paramArr(1, 2, 3, 4); // -> [1, 2, 3, 4]
-         * ```
-         */
-
-        function exports(fn, startIdx)
-        {
-            startIdx = startIdx == null ? fn.length - 1 : +startIdx;
-
-            return function ()
-            {
-                var len = Math.max(arguments.length - startIdx, 0),
-                    rest = new Array(len),
-                    i;
-
-                for (i = 0; i < len; i++) rest[i] = arguments[i + startIdx];
-
-                // Call runs faster than apply.
-                switch (startIdx)
-                {
-                    case 0: return fn.call(this, rest);
-                    case 1: return fn.call(this, arguments[0], rest);
-                    case 2: return fn.call(this, arguments[0], arguments[1], rest);
-                }
-
-                var args = new Array(startIdx + 1);
-
-                for (i = 0; i < startIdx; i++) args[i] = arguments[i];
-
-                args[startIdx] = rest;
-
-                return fn.apply(this, args);
-            };
         }
 
         return exports;
@@ -3023,6 +3619,373 @@ window._ = (function()
         return exports;
     })({});
 
+    /* ------------------------------ Promise ------------------------------ */
+
+    var Promise = _.Promise = (function (exports)
+    {
+        /* Lightweight Promise implementation.
+         *
+         * [Promises spec](https://github.com/promises-aplus/promises-spec)
+         * 
+         * ```javascript
+         * function get(url) 
+         * {
+         *     return new Promise(function (resolve, reject)
+         *     {
+         *         var req = new XMLHttpRequest();
+         *         req.open('GET', url);
+         *         req.onload = function () 
+         *         {
+         *             req.status == 200 ? resolve(req.reponse) : reject(Error(req.statusText));
+         *         };
+         *         req.onerror = function () { reject(Error('Network Error')) };
+         *         req.send();
+         *     });
+         * }
+         * 
+         * get('test.json').then(function (result) 
+         * {
+         *     // Do something...
+         * });
+         * ```
+         */
+
+        /* dependencies
+         * Class isObj isFn State bind nextTick noop 
+         */
+
+        var Promise = exports = Class({
+            initialize: function Promise(fn) 
+            {
+                if (!isObj(this)) throw new TypeError('Promises must be constructed via new');      
+                if (!isFn(fn)) throw new TypeError(fn + ' is not a function');
+
+                var self = this;
+
+                this._state = new State('pending', {
+                    fulfill: {from: 'pending', to: 'fulfilled'},
+                    reject: {from: 'pending', to: 'rejected'},
+                    adopt: {from: 'pending', to: 'adopted'}
+                }).on('fulfill', assignVal).on('reject', assignVal).on('adopt', assignVal);
+
+                function assignVal(val) { self._value = val }
+
+                this._handled = false;
+                this._value = undefined;
+                this._deferreds = [];
+
+                doResolve(fn, this);
+            },
+            'catch': function (onRejected) 
+            {
+                return this.then(null, onRejected);
+            },
+            then: function (onFulfilled, onRejected) 
+            {
+                var promise = new Promise(noop);
+
+                handle(this, new Handler(onFulfilled, onRejected, promise));
+
+                return promise;
+            }
+        }, {
+            all: function (arr) 
+            {
+                var args = toArr(arr);
+
+                return new Promise(function (resolve, reject) 
+                {
+                    if (args.length === 0) return resolve([]);
+
+                    var remaining = args.length;
+
+                    function res(i, val) 
+                    {
+                        try 
+                        {
+                            if (val && (isObj(val) || isFn(val))) 
+                            {
+                                var then = val.then;
+                                if (isFn(then)) 
+                                {
+                                    then.call(val, function (val) 
+                                    {
+                                        res(i, val);
+                                    }, reject);
+
+                                    return;
+                                }
+                            }
+
+                            args[i] = val;
+
+                            if (--remaining === 0) resolve(args);
+                        } catch (e) 
+                        {
+                            reject(e);
+                        }
+                    }
+
+                    for (var i = 0; i < args.length; i++) res(i, args[i]);
+                });
+            },
+            resolve: function (val) 
+            {
+                if (val && isObj(val) && val.constructor === Promise) return val;
+
+                return new Promise(function (resolve) { resolve(val) });
+            },
+            reject: function (val) 
+            {
+                return new Promise(function (resolve, reject) { reject(val) });
+            },
+            race: function (values) 
+            {
+                return new Promise(function (resolve, reject)
+                {
+                    for (var i = 0, len = values.length; i < len; i++) 
+                    {
+                        values[i].then(resolve, reject);
+                    }
+                });
+            }
+        });
+
+        var Handler = Class({
+            initialize: function Handler(onFulfilled, onRejected, promise) 
+            {
+                this.onFulfilled = isFn(onFulfilled) ? onFulfilled : null;
+                this.onRejected = isFn(onRejected) ? onRejected : null;
+                this.promise = promise;
+            }
+        });
+
+        function reject(self, err) 
+        {
+            self._state.reject(err);
+            finale(self);
+        }
+
+        function resolve(self, val) 
+        {
+            try 
+            {
+                if (val === self) throw new TypeError('A promise cannot be resolved with itself');
+                if (val && (isObj(val) || isFn(val))) 
+                {
+                    var then = val.then;
+                    if (val instanceof Promise) 
+                    {
+                        self._state.adopt(val);
+                        return finale(self);
+                    }
+
+                    if (isFn(then)) return doResolve(bind(then, val), self);
+                }
+
+                self._state.fulfill(val);
+                finale(self);
+            } catch (e) 
+            {
+                reject(self, e);
+            }
+        }
+
+        function finale(self) 
+        {
+            for (var i = 0, len = self._deferreds.length; i < len; i++) 
+            {
+                handle(self, self._deferreds[i]);
+            }
+
+            self._deferreds = null;
+        }
+
+        function handle(self, deferred) 
+        {
+            while (self._state.is('adopted')) self = self._value;
+
+            if (self._state.is('pending')) return self._deferreds.push(deferred);
+
+            self._handled = true;    
+
+            nextTick(function () 
+            {
+                var isFulfilled = self._state.is('fulfilled');
+
+                var cb = isFulfilled ? deferred.onFulfilled : deferred.onRejected;
+
+                if (cb === null) return (isFulfilled ? resolve : reject)(deferred.promise, self._value);
+
+                var ret;
+
+                try 
+                {
+                    ret = cb(self._value);
+                } catch (e) 
+                {
+                    return reject(deferred.promise, e);
+                }
+
+                resolve(deferred.promise, ret);
+            });
+        }
+
+        function doResolve(fn, self)
+        {
+            var done = false;
+
+            try 
+            {
+                fn(function (val) 
+                {
+                    if (done) return;
+                    done = true;
+                    resolve(self, val);
+                }, function (reason)
+                {
+                    if (done) return;
+                    done = true;
+                    reject(self, reason);
+                });
+            } catch (e) 
+            {
+                if (done) return;
+                done = true;
+                reject(self, e);
+            }
+        }
+
+        return exports;
+    })({});
+
+    /* ------------------------------ fetch ------------------------------ */
+
+    _.fetch = (function ()
+    {
+        /* Turn XMLHttpRequest into promise like.
+         * 
+         * Note: This is not a complete fetch pollyfill.
+         * 
+         * |Name   |Type   |Desc           |
+         * |-------|-------|---------------|
+         * |url    |string |Request url    |
+         * |options|object |Request options|
+         * |return |promise|Request promise|
+         * 
+         * ```javascript
+         * fetch('test.json', {
+         *     method: 'GET',
+         *     timeout: 3000,
+         *     headers: {},
+         *     body: ''
+         * }).then(function (res) 
+         * {
+         *     return res.json();
+         * }).then(function (data) 
+         * {
+         *     console.log(data);   
+         * });
+         * ```
+         */
+
+        /* dependencies
+         * Promise each defaults noop 
+         */
+
+        function exports(url, options) 
+        {
+            options = options || {};
+
+            defaults(options, exports.setting);
+
+            return new Promise(function (resolve, reject) 
+            {
+                var xhr = options.xhr(),
+                    headers = options.headers,
+                    body = options.body,
+                    timeout = options.timeout,
+                    abortTimer;
+
+                xhr.withCredentials = options.credentials == 'include';     
+
+                xhr.onload = function () 
+                { 
+                    clearTimeout(abortTimer);
+                    resolve(getRes(xhr));
+                };
+
+                xhr.onerror = reject;
+
+                xhr.open(options.method, url, true);
+
+                each(headers, function (val, key) 
+                {
+                    xhr.setRequestHeader(key, val);
+                });
+
+                if (timeout > 0) 
+                {
+                    setTimeout(function () 
+                    {
+                        xhr.onload = noop;
+                        xhr.abort();
+                        reject(Error('timeout'));
+                    }, timeout);
+                }
+
+                xhr.send(body);
+            });
+        }
+
+        var regHeaders = /^(.*?):\s*([\s\S]*?)$/gm;
+
+        function getRes(xhr) 
+        {
+            var keys = [],
+                all = [],
+                headers = {},
+                header;
+
+            xhr.getAllResponseHeaders().replace(regHeaders, function (m, key, val) 
+            {
+                key = key.toLowerCase();
+                keys.push(key);
+                // Duplicated headers is possible.
+                all.push([key, val]);
+                header = headers[key];
+                headers[key] = header ? header + ',' + val : val;
+            });    
+
+            return {
+                ok: xhr.status >= 200 && xhr.status < 400,
+                status: xhr.status,
+                statusText: xhr.statusText,
+                url: xhr.responseURL,
+                clone: function () { return getRes(xhr) },
+                text: function () { return Promise.resolve(xhr.responseText) },
+                json: function () { return Promise.resolve(xhr.responseText).then(JSON.parse) },
+                xml: function () { return Promise.resolve(xhr.responseXML) },
+                blob: function () { return Promise.resolve(new Blob([xhr.response])) },
+                headers: {
+                    keys: function () { return keys },
+                    entries: function () { return all },
+                    get: function (name) { return headers[name.toLowerCase() ]},
+                    has: function (name) { return has(headers, name) }
+                }
+            };
+        }
+
+        exports.setting = {
+            method: 'GET',
+            headers: {},
+            timeout: 0,
+            xhr: function () { return new XMLHttpRequest() }
+        };
+
+        return exports;
+    })();
+
     /* ------------------------------ Tween ------------------------------ */
 
     _.Tween = (function (exports)
@@ -3244,6 +4207,371 @@ window._ = (function()
         function exports(fn)
         {
             loaded ? setTimeout(fn, 0) : fns.push(fn)
+        }
+
+        return exports;
+    })();
+
+    /* ------------------------------ rtrim ------------------------------ */
+
+    var rtrim = _.rtrim = (function ()
+    {
+        /* Remove chars or white-spaces from end of string.
+         *
+         * |Name  |Type        |Desc              |
+         * |------|------------|------------------|
+         * |str   |string      |String to trim    |
+         * |chars |string array|Characters to trim|
+         * |return|string      |Trimmed string    |
+         *
+         * ```javascript
+         * rtrim(' abc  '); // -> ' abc'
+         * rtrim('_abc_', '_'); // -> '_abc'
+         * rtrim('_abc_', ['c', '_']); // -> '_ab'
+         * ```
+         */
+
+        var regSpace = /\s+$/;
+
+        function exports(str, chars)
+        {
+            if (chars == null) return str.replace(regSpace, '');
+
+            var end = str.length - 1,
+                charLen = chars.length,
+                found = true,
+                i, c;
+
+            while (found && end >= 0)
+            {
+                found = false;
+                i = -1;
+                c = str.charAt(end);
+
+                while (++i < charLen)
+                {
+                    if (c === chars[i])
+                    {
+                        found = true;
+                        end--;
+                        break;
+                    }
+                }
+            }
+
+            return (end >= 0) ? str.substring(0, end + 1) : '';
+        }
+
+        return exports;
+    })();
+
+    /* ------------------------------ template ------------------------------ */
+
+    _.template = (function (exports)
+    {
+        /* Compile JavaScript template into function that can be evaluated for rendering.
+         *
+         * |Name  |Type    |String                    |
+         * |------|--------|--------------------------|
+         * |str   |string  |Template string           |
+         * |return|function|Compiled template function|
+         *
+         * ```javascript
+         * template('Hello <%= name %>!')({name: 'eris'}); // -> 'Hello eris!'
+         * template('<p><%- name %></p>')({name: '<eris>'}); // -> '<p>&lt;eris&gt;</p>'
+         * template('<%if (echo) {%>Hello eris!<%}%>')({echo: true}); // -> 'Hello eris!'
+         * ```
+         */
+
+        /* dependencies
+         * escape 
+         */
+
+        /* eslint-disable quotes */
+        var regEvaluate = /<%([\s\S]+?)%>/g,
+            regInterpolate = /<%=([\s\S]+?)%>/g,
+            regEscape = /<%-([\s\S]+?)%>/g,
+            regMatcher = RegExp([
+                regEscape.source,
+                regInterpolate.source,
+                regEvaluate.source
+            ].join('|') + '|$', 'g');
+
+        var escapes = {
+            "'": "'",
+            '\\': '\\',
+            '\r': 'r',
+            '\n': 'n',
+            '\u2028': 'u2028',
+            '\u2029': 'u2029'
+        };
+
+        var regEscapeChar = /\\|'|\r|\n|\u2028|\u2029/g;
+
+        var escapeChar = function(match)
+        {
+            return '\\' + escapes[match];
+        };
+
+        exports = function (str)
+        {
+            var index = 0,
+                src = "__p+='";
+
+            str.replace(regMatcher, function (match, escape, interpolate, evaluate, offset)
+            {
+                src += str.slice(index, offset).replace(regEscapeChar, escapeChar);
+                index = offset + match.length;
+
+                if (escape)
+                {
+                    src += "'+\n((__t=(" + escape + "))==null?'':util.escape(__t))+\n'";
+                } else if (interpolate)
+                {
+                    src += "'+\n((__t=(" + interpolate + "))==null?'':__t)+\n'";
+                } else if (evaluate)
+                {
+                    src += "';\n" + evaluate + "\n__p+='";
+                }
+
+                return match;
+            });
+
+            src += "';\n";
+            src = 'with(obj||{}){\n' + src + '}\n';
+            src = "var __t,__p='',__j=Array.prototype.join," +
+                  "print=function(){__p+=__j.call(arguments,'');};\n" +
+                  src + 'return __p;\n';
+
+            var render = new Function('obj', 'util', src);
+
+            return function (data)
+            {
+                return render.call(null, data, _);
+            };
+        };
+
+        return exports;
+    })({});
+
+    /* ------------------------------ topoSort ------------------------------ */
+
+    _.topoSort = (function ()
+    {
+        /* Topological sorting algorithm.
+         *
+         * |Name  |Type |Desc        |
+         * |------|-----|------------|
+         * |edges |array|Dependencies|
+         * |return|array|Sorted order|
+         *
+         * ```javascript
+         * topoSort([[1, 2], [1, 3], [3, 2]]); // -> [1, 3, 2]
+         * ```
+         */
+
+        function exports(edges)
+        {
+            return sort(uniqueNodes(edges), edges);
+        }
+
+        function uniqueNodes(arr)
+        {
+            var ret = [];
+
+            for (var i = 0, len = arr.length; i < len; i++)
+            {
+                var edge = arr[i];
+                if (ret.indexOf(edge[0]) < 0) ret.push(edge[0]);
+                if (ret.indexOf(edge[1]) < 0) ret.push(edge[1]);
+            }
+
+            return ret;
+        }
+
+        function sort(nodes, edges)
+        {
+            var cursor = nodes.length,
+                sorted = new Array(cursor),
+                visited = {},
+                i = cursor;
+
+            while (i--)
+            {
+                if (!visited[i]) visit(nodes[i], i, []);
+            }
+
+            function visit(node, i, predecessors)
+            {
+                if(predecessors.indexOf(node) >= 0)
+                {
+                    throw new Error('Cyclic dependency: ' + JSON.stringify(node));
+                }
+
+                if (visited[i]) return;
+                visited[i] = true;
+
+                var outgoing = edges.filter(function(edge) { return edge[0] === node });
+
+                /* eslint-disable no-cond-assign */
+                if (i = outgoing.length)
+                {
+                    var preds = predecessors.concat(node);
+                    do {
+                        var child = outgoing[--i][1];
+                        visit(child, nodes.indexOf(child), preds);
+                    } while (i)
+                }
+
+                sorted[--cursor] = node
+            }
+
+            return sorted;
+        }
+
+        return exports;
+    })();
+
+    /* ------------------------------ trim ------------------------------ */
+
+    _.trim = (function ()
+    {
+        /* Remove chars or white-spaces from beginning end of string.
+         *
+         * |Name  |Type        |Desc              |
+         * |------|------------|------------------|
+         * |str   |string      |String to trim    |
+         * |chars |string array|Characters to trim|
+         * |return|string      |Trimmed string    |
+         *
+         * ```javascript
+         * trim(' abc  '); // -> 'abc'
+         * trim('_abc_', '_'); // -> 'abc'
+         * trim('_abc_', ['a', 'c', '_']); // -> 'b'
+         * ```
+         */
+
+        /* dependencies
+         * ltrim rtrim 
+         */
+
+        var regSpace = /^\s+|\s+$/g;
+
+        function exports(str, chars)
+        {
+            if (chars == null) return str.replace(regSpace, '');
+
+            return ltrim(rtrim(str, chars), chars);
+        }
+
+        return exports;
+    })();
+
+    /* ------------------------------ unique ------------------------------ */
+
+    _.unique = (function ()
+    {
+        /* Create duplicate-free version of an array.
+         *
+         * |Name     |Type    |Desc                         |
+         * |---------|--------|-----------------------------|
+         * |arr      |array   |Array to inspect             |
+         * |[compare]|function|Function for comparing values|
+         * |return   |array   |New duplicate free array     |
+         *
+         * ```javascript
+         * unique([1, 2, 3, 1]); // -> [1, 2, 3]
+         * ```
+         */
+
+        /* dependencies
+         * filter 
+         */
+
+        function exports(arr, compare)
+        {
+            compare = compare || isEqual;
+
+            return filter(arr, function (item, idx, arr)
+            {
+                var len = arr.length;
+
+                while (++idx < len)
+                {
+                    if (compare(item, arr[idx])) return false;
+                }
+
+                return true;
+            });
+        }
+
+        function isEqual(a, b)
+        {
+            return a === b;
+        }
+
+        return exports;
+    })();
+
+    /* ------------------------------ waterfall ------------------------------ */
+
+    _.waterfall = (function ()
+    {
+        /* Run an array of functions in series.
+         *
+         * |Name |Type    |Desc                   |
+         * |-----|--------|-----------------------|
+         * |tasks|array   |Array of functions     |
+         * |[cb] |function|Callback once completed|
+         *
+         * ```javascript
+         * waterfall([
+         *     function (cb)
+         *     {
+         *         cb(null, 'one');
+         *     },
+         *     function (arg1, cb)
+         *     {
+         *         // arg1 -> 'one'
+         *         cb(null, 'done');
+         *     }
+         * ], function (err, result)
+         * {
+         *     // result -> 'done'
+         * });
+         * ```
+         */
+
+        /* dependencies
+         * noop nextTick restArgs 
+         */
+
+        function exports(tasks, cb)
+        {
+            cb = cb || noop;
+
+            var current = 0;
+
+            var taskCb = restArgs(function (err, args)
+            {
+                if (++current >= tasks.length || err)
+                {
+                    args.unshift(err);
+                    nextTick(function () { cb.apply(null, args) });
+                } else
+                {
+                    args.push(taskCb);
+                    tasks[current].apply(null, args);
+                }
+            });
+
+            if (tasks.length)
+            {
+                tasks[0](taskCb);
+            } else
+            {
+                nextTick(function () { cb(null) });
+            }
         }
 
         return exports;

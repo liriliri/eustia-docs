@@ -2,6 +2,7 @@ var path = require('path'),
     fs = require('fs'),
     ncp = require('ncp'),
     marked = require('marked'),
+    rmdir = require('rmdir'),
     autoprefixer = require('autoprefixer-stylus');
 
 var layouts = require('metalsmith-layouts'),
@@ -96,8 +97,11 @@ function build()
 
 function fullBuild()
 {
-    copyStatic();
-    build();
+    rmdir('dist', function ()
+    {
+        copyStatic();
+        build();
+    });
 }
 
 function server()
