@@ -40,7 +40,8 @@ block content
             {
                 e.preventDefault();
 
-                var scrollTop = docContainer.scrollTop;
+                var scrollTop = docContainer.scrollTop,
+                    href = _.$(this).attr('href');
 
                 new _.Tween({
                     y: scrollTop
@@ -48,7 +49,9 @@ block content
                 {
                     docContainer.scrollTop = target.y;
                 }).to({
-                    y: _.$(_.$(this).attr('href')).offset().top - docTop + scrollTop
+                    y: _.$(href).offset().top - docTop + scrollTop
                 }, 300, 'inQuad').play();
+
+                window.location.hash = href;
             });
         });
