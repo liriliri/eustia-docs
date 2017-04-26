@@ -21,8 +21,8 @@ function addSourceLink(body)
 {
     return body.replace(/^##\s+([\w$]+)/mg, function (match, name) 
     {
-        var source = 'https://github.com/liriliri/eris/blob/master/' + name[0].toLowerCase() + '/' + name + '.js';
+        var source = 'https://github.com/liriliri/eris/blob/master/' + name[0].toLowerCase() + '/' + name;
 
-        return match + '\n\n[source](' + source + ')'; 
+        return match + '\n\n[source](' + source + '.js) ' + '[test](' + source + '.test.js)'; 
     });
 }
