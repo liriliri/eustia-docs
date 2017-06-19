@@ -16,7 +16,7 @@ own modules to create libraries for multiple projects.
 You can install Eustia using Node Package Manager(**npm**).
 
 ```bash
-npm install -g eustiahtt
+npm install -g eustia
 ```
 
 ## Quick Example
