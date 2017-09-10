@@ -218,11 +218,11 @@ Now, let's say I want to have a function to compare version numbers. The first s
 _('isStr each'); // dependencies
 
 // export object
-exports = function (v1, v2)
+function exports(v1, v2)
 {
     if (!isStr(v1) || !isStr(v2)) return;
     ...
-};
+}
 ```
 
 Now you can use **compareVersion** anywhere in your project.

@@ -4,9 +4,8 @@
   "description": "Eustia documentation",
   "main": "index.js",
   "scripts": {
-    "build": "node . && gulp",
-    "dev": "node . serve",
-    "updateMod": "node script/updateMod"
+    "build": "node script/updateMod && node . && gulp",
+    "dev": "node . serve"
   },
   "repository": {
     "type": "git",
