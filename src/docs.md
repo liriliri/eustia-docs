@@ -20,10 +20,8 @@ title: Guide
         <a href="#commands">2. Commands</a>
         <ul>
             <li><a href="#build-command">2.1 Build Command</a></li>
-            <li><a href="#search-command">2.2 Search Command</a></li>
-            <li><a href="#install-command">2.3 Install Command</a></li>
-            <li><a href="#doc-command">2.4 Doc Command</a></li>
-            <li><a href="#cache-command">2.5 Cache Command</a></li>
+            <li><a href="#doc-command">2.2 Doc Command</a></li>
+            <li><a href="#cache-command">2.3 Cache Command</a></li>
         </ul>
     </li>
     <li>
@@ -130,7 +128,7 @@ Obviously, multiple configuration is also supported. To specify which task to ru
 eustia <task-name>
 ```
 
-> Configuration could be overwritten by command line options. And it's possible to specify another configuration path using **config** options.
+Configuration could be overwritten by command line options. And it's possible to specify another configuration path using **config** options.
 
 ### Use in JavaScript
 
@@ -183,27 +181,7 @@ eusita build index.html src/*.js -o lib.js
 |transpilers|         |                    |Use for writing modules in different formats|
 |watch      |w        |false               |Watch files to regenerate automatically     |
 
-> **Transpilers** and **extension** are not available via command line arguments, use them only in configurations.
-
-### Search Command
-
-Search for [modules](http://liriliri.github.io/eustia/module.html) directly through command line.
-
-```bash
-eustia search <keyword>
-```
-
-|Name  |Shorthand|Default|Desc                               |
-|------------------------------------------------------------|
-|update|u        |false  |Update module data before searching|
-
-### Install Command
-
-Install module in current project directory.
-
-```bash
-eustia install [<modules>]
-```
+**Transpilers** and **extension** are not available via command line arguments, use them only in configurations.
 
 ### Doc Command
 
@@ -249,7 +227,7 @@ exports = function (v1, v2)
 
 Now you can use **compareVersion** anywhere in your project.
 
-> Using option **library** allows you to search functions in other paths, quite useful when sharing functions among several projects. Besides, **Lodash** functions is available by using [eustia-lodash](https://github.com/liriliri/eustia-lodash).
+Using option **library** allows you to search functions in other paths, quite useful when sharing functions among several projects. Besides, **Lodash** functions is available by using [eustia-lodash](https://github.com/liriliri/eustia-lodash).
 
 ## Relative Projects
 
