@@ -1,22 +1,36 @@
 var request = require('request'),
     fs = require('fs');
 
-var ERIS_URL = 'https://raw.githubusercontent.com/liriliri/eris/master/doc.md';
+var ERIS_URL = 'https://raw.githubusercontent.com/liriliri/eris/master/doc.md',
+    DEMO_URL = 'https://raw.githubusercontent.com/liriliri/eris/master/demo.json',
+    demo = [];
 
-request(ERIS_URL, function (err, res, body)
+request(DEMO_URL, function (err, res, body) 
 {
     if (err) return console.log(err);
 
-    body = addDesc(body);
-    body = addSourceLink(body);
+    demo = JSON.parse(body);
 
-    var data = '---\nlayout: module.jade\ntitle: Module\n---\n\n' + body;
+    requestDoc();
+});    
 
-    fs.writeFile('src/module.md', data, 'utf-8', function (err) 
+function requestDoc() 
+{
+    request(ERIS_URL, function (err, res, body)
     {
-        if (err) console.log(err);
+        if (err) return console.log(err);
+
+        body = addDesc(body);
+        body = addSourceLink(body);
+
+        var data = '---\nlayout: module.jade\ntitle: Module\n---\n\n' + body;
+
+        fs.writeFile('src/module.md', data, 'utf-8', function (err) 
+        {
+            if (err) console.log(err);
+        });
     });
-});
+}
 
 function addDesc(body) 
 {
@@ -32,6 +46,13 @@ function addSourceLink(body)
     {
         var source = 'https://github.com/liriliri/eris/blob/master/' + name[0].toLowerCase() + '/' + name;
 
-        return match + '\n\n[source](' + source + '.js) ' + '[test](' + source + '.test.js)'; 
+        var ret = match + '\n\n[source](' + source + '.js) ' + '[test](' + source + '.test.js)'; 
+
+        if (demo.indexOf(name) > -1) 
+        {
+            ret += ' [demo](/demo/' + name + '.html)';
+        }
+
+        return ret;
     });
 }
