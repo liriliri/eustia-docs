@@ -5,15 +5,15 @@ var gulp = require('gulp'),
 
 gulp.task('js', function ()
 {
-    return gulp.src('dist/static/js/*.js')
+    return gulp.src('dist/**/*.js')
                .pipe(uglify())
                .pipe(rename({suffix: '.min'}))
-               .pipe(gulp.dest('dist/static/js'));
+               .pipe(gulp.dest('dist/'));
 });
 
 gulp.task('html', function () 
 {
-    return gulp.src('dist/*.html')
+    return gulp.src('dist/**/*.html')
                .pipe(htmlmin({
                    collapseWhitespace: true,
                    minifyJS: true
