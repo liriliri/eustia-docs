@@ -23,7 +23,7 @@
       "format": "global"
     },
     "node": {
-      "files": ["lib/*.js", "tool/**/*.js"],
+      "files": ["lib/*.js", "tool/**/*.js", "script/*.js"],
       "output": "./lib/util.js",
       "format": "commonjs"
     }
