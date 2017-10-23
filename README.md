@@ -1,11 +1,9 @@
 # caim
-Eustia official website.
+[Eustia official website](http://eustia.liriliri.io/)
 
 ```bash
-# Watch and auto re-build.
+# watch and auto re-build.
 npm run dev
-# Build final output into dist folder.
+# build final output into dist folder.
 npm run build
-# Update module data.
-npm run updateMod
 ```
