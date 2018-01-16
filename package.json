@@ -18,12 +18,19 @@
   },
   "eustia": {
     "page": {
-      "files": ["layout/**/*.jade", "static/js/*.js"],
+      "files": [
+        "layout/**/*.jade",
+        "static/js/*.js"
+      ],
       "output": "static/js/eustia.js",
       "format": "global"
     },
     "node": {
-      "files": ["lib/*.js", "tool/**/*.js", "script/*.js"],
+      "files": [
+        "lib/*.js",
+        "tool/**/*.js",
+        "script/*.js"
+      ],
       "output": "./lib/util.js",
       "format": "commonjs"
     }

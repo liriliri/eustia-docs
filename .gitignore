@@ -2,3 +2,4 @@
 /dist/
 /node_modules/
 /src/module.md
+package-lock.json

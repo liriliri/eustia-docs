@@ -172,7 +172,7 @@ eusita build index.html src/*.js -o lib.js
 |exclude    |e        |                    |Functions excluded                          |
 |extension  |         |js                  |Module extension, useful for transpilers    |
 |files      |         |['\*.html', '\*.js']|Files to scan                               |
-|format     |f        |umd                 |Module pattern, commonjs, umd or global     |
+|format     |f        |umd                 |Module pattern, commonjs, umd, es or global |
 |include    |i        |                    |Functions included                          |
 |ignore     |         |                    |Files excluded                              |
 |library    |l        |                    |External library paths                      |
