@@ -60,6 +60,14 @@ function addLink(body)
             ret += ' [demo](/demo/' + name + '.html)';
         }
 
+        var env = index[name].env,
+            envHtml = '';
+
+        if (env === 'browser' || env === 'all') envHtml += '<span class="env">browser</span>';
+        if (env === 'node' || env === 'all') envHtml += '<span class="env">node</span>';
+
+        ret += envHtml;
+
         return ret;
     });
 }
