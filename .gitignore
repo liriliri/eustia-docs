@@ -2,4 +2,5 @@
 /dist/
 /node_modules/
 /src/module.md
+/src/eris.json
 package-lock.json

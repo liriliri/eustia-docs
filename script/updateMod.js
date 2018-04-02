@@ -13,6 +13,8 @@ request(INDEX_URL, function (err, res, body)
 
     index = JSON.parse(body);
 
+    fs.writeFile('src/eris.json', JSON.stringify(index, null, 4), function () {});
+
     requestDoc();
 });    
 

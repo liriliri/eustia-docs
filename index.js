@@ -42,7 +42,8 @@ function copyStatic()
     });
 }
 
-var site = require('./src/site.json');
+var site = require('./src/site.json'),
+    eris = require('./src/eris.json');
 
 function build()
 {
@@ -59,7 +60,8 @@ function build()
     console.time('[metalsmith] build/site finished');
 
     metalsmith.metadata({
-        site: site
+        site: site,
+        eris: eris
     }).source(
         'src'
     ).clean(

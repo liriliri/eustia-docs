@@ -2,6 +2,7 @@ _.ready(function ()
 {
     var $buildBtn = _.$('#build-btn'),
         $input = _.$('#input-modules'),
+        $buildModules = _.$('#build-modules'),
         $downloadBtn = _.$('#download-btn');
 
     var localStore = window.localStorage;
@@ -49,7 +50,20 @@ _.ready(function ()
 
     $input.on('input', function ()
     {
+        $buildModules.show();
+        logger.reset();
+        disableDownload();
         localStore.setItem(INPUT_STORE_NAME, $input.val())
+    });
+
+    $buildModules.on('click', 'li', function () 
+    {
+        var $this = _.$(this),
+            name = $this.text();
+
+        var val = $input.val();
+        val += ' ' + name;
+        $input.val(_.trim(val));
     });
 
     var lastVal = localStore.getItem(INPUT_STORE_NAME);
@@ -63,6 +77,8 @@ function build(modules, cb)
 
     logger.log('MODULES INCLUDED');
     logger.log(modules.join(' '));
+
+    _.$('#build-modules').hide();
 
     _.waterfall([
         _.partial(downloadMod, modules),
@@ -86,6 +102,11 @@ function enableDownload(output)
     $btn.attr('href', URL.createObjectURL(blob));
 
     $btn.get(0).click();
+}
+
+function disableDownload() 
+{
+    _.$('#download-btn').addClass('disabled');
 }
 
 function concatMod(codes, cb)
@@ -247,10 +268,15 @@ var logger = {
     init: function ()
     {
         this._$el = _.$('#build-logger');
+        this._initHtml = this._$el.html();
     },
     log: function ()
     {
         this._$el.append('<li class="log">' + _.escape(_.format.apply(null, arguments)) + '</li>');
+    },
+    reset: function ()
+    {
+        this._$el.html(this._initHtml);
     },
     clear: function ()
     {
