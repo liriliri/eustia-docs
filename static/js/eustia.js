@@ -1,6 +1,8 @@
 // Built by eustia.
 window._ = (function()
 {
+    "use strict";
+
     var _ = {};
 
     if (typeof window === 'object' && window._) _ = window._;
@@ -19,6 +21,11 @@ window._ = (function()
          * ```javascript
          * last([1, 2]); // -> 2
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         function exports(arr)
@@ -48,6 +55,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         function exports(val)
         {
             return val === void 0;
@@ -75,6 +87,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         function exports(val)
         {
             var type = typeof val;
@@ -100,6 +117,11 @@ window._ = (function()
          * ```javascript
          * startWith('ab', 'a'); // -> true
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         function exports(str, prefix)
@@ -142,6 +164,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         function exports(Class, SuperClass)
         {
             if (objCreate) return Class.prototype = objCreate(SuperClass.prototype);
@@ -174,6 +201,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         var hasOwnProp = Object.prototype.hasOwnProperty;
 
         function exports(obj, key)
@@ -199,6 +231,11 @@ window._ = (function()
          * ```javascript
          * slice([1, 2, 3, 4], 1, 2); // -> [2]
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         function exports(arr, start, end)
@@ -258,6 +295,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         if (typeof process === 'object' && process.nextTick)
         {
             exports = process.nextTick;
@@ -290,6 +332,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         function exports() {}
 
         return exports;
@@ -304,6 +351,11 @@ window._ = (function()
          * ```javascript
          * now(); // -> 1468826678701
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         exports = Date.now || function ()
@@ -332,6 +384,11 @@ window._ = (function()
          * obj.one = 1;
          * allKeys(obj) // -> ['zero', 'one']
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         function exports(obj)
@@ -366,6 +423,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         function exports(n, fn)
         {
             var memo;
@@ -398,6 +460,11 @@ window._ = (function()
          * var paramArr = _.restArgs(function (rest) { return rest });
          * paramArr(1, 2, 3, 4); // -> [1, 2, 3, 4]
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         function exports(fn, startIdx)
@@ -439,12 +506,12 @@ window._ = (function()
     {
         /* Create a function bound to a given object.
          *
-         * |Name  |Type    |Desc                    |
-         * |------|--------|------------------------|
-         * |fn    |function|Function to bind        |
-         * |ctx   |*       |This binding of given fn|
-         * |[rest]|...*    |Optional arguments      |
-         * |return|function|New bound function      |
+         * |Name     |Type    |Desc                    |
+         * |---------|--------|------------------------|
+         * |fn       |function|Function to bind        |
+         * |ctx      |*       |This binding of given fn|
+         * |[...rest]|*       |Optional arguments      |
+         * |return   |function|New bound function      |
          *
          * ```javascript
          * var fn = bind(function (msg)
@@ -453,6 +520,11 @@ window._ = (function()
          * }, {name: 'eustia'}, 'I am a utility library.');
          * fn(); // -> 'eustia: I am a utility library.'
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -491,6 +563,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         var regUpperCase = /([A-Z])/g,
             regSeparator = /[_.\- ]+/g,
             regTrim = /(^-)|(-$)/g;
@@ -525,6 +602,11 @@ window._ = (function()
          * camelCase('foo_bar'); // -> fooBar
          * camelCase('foo.bar'); // -> fooBar
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -574,6 +656,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         /* dependencies
          * splitCase 
          */
@@ -603,6 +690,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         function exports(arr, val, fromIdx)
         {
             return Array.prototype.indexOf.call(arr, val, fromIdx);
@@ -625,6 +717,11 @@ window._ = (function()
          * ```javascript
          * keys({a: 1}); // -> ['a']
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -651,6 +748,11 @@ window._ = (function()
     var optimizeCb = _.optimizeCb = (function ()
     {
         /* Used for function context binding.
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -702,6 +804,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         function exports(str)
         {
             if (str.length < 1) return str;
@@ -726,6 +833,11 @@ window._ = (function()
          * ```javascript
          * escape('You & Me'); -> // -> 'You &amp; Me'
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -777,6 +889,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         function exports(val)
         {
             return val == null ? '' : val.toString();
@@ -799,6 +916,11 @@ window._ = (function()
          * ```javascript
          * identity('a'); // -> 'a'
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         function exports(val)
@@ -826,6 +948,11 @@ window._ = (function()
          * repeat('ab', 2); // -> 'abab'
          * repeat('*', 0); // -> ''
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         exports = function (str, n)
@@ -863,6 +990,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         var ObjToStr = Object.prototype.toString;
 
         function exports(val)
@@ -881,7 +1013,7 @@ window._ = (function()
          *
          * |Name  |Type   |Desc                                |
          * |------|-------|------------------------------------|
-         * |value |*      |Value to check                      |
+         * |val   |*      |Value to check                      |
          * |return|boolean|True if value is an arguments object|
          *
          * ```javascript
@@ -889,6 +1021,11 @@ window._ = (function()
          *     isArgs(arguments); // -> true
          * })();
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -920,6 +1057,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         /* dependencies
          * objToStr 
          */
@@ -931,6 +1073,105 @@ window._ = (function()
 
         return exports;
     })({});
+
+    /* ------------------------------ castPath ------------------------------ */
+
+    var castPath = _.castPath = (function ()
+    {
+        /* Cast value into a property path array.
+         *
+         * |Name  |Type  |Desc               |
+         * |------|------|-------------------|
+         * |str   |*     |Value to inspect   |
+         * |[obj] |object|Object to query    |
+         * |return|array |Property path array|
+         * 
+         * ```javascript
+         * castPath('a.b.c'); // -> ['a', 'b', 'c']
+         * castPath(['a']); // -> ['a']
+         * castPath('a[0].b'); // -> ['a', '0', 'b']
+         * castPath('a.b.c', {'a.b.c': true}); // -> ['a.b.c']
+         * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
+         */
+
+        /* dependencies
+         * has isArr 
+         */
+
+        function exports(str, obj) 
+        {
+            if (isArr(str)) return str;
+            if (obj && has(obj, str)) return [str];
+
+            var ret = [];
+
+            str.replace(regPropName, function(match, number, quote, str) 
+            {
+                ret.push(quote ? str.replace(regEscapeChar, '$1') : (number || match));
+            });
+
+            return ret;
+        }
+
+        // Lodash _stringToPath
+        var regPropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g,
+            regEscapeChar = /\\(\\)?/g;
+
+        return exports;
+    })();
+
+    /* ------------------------------ safeGet ------------------------------ */
+
+    var safeGet = _.safeGet = (function ()
+    {
+        /* Get object property, don't throw undefined error.
+         *
+         * |Name  |Type        |Desc                     |
+         * |------|------------|-------------------------|
+         * |obj   |object      |Object to query          |
+         * |path  |array string|Path of property to get  |
+         * |return|*           |Target value or undefined|
+         *
+         * ```javascript
+         * var obj = {a: {aa: {aaa: 1}}};
+         * safeGet(obj, 'a.aa.aaa'); // -> 1
+         * safeGet(obj, ['a', 'aa']); // -> {aaa: 1}
+         * safeGet(obj, 'a.b'); // -> undefined
+         * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
+         */
+
+        /* dependencies
+         * isUndef castPath 
+         */
+
+        function exports(obj, path)
+        {
+            path = castPath(path, obj);
+
+            var prop;
+
+            /* eslint-disable no-cond-assign */
+            while (prop = path.shift())
+            {
+                obj = obj[prop];
+                if (isUndef(obj)) return;
+            }
+
+            return obj;
+        }
+
+        return exports;
+    })();
 
     /* ------------------------------ isFn ------------------------------ */
 
@@ -951,6 +1192,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         /* dependencies
          * objToStr 
          */
@@ -969,12 +1215,23 @@ window._ = (function()
 
     var isNum = _.isNum = (function ()
     {
-        /* Checks if value is classified as a Number primitive or object.
+        /* Check if value is classified as a Number primitive or object.
          *
          * |Name  |Type   |Desc                                 |
          * |------|-------|-------------------------------------|
-         * |value |*      |Value to check                       |
+         * |val   |*      |Value to check                       |
          * |return|boolean|True if value is correctly classified|
+         * 
+         * ```javascript
+         * isNum(5); // -> true
+         * isNum(5.1); // -> true
+         * isNum({}); // -> false
+         * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -1005,6 +1262,11 @@ window._ = (function()
          * ```javascript
          * indent('foo\nbar', ' ', 4); // -> 'foo\n    bar'
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -1039,7 +1301,7 @@ window._ = (function()
          *
          * |Name  |Type   |Desc                       |
          * |------|-------|---------------------------|
-         * |value |*      |Value to check             |
+         * |val   |*      |Value to check             |
          * |return|boolean|True if value is array like|
          *
          * > Function returns false.
@@ -1051,15 +1313,20 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         /* dependencies
-         * isNum has isFn 
+         * isNum isFn 
          */
 
         var MAX_ARR_IDX = Math.pow(2, 53) - 1;
 
         function exports(val)
         {
-            if (!has(val, 'length')) return false;
+            if (!val) return false;
 
             var len = val.length;
 
@@ -1073,7 +1340,7 @@ window._ = (function()
 
     var each = _.each = (function ()
     {
-        /* Iterates over elements of collection and invokes iteratee for each element.
+        /* Iterate over elements of collection and invokes iteratee for each element.
          *
          * |Name    |Type        |Desc                          |
          * |--------|------------|------------------------------|
@@ -1084,6 +1351,11 @@ window._ = (function()
          * ```javascript
          * each({'a': 1, 'b': 2}, function (val, key) {});
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -1125,6 +1397,11 @@ window._ = (function()
          * |keysFn  |function|Function to get object keys   |
          * |defaults|boolean |No override when set to true  |
          * |return  |function|Result function, extend...    |
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -1171,6 +1448,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         /* dependencies
          * createAssigner allKeys 
          */
@@ -1195,6 +1477,11 @@ window._ = (function()
          * ```javascript
          * extend({name: 'RedHood'}, {age: 24}); // -> {name: 'RedHood', age: 24}
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -1223,6 +1510,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         /* dependencies
          * keys createAssigner 
          */
@@ -1247,6 +1539,11 @@ window._ = (function()
          * easing.linear(0.5); // -> 0.5
          * easing.inElastic(0.5, 500); // -> 0.03125
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -1343,6 +1640,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         /* dependencies
          * each 
          */
@@ -1377,6 +1679,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         /* dependencies
          * idxOf isArrLike values 
          */
@@ -1407,6 +1714,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         /* dependencies
          * objToStr 
          */
@@ -1419,44 +1731,43 @@ window._ = (function()
         return exports;
     })();
 
-    /* ------------------------------ safeGet ------------------------------ */
+    /* ------------------------------ isEmpty ------------------------------ */
 
-    var safeGet = _.safeGet = (function ()
+    var isEmpty = _.isEmpty = (function ()
     {
-        /* Get object property, don't throw undefined error.
+        /* Check if value is an empty object or array.
          *
-         * |Name  |Type        |Desc                     |
-         * |------|------------|-------------------------|
-         * |obj   |object      |Object to query          |
-         * |path  |array string|Path of property to get  |
-         * |return|*           |Target value or undefined|
+         * |Name  |Type   |Desc                  |
+         * |------|-------|----------------------|
+         * |val   |*      |Value to check        |
+         * |return|boolean|True if value is empty|
          *
          * ```javascript
-         * var obj = {a: {aa: {aaa: 1}}};
-         * safeGet(obj, 'a.aa.aaa'); // -> 1
-         * safeGet(obj, ['a', 'aa']); // -> {aaa: 1}
-         * safeGet(obj, 'a.b'); // -> undefined
+         * isEmpty([]); // -> true
+         * isEmpty({}); // -> true
+         * isEmpty(''); // -> true
          * ```
          */
 
-        /* dependencies
-         * isStr isUndef 
+        /* module
+         * env: all
+         * test: all
          */
 
-        function exports(obj, path)
+        /* dependencies
+         * isArrLike isArr isStr isArgs keys 
+         */
+
+        function exports(val)
         {
-            if (isStr(path)) path = path.split('.');
+            if (val == null) return true;
 
-            var prop;
-
-            /* eslint-disable no-cond-assign */
-            while (prop = path.shift())
+            if (isArrLike(val) && (isArr(val) || isStr(val) || isArgs(val)))
             {
-                obj = obj[prop];
-                if (isUndef(obj)) return;
+                return val.length === 0;
             }
 
-            return obj;
+            return keys(val).length === 0;
         }
 
         return exports;
@@ -1476,6 +1787,11 @@ window._ = (function()
          * ```javascript
          * toNum('5'); // -> 5
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -1515,6 +1831,11 @@ window._ = (function()
          * toInt(1.1); // -> 1
          * toInt(undefined); // -> 0
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -1557,6 +1878,11 @@ window._ = (function()
          * ```javascript
          * format('%s_%s', 'foo', 'bar'); // -> 'foo bar'
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -1631,6 +1957,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         exports = typeof window === 'object' &&
                   typeof document === 'object' &&
                   document.nodeType === 9;
@@ -1654,6 +1985,11 @@ window._ = (function()
          * });
          * raf.cancel(id);
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -1699,43 +2035,6 @@ window._ = (function()
         return exports;
     })({});
 
-    /* ------------------------------ isEmpty ------------------------------ */
-
-    _.isEmpty = (function ()
-    {
-        /* Check if value is an empty object or array.
-         *
-         * |Name  |Type   |Desc                  |
-         * |------|-------|----------------------|
-         * |val   |*      |Value to check        |
-         * |return|boolean|True if value is empty|
-         *
-         * ```javascript
-         * isEmpty([]); // -> true
-         * isEmpty({}); // -> true
-         * isEmpty(''); // -> true
-         * ```
-         */
-
-        /* dependencies
-         * isArrLike isArr isStr isArgs keys 
-         */
-
-        function exports(val)
-        {
-            if (val == null) return true;
-
-            if (isArrLike(val) && (isArr(val) || isStr(val) || isArgs(val)))
-            {
-                return val.length === 0;
-            }
-
-            return keys(val).length === 0;
-        }
-
-        return exports;
-    })();
-
     /* ------------------------------ isMatch ------------------------------ */
 
     var isMatch = _.isMatch = (function ()
@@ -1751,6 +2050,11 @@ window._ = (function()
          * ```javascript
          * isMatch({a: 1, b: 2}, {a: 1}); // -> true
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -1795,6 +2099,11 @@ window._ = (function()
          * ltrim('_abc_', '_'); // -> 'abc_'
          * ltrim('_abc_', ['a', '_']); // -> 'bc_'
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         var regSpace = /^\s+/;
@@ -1852,6 +2161,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         /* dependencies
          * extendOwn isMatch 
          */
@@ -1874,6 +2188,11 @@ window._ = (function()
     var safeCb = _.safeCb = (function (exports)
     {
         /* Create callback based on input value.
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -1921,6 +2240,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         /* dependencies
          * safeCb each 
          */
@@ -1958,6 +2282,11 @@ window._ = (function()
          * ```javascript
          * map([4, 8], function (n) { return n * n; }); // -> [16, 64]
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -2003,6 +2332,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         /* dependencies
          * isArrLike map isArr isStr 
          */
@@ -2042,7 +2376,7 @@ window._ = (function()
          *     },
          *     introduce: function ()
          *     {
-         *         return 'I am ' + this.name + ', ' + this.age + ' years old.'.
+         *         return 'I am ' + this.name + ', ' + this.age + ' years old.';
          *     }
          * });
          *
@@ -2055,7 +2389,7 @@ window._ = (function()
          *     },
          *     introduce: function ()
          *     {
-         *         return this.callSuper(People, 'introduce') + '\n I study at ' + this.school + '.'.
+         *         return this.callSuper(People, 'introduce') + '\n I study at ' + this.school + '.';
          *     }
          * }, {
          *     is: function (obj)
@@ -2068,6 +2402,11 @@ window._ = (function()
          * a.introduce(); // -> 'I am allen, 17 years old. \n I study at Hogwarts.'
          * Student.is(a); // -> true
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -2172,6 +2511,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: browser
+         * test: browser
+         */
+
         /* dependencies
          * Class isStr each 
          */
@@ -2247,6 +2591,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: browser
+         * test: browser
+         */
+
         /* dependencies
          * isStr toArr Select 
          */
@@ -2304,6 +2653,11 @@ window._ = (function()
          *     'attr2': 'test'
          * });
          * ```
+         */
+
+        /* module
+         * env: browser
+         * test: browser
          */
 
         /* dependencies
@@ -2371,6 +2725,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: browser
+         * test: browser
+         */
+
         /* dependencies
          * $attr isStr isObj each 
          */
@@ -2432,6 +2791,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: browser
+         * test: browser
+         */
+
         /* dependencies
          * isStr isObj camelCase kebabCase isUndef contain isNum $safeEls startWith 
          */
@@ -2455,7 +2819,7 @@ window._ = (function()
 
         function getCss(node, name)
         {
-            return node.style[camelCase(name)];
+            return node.style[camelCase(name)] || getComputedStyle(node, '').getPropertyValue(name);
         }
 
         function setCss(nodes, css)
@@ -2540,6 +2904,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: browser
+         * test: browser
+         */
+
         /* dependencies
          * each $safeEls 
          */
@@ -2580,6 +2949,11 @@ window._ = (function()
          * ```javascript
          * $offset('#test'); // -> {left: 0, top: 0, width: 0, height: 0}
          * ```
+         */
+
+        /* module
+         * env: browser
+         * test: browser
          */
 
         /* dependencies
@@ -2633,6 +3007,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: browser
+         * test: browser
+         */
+
         /* dependencies
          * isUndef each $safeEls 
          */
@@ -2676,6 +3055,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: browser
+         * test: browser
+         */
+
         /* dependencies
          * each $safeEls 
          */
@@ -2708,6 +3092,11 @@ window._ = (function()
          * ```javascript
          * $show('#test');
          * ```
+         */
+
+        /* module
+         * env: browser
+         * test: browser
          */
 
         /* dependencies
@@ -2786,6 +3175,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: browser
+         * test: browser
+         */
+
         /* dependencies
          * Class contain 
          */
@@ -2799,7 +3193,7 @@ window._ = (function()
                 handler,
                 handlerQueue = formatHandlers.call(this, e, handlers);
 
-            e = new delegate.Event(e);
+            e = new exports.Event(e);
 
             var i = 0, j, matched, ret;
 
@@ -2823,7 +3217,7 @@ window._ = (function()
         function formatHandlers(e, handlers)
         {
             var current = e.target,
-                ret     = [],
+                ret = [],
                 delegateCount = handlers.delegateCount,
                 selector, matches, handler, i;
 
@@ -2862,7 +3256,7 @@ window._ = (function()
             {
                 var handler = {
                         selector: selector,
-                        handler : fn
+                        handler: fn
                     },
                     handlers;
 
@@ -2955,6 +3349,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: browser
+         * test: browser
+         */
+
         /* dependencies
          * delegate isUndef $safeEls 
          */
@@ -3005,6 +3404,11 @@ window._ = (function()
          *     return val % 2 === 0;
          * }); // -> true
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -3082,6 +3486,11 @@ window._ = (function()
          * $class.toggle('#test', 'class1');
          * $class.has('#test', 'class1'); // -> true
          * ```
+         */
+
+        /* module
+         * env: browser
+         * test: browser
          */
 
         /* dependencies
@@ -3173,6 +3582,11 @@ window._ = (function()
          *     // Do something...
          * });
          * ```
+         */
+
+        /* module
+         * env: browser
+         * test: browser
          */
 
         /* dependencies
@@ -3352,16 +3766,21 @@ window._ = (function()
     {
         /* Partially apply a function by filling in given arguments.
          *
-         * |Name    |Type    |Desc                                    |
-         * |--------|--------|----------------------------------------|
-         * |fn      |function|Function to partially apply arguments to|
-         * |partials|...*    |Arguments to be partially applied       |
-         * |return  |function|New partially applied function          |
+         * |Name       |Type    |Desc                                    |
+         * |-----------|--------|----------------------------------------|
+         * |fn         |function|Function to partially apply arguments to|
+         * |...partials|*       |Arguments to be partially applied       |
+         * |return     |function|New partially applied function          |
          *
          * ```javascript
          * var sub5 = partial(function (a, b) { return b - a }, 5);
          * sub(20); // -> 15
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -3401,6 +3820,11 @@ window._ = (function()
          * initOnce();
          * initOnce(); // -> init is invoked once
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -3460,6 +3884,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         /* dependencies
          * Class has each slice once 
          */
@@ -3508,7 +3937,7 @@ window._ = (function()
             {
                 each(['on', 'off', 'once', 'emit'], function (val)
                 {
-                    obj[val] = Emitter.prototype[val];
+                    obj[val] = exports.prototype[val];
                 });
 
                 obj._events = obj._events || {};
@@ -3563,6 +3992,11 @@ window._ = (function()
          * });
          * state.play('eustia');
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -3648,6 +4082,11 @@ window._ = (function()
          *     // Do something...
          * });
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: manual
          */
 
         /* dependencies
@@ -3889,6 +4328,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: browser
+         * test: manual
+         */
+
         /* dependencies
          * Promise each defaults noop 
          */
@@ -4043,6 +4487,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         /* dependencies
          * Emitter State easing now each raf isFn 
          */
@@ -4186,6 +4635,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: browser
+         * test: browser
+         */
+
         var fns = [],
             listener,
             doc = document,
@@ -4231,6 +4685,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         var regSpace = /\s+$/;
 
         function exports(str, chars)
@@ -4265,6 +4724,367 @@ window._ = (function()
         return exports;
     })();
 
+    /* ------------------------------ trim ------------------------------ */
+
+    var trim = _.trim = (function ()
+    {
+        /* Remove chars or white-spaces from beginning end of string.
+         *
+         * |Name  |Type        |Desc              |
+         * |------|------------|------------------|
+         * |str   |string      |String to trim    |
+         * |chars |string array|Characters to trim|
+         * |return|string      |Trimmed string    |
+         *
+         * ```javascript
+         * trim(' abc  '); // -> 'abc'
+         * trim('_abc_', '_'); // -> 'abc'
+         * trim('_abc_', ['a', 'c', '_']); // -> 'b'
+         * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
+         */
+
+        /* dependencies
+         * ltrim rtrim 
+         */
+
+        var regSpace = /^\s+|\s+$/g;
+
+        function exports(str, chars)
+        {
+            if (chars == null) return str.replace(regSpace, '');
+
+            return ltrim(rtrim(str, chars), chars);
+        }
+
+        return exports;
+    })();
+
+    /* ------------------------------ query ------------------------------ */
+
+    var query = _.query = (function (exports)
+    {
+        /* Parse and stringify url query strings.
+         *
+         * ### parse
+         *
+         * Parse a query string into an object.
+         *
+         * |Name  |Type  |Desc        |
+         * |------|------|------------|
+         * |str   |string|Query string|
+         * |return|object|Query object|
+         *
+         * ### stringify
+         *
+         * Stringify an object into a query string.
+         *
+         * |Name  |Type  |Desc        |
+         * |------|------|------------|
+         * |obj   |object|Query object|
+         * |return|string|Query string|
+         *
+         * ```javascript
+         * query.parse('foo=bar&eruda=true'); // -> {foo: 'bar', eruda: 'true'}
+         * query.stringify({foo: 'bar', eruda: 'true'}); // -> 'foo=bar&eruda=true'
+         * query.parse('name=eruda&name=eustia'); // -> {name: ['eruda', 'eustia']}
+         * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
+         */
+
+        /* dependencies
+         * trim each isUndef isArr map isEmpty filter isObj 
+         */
+
+        exports = {
+            parse: function (str)
+            {
+                var ret = {};
+
+                str = trim(str).replace(regIllegalChars, '');
+
+                each(str.split('&'), function (param)
+                {
+                    var parts = param.split('=');
+
+                    var key = parts.shift(),
+                        val = parts.length > 0 ? parts.join('=') : null;
+
+                    key = decodeURIComponent(key);
+                    val = decodeURIComponent(val);
+
+                    if (isUndef(ret[key]))
+                    {
+                        ret[key] = val;
+                    } else if (isArr(ret[key]))
+                    {
+                        ret[key].push(val);
+                    } else
+                    {
+                        ret[key] = [ret[key], val];
+                    }
+                });
+
+                return ret;
+            },
+            stringify: function (obj, arrKey)
+            {
+                return filter(map(obj, function (val, key)
+                {
+                    if (isObj(val) && isEmpty(val)) return '';
+                    if (isArr(val)) return exports.stringify(val, key);
+
+                    return (arrKey ? encodeURIComponent(arrKey) : encodeURIComponent(key)) + '=' + encodeURIComponent(val);
+                }), function (str)
+                {
+                    return str.length > 0;
+                }).join('&');
+            }
+        };
+
+        var regIllegalChars = /^(\?|#|&)/g;
+
+        return exports;
+    })({});
+
+    /* ------------------------------ Url ------------------------------ */
+
+    _.Url = (function (exports)
+    {
+        /* Simple url manipulator.
+         *
+         * ### constructor
+         *
+         * |Name                 |Type  |Desc      |
+         * |---------------------|------|----------|
+         * |[url=window.location]|string|Url string|
+         *
+         * ### setQuery
+         *
+         * Set query value.
+         *
+         * |Name  |Type  |Desc       |
+         * |------|------|-----------|
+         * |name  |string|Query name |
+         * |value |string|Query value|
+         * |return|Url   |this       |
+         *
+         * |Name  |Type  |Desc        |
+         * |------|------|------------|
+         * |names |object|query object|
+         * |return|Url   |this        |
+         *
+         * ### rmQuery
+         *
+         * Remove query value.
+         *
+         * |Name  |Type        |Desc      |
+         * |------|------------|----------|
+         * |name  |string array|Query name|
+         * |return|Url         |this      |
+         *
+         * ### parse
+         *
+         * [static] Parse url into an object.
+         *
+         * |Name  |Type  |Desc      |
+         * |------|------|----------|
+         * |url   |string|Url string|
+         * |return|object|Url object|
+         *
+         * ### stringify
+         *
+         * [static] Stringify url object into a string.
+         *
+         * |Name  |Type  |Desc      |
+         * |------|------|----------|
+         * |url   |object|Url object|
+         * |return|string|Url string|
+         *
+         * An url object contains the following properties:
+         *
+         * |Name    |Desc                                                                                  |
+         * |--------|--------------------------------------------------------------------------------------|
+         * |protocol|The protocol scheme of the URL (e.g. http:)                                           |
+         * |slashes |A boolean which indicates whether the protocol is followed by two forward slashes (//)|
+         * |auth    |Authentication information portion (e.g. username:password)                           |
+         * |hostname|Host name without port number                                                         |
+         * |port    |Optional port number                                                                  |
+         * |pathname|URL path                                                                              |
+         * |query   |Parsed object containing query string                                                 |
+         * |hash    |The "fragment" portion of the URL including the pound-sign (#)                        |
+         *
+         * ```javascript
+         * var url = new Url('http://example.com:8080?eruda=true');
+         * console.log(url.port); // -> '8080'
+         * url.query.foo = 'bar';
+         * url.rmQuery('eruda');
+         * utl.toString(); // -> 'http://example.com:8080/?foo=bar'
+         * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
+         */
+
+        /* dependencies
+         * Class extend trim query isEmpty each isArr toArr 
+         */
+
+        exports = Class({
+            className: 'Url',
+            initialize: function (url)
+            {
+                extend(this, exports.parse(url || window.location.href));
+            },
+            setQuery: function (name, val)
+            {
+                var query = this.query;
+
+                if (isObj(name))
+                {
+                    each(name, function (val, key)
+                    {
+                        query[key] = val;
+                    });
+                } else
+                {
+                    query[name] = val;
+                }
+
+                return this;
+            },
+            rmQuery: function (name)
+            {
+                var query = this.query;
+
+                if (!isArr(name)) name = toArr(name);
+                each(name, function (key)
+                {
+                    delete query[key];
+                });
+
+                return this;
+            },
+            toString: function ()
+            {
+                return exports.stringify(this);
+            }
+        }, {
+            parse: function (url)
+            {
+                var ret = {
+                        protocol: '',
+                        auth: '',
+                        hostname: '',
+                        hash: '',
+                        query: {},
+                        port: '',
+                        pathname: '',
+                        slashes: false
+                    },
+                    rest = trim(url);
+
+                var proto = rest.match(regProto);
+                if (proto)
+                {
+                    proto = proto[0];
+                    ret.protocol = proto.toLowerCase();
+                    rest = rest.substr(proto.length);
+                }
+
+                if (proto)
+                {
+                    var slashes = rest.substr(0, 2) === '//';
+                    if (slashes)
+                    {
+                        rest = rest.slice(2);
+                        ret.slashes = true;
+                    }
+                }
+
+                if (slashes)
+                {
+                    var hostEnd = -1;
+                    for (var i = 0, len = hostEndingChars.length; i < len; i++)
+                    {
+                        var pos = rest.indexOf(hostEndingChars[i]);
+                        if (pos !== -1 && (hostEnd === -1 || pos < hostEnd)) hostEnd = pos;
+                    }
+
+                    var host = rest.slice(0, hostEnd);
+                    rest = rest.slice(hostEnd);
+
+                    var atSign = host.lastIndexOf('@');
+
+                    if (atSign !== -1)
+                    {
+                        ret.auth = decodeURIComponent(host.slice(0, atSign));
+                        host = host.slice(atSign + 1);
+                    }
+
+                    ret.hostname = host;
+                    var port = host.match(regPort);
+                    if (port)
+                    {
+                        port = port[0];
+                        if (port !== ':') ret.port = port.substr(1);
+                        ret.hostname = host.substr(0, host.length - port.length);
+                    }
+                }
+
+                var hash = rest.indexOf('#');
+
+                if (hash !== -1)
+                {
+                    ret.hash = rest.substr(hash);
+                    rest = rest.slice(0, hash);
+                }
+
+                var queryMark = rest.indexOf('?');
+
+                if (queryMark !== -1)
+                {
+                    ret.query = query.parse(rest.substr(queryMark + 1));
+                    rest = rest.slice(0, queryMark);
+                }
+
+                ret.pathname = rest || '/';
+
+                return ret;
+            },
+            stringify: function (obj)
+            {
+                var ret = obj.protocol +
+                          (obj.slashes ? '//' : '') +
+                          (obj.auth ? encodeURIComponent(obj.auth) + '@' : '') +
+                          obj.hostname +
+                          (obj.port ? (':' + obj.port) : '') +
+                          obj.pathname;
+
+                if (!isEmpty(obj.query)) ret += '?' + query.stringify(obj.query);
+                if (obj.hash) ret += obj.hash;
+
+                return ret;
+            }
+        });
+
+        var regProto = /^([a-z0-9.+-]+:)/i,
+            regPort = /:[0-9]*$/,
+            hostEndingChars = ['/', '?', '#'];
+
+        return exports;
+    })({});
+
     /* ------------------------------ template ------------------------------ */
 
     _.template = (function (exports)
@@ -4281,6 +5101,11 @@ window._ = (function()
          * template('<p><%- name %></p>')({name: '<eris>'}); // -> '<p>&lt;eris&gt;</p>'
          * template('<%if (echo) {%>Hello eris!<%}%>')({echo: true}); // -> 'Hello eris!'
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -4370,6 +5195,11 @@ window._ = (function()
          * ```
          */
 
+        /* module
+         * env: all
+         * test: all
+         */
+
         function exports(edges)
         {
             return sort(uniqueNodes(edges), edges);
@@ -4432,41 +5262,6 @@ window._ = (function()
         return exports;
     })();
 
-    /* ------------------------------ trim ------------------------------ */
-
-    _.trim = (function ()
-    {
-        /* Remove chars or white-spaces from beginning end of string.
-         *
-         * |Name  |Type        |Desc              |
-         * |------|------------|------------------|
-         * |str   |string      |String to trim    |
-         * |chars |string array|Characters to trim|
-         * |return|string      |Trimmed string    |
-         *
-         * ```javascript
-         * trim(' abc  '); // -> 'abc'
-         * trim('_abc_', '_'); // -> 'abc'
-         * trim('_abc_', ['a', 'c', '_']); // -> 'b'
-         * ```
-         */
-
-        /* dependencies
-         * ltrim rtrim 
-         */
-
-        var regSpace = /^\s+|\s+$/g;
-
-        function exports(str, chars)
-        {
-            if (chars == null) return str.replace(regSpace, '');
-
-            return ltrim(rtrim(str, chars), chars);
-        }
-
-        return exports;
-    })();
-
     /* ------------------------------ unique ------------------------------ */
 
     _.unique = (function ()
@@ -4482,6 +5277,11 @@ window._ = (function()
          * ```javascript
          * unique([1, 2, 3, 1]); // -> [1, 2, 3]
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies
@@ -4540,6 +5340,11 @@ window._ = (function()
          *     // result -> 'done'
          * });
          * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
          */
 
         /* dependencies

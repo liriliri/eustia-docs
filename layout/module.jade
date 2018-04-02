@@ -30,6 +30,13 @@ block content
                 });
             });
         });
+        _.ready(function buildMod() 
+        {
+            _.$('h2').on('click', function () 
+            {
+                window.location = '/builder.html?module=' + _.$(this).text();                
+            });   
+        });
         _.ready(function scrollEffect()
         {
             var $docContainer = _.$('.doc-container'),

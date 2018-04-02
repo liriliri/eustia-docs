@@ -13,6 +13,11 @@ _.ready(function ()
     {
         e.preventDefault();
 
+        startBuild();
+    });
+
+    function startBuild() 
+    {
         var modules = _.trim($input.val());
 
         modules = _.filter(modules.split(/\s+/), function (name)
@@ -44,7 +49,9 @@ _.ready(function ()
 
             enableDownload(output);
         });
-    });
+
+        localStore.setItem(INPUT_STORE_NAME, $input.val());
+    }
 
     var INPUT_STORE_NAME = 'buildModules';
 
@@ -53,7 +60,6 @@ _.ready(function ()
         $buildModules.show();
         logger.reset();
         disableDownload();
-        localStore.setItem(INPUT_STORE_NAME, $input.val())
     });
 
     $buildModules.on('click', 'li', function () 
@@ -69,6 +75,13 @@ _.ready(function ()
     var lastVal = localStore.getItem(INPUT_STORE_NAME);
 
     if (lastVal) $input.val(lastVal);
+
+    var url = new _.Url();
+    if (url.query.module) 
+    {
+        $input.val(url.query.module);
+        startBuild();
+    }
 });
 
 function build(modules, cb)
