@@ -5,7 +5,7 @@ block content
     .module-container
         .md.toc-container
             .search
-                input(type="text" placeholder="Search")
+                input(type="text" placeholder="Search #{Object.keys(eris).length} modules")
             != toc
         .md.doc-container!= contents
 
