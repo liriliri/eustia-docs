@@ -43,7 +43,7 @@ function copyStatic()
 }
 
 var site = require('./src/site.json'),
-    eris = require('./src/eris.json');
+    licia = require('./src/licia.json');
 
 function build()
 {
@@ -61,7 +61,7 @@ function build()
 
     metalsmith.metadata({
         site: site,
-        eris: eris
+        licia: licia
     }).source(
         'src'
     ).clean(

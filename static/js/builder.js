@@ -222,7 +222,7 @@ var moduleStore = {
     },
     _fetch: function (name, cb)
     {
-        var url = 'https://raw.githubusercontent.com/liriliri/eris/master/' + name[0].toLowerCase() + '/' + name + '.js';
+        var url = 'https://raw.githubusercontent.com/liriliri/licia/master/' + name[0].toLowerCase() + '/' + name + '.js';
 
         var self = this;
 

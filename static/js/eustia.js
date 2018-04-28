@@ -1710,7 +1710,7 @@ window._ = (function()
          * |return|boolean|True if value is a string primitive|
          *
          * ```javascript
-         * isStr('eris'); // -> true
+         * isStr('licia'); // -> true
          * ```
          */
 
@@ -2893,14 +2893,14 @@ window._ = (function()
          *
          * ```javascript
          * // <div id="test"><div class="mark"></div></div>
-         * $insert.before('#test', '<div>eris</div>');
-         * // -> <div>eris</div><div id="test"><div class="mark"></div></div>
-         * $insert.after('#test', '<div>eris</div>');
-         * // -> <div id="test"><div class="mark"></div></div><div>eris</div>
-         * $insert.prepend('#test', '<div>eris</div>');
-         * // -> <div id="test"><div>eris</div><div class="mark"></div></div>
-         * $insert.append('#test', '<div>eris</div>');
-         * // -> <div id="test"><div class="mark"></div><div>eris</div></div>
+         * $insert.before('#test', '<div>licia</div>');
+         * // -> <div>licia</div><div id="test"><div class="mark"></div></div>
+         * $insert.after('#test', '<div>licia</div>');
+         * // -> <div id="test"><div class="mark"></div></div><div>licia</div>
+         * $insert.prepend('#test', '<div>licia</div>');
+         * // -> <div id="test"><div>licia</div><div class="mark"></div></div>
+         * $insert.append('#test', '<div>licia</div>');
+         * // -> <div id="test"><div class="mark"></div><div>licia</div></div>
          * ```
          */
 
@@ -3002,8 +3002,8 @@ window._ = (function()
          * set the value of every matched element.
          *
          * ```javascript
-         * $property.html('#test', 'eris');
-         * $property.html('#test'); // -> eris
+         * $property.html('#test', 'licia');
+         * $property.html('#test'); // -> licia
          * ```
          */
 
@@ -5097,9 +5097,9 @@ window._ = (function()
          * |return|function|Compiled template function|
          *
          * ```javascript
-         * template('Hello <%= name %>!')({name: 'eris'}); // -> 'Hello eris!'
-         * template('<p><%- name %></p>')({name: '<eris>'}); // -> '<p>&lt;eris&gt;</p>'
-         * template('<%if (echo) {%>Hello eris!<%}%>')({echo: true}); // -> 'Hello eris!'
+         * template('Hello <%= name %>!')({name: 'licia'}); // -> 'Hello licia!'
+         * template('<p><%- name %></p>')({name: '<licia>'}); // -> '<p>&lt;licia&gt;</p>'
+         * template('<%if (echo) {%>Hello licia!<%}%>')({echo: true}); // -> 'Hello licia!'
          * ```
          */
 

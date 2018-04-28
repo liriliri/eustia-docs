@@ -3,8 +3,8 @@ var request = require('request'),
 
 var util = require('../lib/util');    
 
-var ERIS_URL = 'https://raw.githubusercontent.com/liriliri/eris/master/doc.md',
-    INDEX_URL = 'https://raw.githubusercontent.com/liriliri/eris/master/index.json',
+var ERIS_URL = 'https://raw.githubusercontent.com/liriliri/licia/master/doc.md',
+    INDEX_URL = 'https://raw.githubusercontent.com/liriliri/licia/master/index.json',
     index = {};
 
 request(INDEX_URL, function (err, res, body) 
@@ -13,7 +13,7 @@ request(INDEX_URL, function (err, res, body)
 
     index = JSON.parse(body);
 
-    fs.writeFile('src/eris.json', JSON.stringify(index, null, 4), function () {});
+    fs.writeFile('src/licia.json', JSON.stringify(index, null, 4), function () {});
 
     requestDoc();
 });    
@@ -40,7 +40,7 @@ function addDesc(body)
 {
     return body.replace(/^#.*/, function () 
     {
-        return 'All source code is [hosted on GitHub](https://github.com/liriliri/eris).\n\nFeel free to report issues and make pull requests:)';
+        return 'All source code is [hosted on GitHub](https://github.com/liriliri/licia).\n\nFeel free to report issues and make pull requests:)';
     });
 }
 
@@ -48,7 +48,7 @@ function addLink(body)
 {
     return body.replace(/^##\s+([\w$]+)/mg, function (match, name) 
     {
-        var source = 'https://github.com/liriliri/eris/blob/master/' + name[0].toLowerCase() + '/' + name;
+        var source = 'https://github.com/liriliri/licia/blob/master/' + name[0].toLowerCase() + '/' + name;
 
         var ret = match + '\n\n[source](' + source + '.js) ' + '[test](' + source + '.test.js)'; 
 

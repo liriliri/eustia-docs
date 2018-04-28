@@ -231,7 +231,7 @@ Using option **library** allows you to search functions in other paths, quite us
 
 ## Relative Projects
 
-[eris: Eustia official modules(updated everyday)](https://github.com/liriliri/eris)
+[licia: Eustia official modules(updated everyday)](https://github.com/liriliri/licia)
 
 [eustia-babel: Allow modules to be written in es6.](https://github.com/liriliri/eustia-babel)
 
