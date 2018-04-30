@@ -209,7 +209,7 @@ eustia cache clear
 
 ## Create Module
 
-Materials must be prepared first to cook a good meal. Right now, our materials is a bunch of small modules. Eustia provides many [utilities](http://liriliri.github.io/eustia/module.html) itself(currently under development). Still, there are times you want to add your own ones. To achieve that, create a directory named **eustia** in the root directory.
+Materials must be prepared first to cook a good meal. Right now, our materials is a bunch of small modules. Eustia provides many [utilities](https://eustia.github.io/module.html) itself(currently under development). Still, there are times you want to add your own ones. To achieve that, create a directory named **eustia** in the root directory.
 
 Now, let's say I want to have a function to compare version numbers. The first step is to create a js file named **compareVersion.js** in **eustia** directory. Then fills it with actual codes to finish the procedure.
 
