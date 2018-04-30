@@ -305,10 +305,10 @@ window._ = (function()
             exports = process.nextTick;
         } else if (typeof setImmediate === 'function')
         {
-            exports = function (cb) { setImmediate(ensureCallable(cb)) }
+            exports = function (cb) { setImmediate(ensureCallable(cb)); };
         } else
         {
-            exports = function (cb) { setTimeout(ensureCallable(cb), 0) };
+            exports = function (cb) { setTimeout(ensureCallable(cb), 0); };
         }
 
         function ensureCallable(fn)
@@ -362,6 +362,115 @@ window._ = (function()
         {
             return new Date().getTime();
         };
+
+        return exports;
+    })({});
+
+    /* ------------------------------ isBrowser ------------------------------ */
+
+    var isBrowser = _.isBrowser = (function (exports)
+    {
+        /* Check if running in a browser.
+         *
+         * ```javascript
+         * console.log(isBrowser); // -> true if running in a browser
+         * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
+         */
+
+        exports = typeof window === 'object' &&
+                  typeof document === 'object' &&
+                  document.nodeType === 9;
+
+        return exports;
+    })({});
+
+    /* ------------------------------ raf ------------------------------ */
+
+    var raf = _.raf = (function (exports)
+    {
+        /* Shortcut for requestAnimationFrame.
+         *
+         * Use setTimeout if native requestAnimationFrame is not supported.
+         *
+         * ```javascript
+         * var id = raf(function tick()
+         * {
+         *     // Animation stuff
+         *     raf(tick);
+         * });
+         * raf.cancel(id);
+         * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
+         */
+
+        /* dependencies
+         * now isBrowser 
+         */
+
+        var raf, cancel;
+
+        if (isBrowser)
+        {
+            raf = window.requestAnimationFrame;
+            cancel = window.cancelAnimationFrame;
+
+            var lastTime = 0,
+                vendors = ['ms', 'moz', 'webkit', 'o'];
+
+            for (var i = 0, len = vendors.length; i < len && !raf; i++)
+            {
+                raf = window[vendors[i] + 'RequestAnimationFrame'];
+                cancel = window[vendors[i] + 'CancelAnimationFrame'] ||
+                         window[vendors[i] + 'CancelRequestAnimationFrame'];
+            }
+        }
+
+        raf = raf || function(cb)
+        {
+            var curTime = now();
+
+            var timeToCall = Math.max(0, 16 - (curTime - lastTime)),
+                id = setTimeout(function() { cb(curTime + timeToCall); }, timeToCall);
+
+            lastTime = curTime + timeToCall;
+
+            return id;
+        };
+
+        cancel = cancel || function(id) { clearTimeout(id); };
+
+        raf.cancel = cancel;
+
+        exports = raf;
+
+        return exports;
+    })({});
+
+    /* ------------------------------ root ------------------------------ */
+
+    var root = _.root = (function (exports)
+    {
+        /* Root object reference, `global` in nodeJs, `window` in browser. */
+
+        /* module
+         * env: all
+         * test: all
+         */
+
+        /* dependencies
+         * isBrowser 
+         */
+
+        exports = isBrowser ? window : global;
 
         return exports;
     })({});
@@ -457,7 +566,7 @@ window._ = (function()
          * |return    |function|Generated function with rest parameters|
          *
          * ```javascript
-         * var paramArr = _.restArgs(function (rest) { return rest });
+         * var paramArr = restArgs(function (rest) { return rest });
          * paramArr(1, 2, 3, 4); // -> [1, 2, 3, 4]
          * ```
          */
@@ -679,11 +788,11 @@ window._ = (function()
     {
         /* Get the index at which the first occurrence of value.
          *
-         * |Name       |Type  |Desc                |
-         * |-----------|------|--------------------|
-         * |arr        |array |Array to search     |
-         * |val        |*     |Value to search for |
-         * |[fromIdx=0]|number|Index to search from|
+         * |Name     |Type  |Desc                |
+         * |---------|------|--------------------|
+         * |arr      |array |Array to search     |
+         * |val      |*     |Value to search for |
+         * |fromIdx=0|number|Index to search from|
          *
          * ```javascript
          * idxOf([1, 2, 1, 2], 2, 2); // -> 3
@@ -776,7 +885,7 @@ window._ = (function()
                 case 4: return function (accumulator, val, idx, collection)
                 {
                     return fn.call(ctx, accumulator, val, idx, collection);
-                }
+                };
             }
 
             return function ()
@@ -1048,7 +1157,7 @@ window._ = (function()
          *
          * |Name  |Type   |Desc                              |
          * |------|-------|----------------------------------|
-         * |val   |*      |The value to check                |
+         * |val   |*      |Value to check                    |
          * |return|boolean|True if value is an `Array` object|
          *
          * ```javascript
@@ -1173,6 +1282,73 @@ window._ = (function()
         return exports;
     })();
 
+    /* ------------------------------ isBlob ------------------------------ */
+
+    var isBlob = _.isBlob = (function ()
+    {
+        /* Check if value is a Blob.
+         *
+         * |Name  |Type   |Desc                   |
+         * |------|-------|-----------------------|
+         * |val   |*      |Value to check         |
+         * |return|boolean|True if value is a Blob|
+         * 
+         * ```javascript
+         * isBlob(new Blob([])); // -> true;
+         * isBlob([]); // -> false
+         * ```
+         */
+
+        /* module
+         * env: browser
+         * test: browser
+         */
+
+        /* dependencies
+         * objToStr 
+         */
+
+        function exports(val) 
+        {
+            return objToStr(val) === '[object Blob]';
+        }
+
+        return exports;
+    })();
+
+    /* ------------------------------ isFile ------------------------------ */
+
+    var isFile = _.isFile = (function ()
+    {
+        /* Check if value is a file.
+         *
+         * |Name  |Type   |Desc                   |
+         * |------|-------|-----------------------|
+         * |val   |*      |Value to check         |
+         * |return|boolean|True if value is a file|
+         * 
+         * ```javascript
+         * isFile(new File(['test'], "test.txt", {type: "text/plain"})); // -> true
+         * ```
+         */
+
+        /* module
+         * env: browser
+         * test: browser
+         */
+
+        /* dependencies
+         * objToStr 
+         */
+
+        function exports(val) 
+        {
+            return objToStr(val) === '[object File]';
+        }
+
+        return exports;
+    })();
+
     /* ------------------------------ isFn ------------------------------ */
 
     var isFn = _.isFn = (function ()
@@ -1210,6 +1386,32 @@ window._ = (function()
 
         return exports;
     })();
+
+    /* ------------------------------ isMiniProgram ------------------------------ */
+
+    var isMiniProgram = _.isMiniProgram = (function (exports)
+    {
+        /* Check if running in wechat mini program.
+         *
+         * ```javascript
+         * console.log(isMiniProgram); // -> true if running in mini program.
+         * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
+         */
+
+        /* dependencies
+         * isFn 
+         */ 
+
+        /* eslint-disable no-undef */
+        exports = typeof wx !== 'undefined' && isFn(wx.openLocation);
+
+        return exports;
+    })({});
 
     /* ------------------------------ isNum ------------------------------ */
 
@@ -1386,6 +1588,55 @@ window._ = (function()
         return exports;
     })();
 
+    /* ------------------------------ Blob ------------------------------ */
+
+    var Blob = _.Blob = (function (exports)
+    {
+        /* Use Blob when available, otherwise BlobBuilder.
+         * 
+         * ### constructor
+         * 
+         * |Name  |Type  |Desc      |
+         * |------|------|----------|
+         * |parts |array |Blob parts|
+         * |[opts]|object|Options   |
+         * 
+         * ```javascript
+         * var blob = new Blob([]);
+         * ```
+         */
+
+        /* module
+         * env: browser
+         * test: browser
+         */
+
+        /* dependencies
+         * root each 
+         */ 
+
+        exports = root.Blob || function Blob(parts, opts) 
+        {
+            opts = opts || {};
+
+            var blobBuilder = new BlobBuilder();
+
+            each(parts, function (part) 
+            { 
+                blobBuilder.append(part); 
+            });
+
+            return opts.type ? blobBuilder.getBlob(opts.type) : blobBuilder.getBlob();
+        };
+
+        var BlobBuilder = root.BlobBuilder || 
+                          root.WebKitBlobBuilder || 
+                          root.MSBlobBuilder || 
+                          root.MozBlobBuilder;
+
+        return exports;
+    })({});
+
     /* ------------------------------ createAssigner ------------------------------ */
 
     var createAssigner = _.createAssigner = (function ()
@@ -1550,7 +1801,7 @@ window._ = (function()
          * each upperFirst 
          */
 
-        exports.linear = function (t) { return t };
+        exports.linear = function (t) { return t; };
 
         var pow = Math.pow,
             sqrt = Math.sqrt,
@@ -1653,7 +1904,7 @@ window._ = (function()
         {
             var ret = [];
 
-            each(obj, function (val) { ret.push(val) });
+            each(obj, function (val) { ret.push(val); });
 
             return ret;
         }
@@ -1946,95 +2197,6 @@ window._ = (function()
         return exports;
     })({});
 
-    /* ------------------------------ isBrowser ------------------------------ */
-
-    var isBrowser = _.isBrowser = (function (exports)
-    {
-        /* Check if running in a browser.
-         *
-         * ```javascript
-         * console.log(isBrowser); // -> true if running in a browser
-         * ```
-         */
-
-        /* module
-         * env: all
-         * test: all
-         */
-
-        exports = typeof window === 'object' &&
-                  typeof document === 'object' &&
-                  document.nodeType === 9;
-
-        return exports;
-    })({});
-
-    /* ------------------------------ raf ------------------------------ */
-
-    var raf = _.raf = (function (exports)
-    {
-        /* Shortcut for requestAnimationFrame.
-         *
-         * Use setTimeout if native requestAnimationFrame is not supported.
-         *
-         * ```javascript
-         * var id = raf(function tick()
-         * {
-         *     // Animation stuff
-         *     raf(tick);
-         * });
-         * raf.cancel(id);
-         * ```
-         */
-
-        /* module
-         * env: all
-         * test: all
-         */
-
-        /* dependencies
-         * now isBrowser 
-         */
-
-        var raf, cancel;
-
-        if (isBrowser)
-        {
-            raf = window.requestAnimationFrame;
-            cancel = window.cancelAnimationFrame;
-
-            var lastTime = 0,
-                vendors = ['ms', 'moz', 'webkit', 'o'];
-
-            for (var i = 0, len = vendors.length; i < len && !raf; i++)
-            {
-                raf = window[vendors[i] + 'RequestAnimationFrame'];
-                cancel = window[vendors[i] + 'CancelAnimationFrame'] ||
-                         window[vendors[i] + 'CancelRequestAnimationFrame'];
-            }
-        }
-
-        raf = raf || function(cb)
-        {
-            var curTime = now();
-
-            var timeToCall = Math.max(0, 16 - (curTime - lastTime)),
-                id = setTimeout(function() { cb(curTime + timeToCall) }, timeToCall);
-
-            lastTime = curTime + timeToCall;
-
-            return id;
-        };
-
-        cancel = cancel || function(id) { clearTimeout(id) };
-
-        raf.cancel = cancel;
-
-        exports = raf;
-
-        return exports;
-    })({});
-
     /* ------------------------------ isMatch ------------------------------ */
 
     var isMatch = _.isMatch = (function ()
@@ -2212,7 +2374,7 @@ window._ = (function()
                 return function (obj)
                 {
                     return obj == null ? undefined : obj[key];
-                }
+                };
             };
         };
 
@@ -2410,7 +2572,7 @@ window._ = (function()
          */
 
         /* dependencies
-         * extend toArr inherits has safeGet 
+         * extend toArr inherits has safeGet isMiniProgram 
          */
 
         function exports(methods, statics)
@@ -2424,11 +2586,22 @@ window._ = (function()
             var className = methods.className || safeGet(methods, 'initialize.name') || '';
             delete methods.className;
 
-            var ctor = new Function('toArr', 'return function ' + className + '()' + 
-            '{' +
-                'var args = toArr(arguments);' +
-                'return this.initialize ? this.initialize.apply(this, args) || this : this;' +
-            '};')(toArr);
+            var ctor;
+            if (isMiniProgram) 
+            {
+                ctor = function () 
+                {
+                    var args = toArr(arguments);
+                    return this.initialize ? this.initialize.apply(this, args) || this : this;
+                };
+            } else 
+            {
+                ctor = new Function('toArr', 'return function ' + className + '()' + 
+                '{' +
+                    'var args = toArr(arguments);' +
+                    'return this.initialize ? this.initialize.apply(this, args) || this : this;' +
+                '};')(toArr);
+            }
 
             inherits(ctor, parent);
             ctor.prototype.constructor = ctor;
@@ -2708,7 +2881,7 @@ window._ = (function()
                 {
                     el.setAttribute(name, val);
                 });
-            })
+            });
         }
 
         return exports;
@@ -2749,116 +2922,6 @@ window._ = (function()
             }
 
             return $attr(nodes, dataName, val);
-        }
-
-        return exports;
-    })();
-
-    /* ------------------------------ $css ------------------------------ */
-
-    var $css = _.$css = (function ()
-    {
-        /* Element css manipulation.
-         *
-         * Get the computed style properties for the first element in the set of matched elements.
-         *
-         * |Name   |Type                |Desc                      |
-         * |-------|--------------------|--------------------------|
-         * |element|string array element|Elements to manipulate    |
-         * |name   |string              |Property name             |
-         * |return |string              |Css value of first element|
-         *
-         * Set one or more CSS properties for the set of matched elements.
-         *
-         * |Name   |Type                |Desc                  |
-         * |-------|--------------------|----------------------|
-         * |element|string array element|Elements to manipulate|
-         * |name   |string              |Property name         |
-         * |value  |string              |Css value             |
-         *
-         * |Name      |Type                |Desc                            |
-         * |----------|--------------------|--------------------------------|
-         * |element   |string array element|Elements to manipulate          |
-         * |properties|object              |Object of css-value pairs to set|
-         *
-         * ```javascript
-         * $css('#test', {
-         *     'color': '#fff',
-         *     'background': 'black'
-         * });
-         * $css('#test', 'display', 'block');
-         * $css('#test', 'color'); // -> #fff
-         * ```
-         */
-
-        /* module
-         * env: browser
-         * test: browser
-         */
-
-        /* dependencies
-         * isStr isObj camelCase kebabCase isUndef contain isNum $safeEls startWith 
-         */
-
-        function exports(nodes, name, val)
-        {
-            nodes = $safeEls(nodes);
-
-            var isGetter = isUndef(val) && isStr(name);
-            if (isGetter) return getCss(nodes[0], name);
-
-            var css = name;
-            if (!isObj(css))
-            {
-                css = {};
-                css[name] = val;
-            }
-
-            setCss(nodes, css);
-        }
-
-        function getCss(node, name)
-        {
-            return node.style[camelCase(name)] || getComputedStyle(node, '').getPropertyValue(name);
-        }
-
-        function setCss(nodes, css)
-        {
-            each(nodes, function (node)
-            {
-                var cssText = ';';
-                each(css, function (val, key)
-                {
-                    key = dasherize(key);
-                    cssText += key + ':' + addPx(key, val) + ';';
-                });
-                node.style.cssText += cssText;
-            });
-        }
-
-        var cssNumProps = [
-            'column-count',
-            'columns',
-            'font-weight',
-            'line-weight',
-            'opacity',
-            'z-index',
-            'zoom'
-        ];
-
-        function addPx(key, val)
-        {
-            var needPx = isNum(val) && !contain(cssNumProps, kebabCase(key));
-
-            return needPx ? val + 'px' : val;
-        }
-
-        function dasherize(str) 
-        {
-            // -webkit- -o- 
-            if (startWith(str, '-')) return str;
-
-            return kebabCase(str);
         }
 
         return exports;
@@ -3184,8 +3247,8 @@ window._ = (function()
          * Class contain 
          */
 
-        function retTrue()  { return true }
-        function retFalse() { return false }
+        function retTrue()  { return true; }
+        function retFalse() { return false; }
 
         function trigger(e)
         {
@@ -3301,7 +3364,7 @@ window._ = (function()
             },
             Event: Class({
                 className: 'Event',
-                initialize: function Event(e) { this.origEvent = e },
+                initialize: function Event(e) { this.origEvent = e; },
                 isDefaultPrevented: retFalse,
                 isPropagationStopped: retFalse,
                 isImmediatePropagationStopped: retFalse,
@@ -3384,6 +3447,55 @@ window._ = (function()
 
         return exports;
     })({});
+
+    /* ------------------------------ createUrl ------------------------------ */
+
+    _.createUrl = (function ()
+    {
+        /* CreateObjectURL wrapper.
+         *
+         * |Name   |Type                  |Desc                                |
+         * |-------|----------------------|------------------------------------|
+         * |data   |File Blob string array|Url data                            | 
+         * |[opts] |object                |Used when data is not a File or Blob|
+         * |return |string                |Blob url                            |
+         * 
+         * ```javascript
+         * createUrl('test', {type: 'text/plain'}); // -> Blob url
+         * createUrl(['test', 'test']);
+         * createUrl(new Blob([]));
+         * createUrl(new File(['test'], 'test.txt'));
+         * ```
+         */
+
+        /* module
+         * env: browser
+         * test: browser
+         */
+
+        /* dependencies
+         * defaults isBlob isFile Blob toArr 
+         */
+
+        function exports(data, opts) 
+        {
+            opts = opts || {};
+            defaults(opts, defOpts);
+
+            if (!isBlob(data) && !isFile(data)) 
+            {
+                data = new Blob(toArr(data), opts);
+            }
+
+            return URL.createObjectURL(data);        
+        } 
+
+        var defOpts = {
+            type: 'text/plain'
+        };
+
+        return exports;
+    })();
 
     /* ------------------------------ some ------------------------------ */
 
@@ -3559,6 +3671,219 @@ window._ = (function()
 
         return exports;
     })({});
+
+    /* ------------------------------ memoize ------------------------------ */
+
+    var memoize = _.memoize = (function ()
+    {
+        /* Memoize a given function by caching the computed result.
+         *
+         * |Name    |Type    |Desc                                |
+         * |--------|--------|------------------------------------|
+         * |fn      |function|Function to have its output memoized|
+         * |[hashFn]|function|Function to create cache key        |
+         * |return  |function|New memoized function               |
+         *
+         * ```javascript
+         * var fibonacci = memoize(function(n)
+         * {
+         *     return n < 2 ? n : fibonacci(n - 1) + fibonacci(n - 2);
+         * });
+         * ```
+         */
+
+        /* module
+         * env: all
+         * test: all
+         */
+
+        /* dependencies
+         * has 
+         */
+
+        function exports(fn, hashFn)
+        {
+            var memoize = function (key)
+            {
+                var cache = memoize.cache,
+                    address = '' + (hashFn ? hashFn.apply(this, arguments) : key);
+
+                if (!has(cache, address)) cache[address] = fn.apply(this, arguments);
+
+                return cache[address];
+            };
+
+            memoize.cache = {};
+
+            return memoize;
+        }
+
+        return exports;
+    })();
+
+    /* ------------------------------ prefix ------------------------------ */
+
+    var prefix = _.prefix = (function (exports)
+    {
+        /* Add vendor prefixes to a CSS attribute.
+         *
+         * |Name  |Type  |Desc                  |
+         * |------|------|----------------------|
+         * |name  |string|Property name         |
+         * |return|string|Prefixed property name|
+         * 
+         * ### dash
+         * 
+         * Create a dasherize version.
+         * 
+         * ```javascript
+         * prefix('text-emphasis'); // -> 'WebkitTextEmphasis'
+         * prefix.dash('text-emphasis'); // -> '-webkit-text-emphasis'
+         * prefix('color'); // -> 'color'
+         * ```
+         */
+
+        /* module
+         * env: browser
+         * test: browser
+         */
+
+        /* dependencies
+         * memoize camelCase upperFirst has kebabCase 
+         */ 
+
+        exports = memoize(function (name) 
+        {
+            name = name.replace(regPrefixes, '');
+            name = camelCase(name);
+
+            if (has(style, name)) return name;
+
+            var i = prefixes.length;
+            while (i--) 
+            {
+                var prefixName = prefixes[i] + upperFirst(name);
+                if (has(style, prefixName)) return prefixName;
+            }
+
+            return name;
+        });
+
+        exports.dash = memoize(function (name) 
+        {
+            var camelCaseResult = exports(name);
+
+            return (regPrefixes.test(camelCaseResult) ? '-' : '') + kebabCase(camelCaseResult);
+        });
+
+        var prefixes = ['O', 'ms', 'Moz', 'Webkit'],
+            regPrefixes = /^(O)|(ms)|(Moz)|(Webkit)|(-o-)|(-ms-)|(-moz-)|(-webkit-)/g,
+            style = document.createElement('p').style;
+
+        return exports;
+    })({});
+
+    /* ------------------------------ $css ------------------------------ */
+
+    var $css = _.$css = (function ()
+    {
+        /* Element css manipulation.
+         *
+         * Get the computed style properties for the first element in the set of matched elements.
+         *
+         * |Name   |Type                |Desc                      |
+         * |-------|--------------------|--------------------------|
+         * |element|string array element|Elements to manipulate    |
+         * |name   |string              |Property name             |
+         * |return |string              |Css value of first element|
+         *
+         * Set one or more CSS properties for the set of matched elements.
+         *
+         * |Name   |Type                |Desc                  |
+         * |-------|--------------------|----------------------|
+         * |element|string array element|Elements to manipulate|
+         * |name   |string              |Property name         |
+         * |value  |string              |Css value             |
+         *
+         * |Name      |Type                |Desc                            |
+         * |----------|--------------------|--------------------------------|
+         * |element   |string array element|Elements to manipulate          |
+         * |properties|object              |Object of css-value pairs to set|
+         *
+         * ```javascript
+         * $css('#test', {
+         *     'color': '#fff',
+         *     'background': 'black'
+         * });
+         * $css('#test', 'display', 'block');
+         * $css('#test', 'color'); // -> #fff
+         * ```
+         */
+
+        /* module
+         * env: browser
+         * test: browser
+         */
+
+        /* dependencies
+         * isStr isObj kebabCase isUndef contain isNum $safeEls startWith prefix 
+         */
+
+        function exports(nodes, name, val)
+        {
+            nodes = $safeEls(nodes);
+
+            var isGetter = isUndef(val) && isStr(name);
+            if (isGetter) return getCss(nodes[0], name);
+
+            var css = name;
+            if (!isObj(css))
+            {
+                css = {};
+                css[name] = val;
+            }
+
+            setCss(nodes, css);
+        }
+
+        function getCss(node, name)
+        {
+            return node.style[prefix(name)] || getComputedStyle(node, '').getPropertyValue(name);
+        }
+
+        function setCss(nodes, css)
+        {
+            each(nodes, function (node)
+            {
+                var cssText = ';';
+                each(css, function (val, key)
+                {
+                    key = prefix.dash(key);
+                    cssText += key + ':' + addPx(key, val) + ';';
+                });
+                node.style.cssText += cssText;
+            });
+        }
+
+        var cssNumProps = [
+            'column-count',
+            'columns',
+            'font-weight',
+            'line-weight',
+            'opacity',
+            'z-index',
+            'zoom'
+        ];
+
+        function addPx(key, val)
+        {
+            var needPx = isNum(val) && !contain(cssNumProps, kebabCase(key));
+
+            return needPx ? val + 'px' : val;
+        }
+
+        return exports;
+    })();
 
     /* ------------------------------ $ ------------------------------ */
 
@@ -4107,7 +4432,7 @@ window._ = (function()
                     adopt: {from: 'pending', to: 'adopted'}
                 }).on('fulfill', assignVal).on('reject', assignVal).on('adopt', assignVal);
 
-                function assignVal(val) { self._value = val }
+                function assignVal(val) { self._value = val; }
 
                 this._handled = false;
                 this._value = undefined;
@@ -4172,11 +4497,11 @@ window._ = (function()
             {
                 if (val && isObj(val) && val.constructor === Promise) return val;
 
-                return new Promise(function (resolve) { resolve(val) });
+                return new Promise(function (resolve) { resolve(val); });
             },
             reject: function (val) 
             {
-                return new Promise(function (resolve, reject) { reject(val) });
+                return new Promise(function (resolve, reject) { reject(val); });
             },
             race: function (values) 
             {
@@ -4406,16 +4731,16 @@ window._ = (function()
                 status: xhr.status,
                 statusText: xhr.statusText,
                 url: xhr.responseURL,
-                clone: function () { return getRes(xhr) },
-                text: function () { return Promise.resolve(xhr.responseText) },
-                json: function () { return Promise.resolve(xhr.responseText).then(JSON.parse) },
-                xml: function () { return Promise.resolve(xhr.responseXML) },
-                blob: function () { return Promise.resolve(new Blob([xhr.response])) },
+                clone: function () { return getRes(xhr); },
+                text: function () { return Promise.resolve(xhr.responseText); },
+                json: function () { return Promise.resolve(xhr.responseText).then(JSON.parse); },
+                xml: function () { return Promise.resolve(xhr.responseXML); },
+                blob: function () { return Promise.resolve(new Blob([xhr.response])); },
                 headers: {
-                    keys: function () { return keys },
-                    entries: function () { return all },
-                    get: function (name) { return headers[name.toLowerCase() ]},
-                    has: function (name) { return has(headers, name) }
+                    keys: function () { return keys; },
+                    entries: function () { return all; },
+                    get: function (name) { return headers[name.toLowerCase()]; },
+                    has: function (name) { return has(headers, name); }
                 }
             };
         }
@@ -4424,7 +4749,7 @@ window._ = (function()
             method: 'GET',
             headers: {},
             timeout: 0,
-            xhr: function () { return new XMLHttpRequest() }
+            xhr: function () { return new XMLHttpRequest(); }
         };
 
         return exports;
@@ -4660,7 +4985,7 @@ window._ = (function()
 
         function exports(fn)
         {
-            loaded ? setTimeout(fn, 0) : fns.push(fn)
+            loaded ? setTimeout(fn, 0) : fns.push(fn);
         }
 
         return exports;
@@ -4863,9 +5188,9 @@ window._ = (function()
          *
          * ### constructor
          *
-         * |Name                 |Type  |Desc      |
-         * |---------------------|------|----------|
-         * |[url=window.location]|string|Url string|
+         * |Name        |Type  |Desc      |
+         * |------------|------|----------|
+         * |url=location|string|Url string|
          *
          * ### setQuery
          *
@@ -4937,14 +5262,15 @@ window._ = (function()
          */
 
         /* dependencies
-         * Class extend trim query isEmpty each isArr toArr 
+         * Class extend trim query isEmpty each isArr toArr isBrowser 
          */
 
         exports = Class({
             className: 'Url',
             initialize: function (url)
             {
-                extend(this, exports.parse(url || window.location.href));
+                if (!url && isBrowser) url = window.location.href;
+                extend(this, exports.parse(url || ''));
             },
             setQuery: function (name, val)
             {
@@ -5241,7 +5567,7 @@ window._ = (function()
                 if (visited[i]) return;
                 visited[i] = true;
 
-                var outgoing = edges.filter(function(edge) { return edge[0] === node });
+                var outgoing = edges.filter(function(edge) { return edge[0] === node; });
 
                 /* eslint-disable no-cond-assign */
                 if (i = outgoing.length)
@@ -5250,10 +5576,10 @@ window._ = (function()
                     do {
                         var child = outgoing[--i][1];
                         visit(child, nodes.indexOf(child), preds);
-                    } while (i)
+                    } while (i);
                 }
 
-                sorted[--cursor] = node
+                sorted[--cursor] = node;
             }
 
             return sorted;
@@ -5362,7 +5688,7 @@ window._ = (function()
                 if (++current >= tasks.length || err)
                 {
                     args.unshift(err);
-                    nextTick(function () { cb.apply(null, args) });
+                    nextTick(function () { cb.apply(null, args); });
                 } else
                 {
                     args.push(taskCb);
@@ -5375,7 +5701,7 @@ window._ = (function()
                 tasks[0](taskCb);
             } else
             {
-                nextTick(function () { cb(null) });
+                nextTick(function () { cb(); });
             }
         }
 

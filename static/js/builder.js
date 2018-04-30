@@ -109,11 +109,7 @@ function enableDownload(output)
     var $btn = _.$('#download-btn');
 
     $btn.rmClass('disabled');
-
-    var blob = new Blob([output], {type: 'text/plain'});
-
-    $btn.attr('href', URL.createObjectURL(blob));
-
+    $btn.attr('href', _.createUrl(output));
     $btn.get(0).click();
 }
 

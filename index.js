@@ -2,7 +2,6 @@ var path = require('path'),
     fs = require('fs'),
     ncp = require('ncp'),
     marked = require('marked'),
-    rmdir = require('rmdir'),
     autoprefixer = require('autoprefixer-stylus');
 
 var layouts = require('metalsmith-layouts'),
@@ -11,7 +10,8 @@ var layouts = require('metalsmith-layouts'),
     markdown = require('metalsmith-markdown'),
     prism = require('metalsmith-prism'),
     ignore = require('metalsmith-ignore'),
-    markedToc = require('./lib/markedToc');
+    markedToc = require('./lib/markedToc'),
+    util = require('./lib/util');
 
 var dirname = __dirname,
     port = 3000,
@@ -99,7 +99,7 @@ function build()
 
 function fullBuild()
 {
-    rmdir('dist', function ()
+    util.rmdir('dist', function ()
     {
         copyStatic();
         build();

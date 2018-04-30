@@ -28,7 +28,7 @@
     "node": {
       "files": [
         "lib/*.js",
-        "tool/**/*.js",
+        "index.js",
         "script/*.js"
       ],
       "output": "./lib/util.js",
@@ -55,7 +55,6 @@
     "metalsmith-uglify": "^1.5.1",
     "ncp": "^2.0.0",
     "request": "^2.72.0",
-    "rmdir": "^1.2.0",
     "st": "^1.0.0"
   }
 }
