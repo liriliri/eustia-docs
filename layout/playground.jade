@@ -13,10 +13,10 @@ block content
             element: _.$('.playground').get(0),
             source: [
                 '// You can\'t require modules that are supposed to run in browsers only.\n',
-                'var uuid = require("eustia-module/uuid"),',
-                '    dateFormat = require("eustia-module/dateFormat"),',
-                '    now = require("eustia-module/now"),',
-                '    randomBytes = require("eustia-module/randomBytes");\n',
+                'var uuid = require("licia/uuid"),',
+                '    dateFormat = require("licia/dateFormat"),',
+                '    now = require("licia/now"),',
+                '    randomBytes = require("licia/randomBytes");\n',
                 'console.log(randomBytes(5));',
                 'console.log(uuid());',
                 'console.log(dateFormat(now(), "yyyy-mm-dd"));'
