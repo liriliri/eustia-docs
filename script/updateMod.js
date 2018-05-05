@@ -65,8 +65,8 @@ function addLink(body)
         var env = index[name].env,
             envHtml = '';
 
-        if (env === 'browser' || env === 'all') envHtml += '<span class="env">browser</span>';
-        if (env === 'node' || env === 'all') envHtml += '<span class="env">node</span>';
+        if (env === 'browser' || env === 'all') envHtml += '<i class="env iconfont icon-browser"></i>';
+        if (env === 'node' || env === 'all') envHtml += '<i class="env iconfont icon-nodejs"></i>';
 
         ret += envHtml;
 
