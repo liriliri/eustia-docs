@@ -65,10 +65,24 @@ _.ready(function ()
     $buildModules.on('click', 'li', function () 
     {
         var $this = _.$(this),
-            name = $this.text();
+            name = $this.text(),
+            val = '';
 
-        var val = $input.val();
-        val += ' ' + name;
+        if (name === 'allBrowser' || name === 'allNode') 
+        {
+            var exclude = name === 'allBrowser' ? 'node' : 'browser';
+            $buildModules.find('li').each(function () 
+            {
+                var $this = _.$(this),
+                    env = $this.data('env');
+                if (env && env !== exclude) val += ' ' + $this.text();
+            });
+        } else 
+        {
+            val = $input.val();
+            val += ' ' + name;
+        }
+
         $input.val(_.trim(val));
     });
 

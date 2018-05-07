@@ -14,7 +14,9 @@ block content
             li The generated library is exported as "_" in global space, using UMD pattern.
 
         ul#build-modules
+            li(title='All browser modules.') allBrowser
+            li(title='All node.js modules.') allNode
             each val, index in licia
-                li(title=val.description)= index    
+                li(title=val.description data-env=val.env)= index    
 
     script(src='#{site.baseUrl}static/js/builder.js')
