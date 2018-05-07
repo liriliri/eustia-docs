@@ -9,7 +9,7 @@ It provides most of underscore's functions and some other useful small
 modules, for example, Class, cookie helpers. You can also collect and build your
 own modules to create libraries for multiple projects.
 
-![Eustia screen shot](//7xn2zy.com1.z0.glb.clouddn.com/eustia_screenshot.gif)
+![Eustia screen shot](/static/img/eustia-screenshot.gif)
 
 ## Installation
 
