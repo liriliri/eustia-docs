@@ -68,13 +68,21 @@ _.ready(function ()
             name = $this.text(),
             val = '';
 
-        if (name === 'allBrowser' || name === 'allNode') 
+        if (name === 'allBrowser' || name === 'allNode' || name === 'all') 
         {
-            var exclude = name === 'allBrowser' ? 'node' : 'browser';
+            if (name !== 'all') 
+            {
+                var exclude = name === 'allBrowser' ? 'node' : 'browser';
+            }
             $buildModules.find('li').each(function () 
             {
                 var $this = _.$(this),
                     env = $this.data('env');
+                if (name === 'all') 
+                {
+                    if (env === 'all') val += ' ' + $this.text();
+                    return;
+                }    
                 if (env && env !== exclude) val += ' ' + $this.text();
             });
         } else 
