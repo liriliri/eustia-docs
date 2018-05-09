@@ -1,6 +1,7 @@
 _.ready(function ()
 {
     var $buildBtn = _.$('#build-btn'),
+        $clearBtn = _.$('#clear-btn'),
         $input = _.$('#input-modules'),
         $buildModules = _.$('#build-modules'),
         $downloadBtn = _.$('#download-btn');
@@ -14,6 +15,13 @@ _.ready(function ()
         e.preventDefault();
 
         startBuild();
+    });
+
+    $clearBtn.on('click', function (e) 
+    {
+        e.preventDefault();
+
+        $input.val('');
     });
 
     function startBuild() 
@@ -30,6 +38,7 @@ _.ready(function ()
         if (modules.length === 0) return;
 
         $buildBtn.addClass('disabled');
+        $clearBtn.addClass('disabled');
         $downloadBtn.addClass('disabled');
 
         var startTime = _.now();
@@ -37,6 +46,7 @@ _.ready(function ()
         build(modules, function (err, output)
         {
             $buildBtn.rmClass('disabled');
+            $clearBtn.rmClass('disabled');
 
             if (err)
             {

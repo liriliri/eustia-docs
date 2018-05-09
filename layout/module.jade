@@ -5,6 +5,7 @@ block content
     .module-container
         .md.toc-container
             .search
+                i.iconfont.icon-search
                 input(type="text" placeholder="Search #{Object.keys(licia).length} modules")
             != toc
         .md.doc-container!= contents
@@ -14,6 +15,8 @@ block content
         {
             var $input = _.$('.search input'),
                 $tocList = _.$('.toc-container ul li');
+
+            $input.get(0).focus();    
 
             $input.on('input', function ()
             {
