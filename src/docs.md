@@ -180,6 +180,7 @@ eusita build index.html src/*.js -o lib.js
 |output     |o        |util.js             |Output path                                 |
 |transpilers|         |                    |Use for writing modules in different formats|
 |watch      |w        |false               |Watch files to regenerate automatically     |
+|proxy      |         |                    |Request proxy                               |
 
 **Transpilers** and **extension** are not available via command line arguments, use them only in configurations.
 
