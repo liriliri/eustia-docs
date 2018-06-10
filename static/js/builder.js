@@ -325,7 +325,7 @@ var logger = {
     }
 };
 
-var regDependency = /\s*\b_\(['"]([\w\s$]+)['"]\);?/,
+var regDependency = /\s*\b_\(\s*['"]([\w\s$]+)['"]\s*\);?/m,
     regExports = /\bexports\b/,
     regFnExports = /function\s+exports\s*\(/;
 
