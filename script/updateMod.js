@@ -3,7 +3,7 @@ var request = require('request'),
 
 var util = require('../lib/util');    
 
-var ERIS_URL = 'https://raw.githubusercontent.com/liriliri/licia/master/doc.md',
+var ERIS_URL = 'https://raw.githubusercontent.com/liriliri/licia/master/DOC.md',
     INDEX_URL = 'https://raw.githubusercontent.com/liriliri/licia/master/index.json',
     index = {};
 
