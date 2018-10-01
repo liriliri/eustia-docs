@@ -167,7 +167,7 @@ eusita build index.html src/*.js -o lib.js
 ```
 
 |Name       |Shorthand|Default             |Desc                                        |
-|---------------------------------------------------------------------------------------|
+|-----------|---------|--------------------|--------------------------------------------|
 |encoding   |         |utf-8               |Input file encoding                         |
 |exclude    |e        |                    |Functions excluded                          |
 |extension  |         |js                  |Module extension, useful for transpilers    |
@@ -180,6 +180,7 @@ eusita build index.html src/*.js -o lib.js
 |output     |o        |util.js             |Output path                                 |
 |transpilers|         |                    |Use for writing modules in different formats|
 |watch      |w        |false               |Watch files to regenerate automatically     |
+|ts         |         |false               |Output typescript definition file           |
 |proxy      |         |                    |Request proxy                               |
 
 **Transpilers** and **extension** are not available via command line arguments, use them only in configurations.
@@ -194,19 +195,11 @@ eustia doc util.js -o doc.html
 ```
 
 |Name       |Shorthand|Default             |Desc                                 |
-|--------------------------------------------------------------------------------|
+|-----------|---------|--------------------|-------------------------------------|
 |description|d        |                    |Extra description markdown file path |
 |format     |f        |html                |Output format, html, json or markdown|
 |output     |o        |docs.html           |Output path                          |
 |title      |t        |Eustia Documentation|Documentation title                  |
-
-### Cache Command
-
-Clear module cache.
-
-```bash
-eustia cache clear
-```
 
 ## Create Module
 
