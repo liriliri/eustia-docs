@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "node script/updateMod && node . && gulp",
-    "dev": "node . serve"
+    "dev": "node . serve",
+    "format": "prettier *.js lib/markedToc.js script/*.js static/js/builder.js --write"
   },
   "repository": {
     "type": "git",
@@ -54,6 +55,7 @@
     "metalsmith-stylus": "^1.0.0",
     "metalsmith-uglify": "^1.5.1",
     "ncp": "^2.0.0",
+    "prettier": "^1.14.3",
     "request": "^2.72.0",
     "st": "^1.0.0"
   }
