@@ -70,7 +70,15 @@ block content
             var $pre = _.$('pre'),
                 container = _.$('.doc-container').get(0);
 
-            $pre.append('<a class="btn-repl">Try in REPL</a>');
+            $pre.each(function () {
+                var $this = _.$(this);
+                var $code = $this.find('code');
+                if (!$code.hasClass('language-javascript')) {
+                    return;
+                }
+
+                $this.append('<a class="btn-repl">Try in REPL</a>');
+            });    
 
             $pre.on('click', '.btn-repl', function () 
             {

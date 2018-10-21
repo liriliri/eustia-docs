@@ -223,12 +223,7 @@ var moduleStore = {
     this._fetch(name, cb)
   },
   _fetch: function(name, cb) {
-    var url =
-      'https://raw.githubusercontent.com/liriliri/licia/master/' +
-      name[0].toLowerCase() +
-      '/' +
-      name +
-      '.js'
+    var url = 'https://cdn.jsdelivr.net/npm/eustia-module/' + name + '.js'
 
     var self = this
 
