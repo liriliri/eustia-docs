@@ -94,17 +94,26 @@ block content
                     if (node.tagName === 'H2') h2 = node;
                     if (node === el) break;
                 }
-                var modName = _.$(h2).text();
+                var source;
+                if (h2) {
+                    var modName = _.$(h2).text();
+                    source = [
+                        '// You can\'t require modules that are supposed to run in browsers only.\n',
+                        'var ' + modName + ' = require("licia/' + modName + '");\n',
+                        code
+                    ].join('\n')
+                } else {
+                    source = [
+                        '// You can\'t require modules that are supposed to run in browsers only.\n',
+                        code
+                    ].join('\n')
+                }
 
                 var newEl = document.createElement('div');
                 container.replaceChild(newEl, el);
                 RunKit.createNotebook({
                     element: newEl,
-                    source: [
-                        '// You can\'t require modules that are supposed to run in browsers only.\n',
-                        'var ' + modName + ' = require("licia/' + modName + '");\n',
-                        code
-                    ].join('\n')
+                    source: source
                 });
             });
         });
