@@ -261,7 +261,6 @@ var moduleStore = {
     data = codeTpl({
       name: name,
       code: _.trim(data),
-      noFnExports: !regFnExports.test(data),
       hasExports: regExports.test(data)
     })
 
@@ -299,17 +298,16 @@ var logger = {
 }
 
 var regDependency = /\s*\b_\(\s*['"]([\w\s$]+)['"]\s*\);?/m,
-  regExports = /\bexports\b/,
-  regFnExports = /function\s+exports\s*\(/
+  regExports = /\bexports\b/;
 
 var codeTpl = _.template(
   [
     '/* ------------------------------ <%-name%> ------------------------------ */',
     '<%if (hasExports) {%>',
-    'var <%-name%> = _.<%-name%> = (function (<%if (noFnExports) {%>exports<%}%>) {',
+    'var <%-name%> = _.<%-name%> = (function (exports) {',
     '    <%=code%>\n',
     '    return exports;',
-    '})(<%if (noFnExports) {%>{}<%}%>);',
+    '})({});',
     '<%} else {%>',
     '(function () {',
     '<%=code%>',
