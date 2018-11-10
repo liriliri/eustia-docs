@@ -4,7 +4,7 @@ var gulp = require('gulp'),
 
 gulp.task('js', function() {
   return gulp
-    .src('dist/**/*.js')
+    .src(['dist/**/*.js', '!dist/demo/*.js'])
     .pipe(uglify())
     .pipe(gulp.dest('dist/'))
 })
