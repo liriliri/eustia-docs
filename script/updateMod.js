@@ -21,7 +21,7 @@ request(INDEX_URL, function(err, res, body) {
   )
   requestDoc(
     'module_cn',
-    'https://raw.githubusercontent.com/liriliri/licia/master/doc/DOC_CN.md',
+    'https://raw.githubusercontent.com/liriliri/licia/master/DOC_CN.md',
     'cn'
   )
 })
