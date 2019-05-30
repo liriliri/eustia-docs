@@ -37,8 +37,7 @@ function copyStatic() {
   })
 }
 
-var site = require('./src/site.json'),
-  licia = require('./src/licia.json')
+var site = require('./src/site.json')
 
 function build() {
   site.baseUrl =
@@ -57,8 +56,7 @@ function build() {
 
   metalsmith
     .metadata({
-      site: site,
-      licia: licia
+      site: site
     })
     .source('src')
     .clean(false)

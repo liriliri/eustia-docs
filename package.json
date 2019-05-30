@@ -4,7 +4,7 @@
   "description": "Eustia documentation",
   "main": "index.js",
   "scripts": {
-    "build": "node script/updateMod && node . && gulp",
+    "build": "node . && gulp",
     "dev": "node . serve",
     "format": "prettier *.js lib/markedToc.js script/*.js static/js/builder.js --write"
   },

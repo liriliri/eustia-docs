@@ -1,7 +1,5 @@
 .idea/
 dist/
 node_modules/
-src/module.md
-src/module_cn.md
 src/licia.json
 package-lock.json

@@ -2,23 +2,9 @@ extends ./layout
 
 block content
 
-    .container.mobile
+    .md.container.mobile.intro!= contents
 
-        textarea#input-modules(rows='4' placeholder="fetch each random...")
-        a.btn#build-btn(href='#') BUILD
-        a.btn#clear-btn(href='#') CLEAR
-        a.btn#download-btn.disabled(download='util.js') DOWNLOAD
-
-        ul#build-logger
-            li Note:
-            li Module names are separated by spaces.
-            li The generated library is exported as "_" in global space, using UMD pattern.
-
-        ul#build-modules
-            li(title="All modules that can run on both browser and node.js.") all
-            li(title='All browser modules.') allBrowser
-            li(title='All node.js modules.') allNode
-            each val, index in licia
-                li(title=val.description data-env=val.env)= index    
-
-    script(src='#{site.baseUrl}static/js/builder.js')
+    script.
+        setTimeout(function () {
+            location = 'https://licia.liriliri.io/builder.html';
+        }, 2000)
