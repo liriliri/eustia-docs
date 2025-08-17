@@ -2,6 +2,9 @@ name: Deploy Eustia
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - master
 
 jobs:
   deploy:
@@ -14,7 +17,7 @@ jobs:
         path: project/eustia-docs
     - uses: actions/setup-node@v4
       with:
-        node-version: '18.x'
+        node-version: '10.x'
     - working-directory: ./project/eustia-docs
       run: |
         npm i
